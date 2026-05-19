@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import ImageLightbox from "./ImageLightbox";
 
-const plans = [
+const row1Plans = [
   {
     type: "Studio",
     badge: "Studio",
@@ -16,17 +16,19 @@ const plans = [
     features: ["All utilities access", "Central HVAC", "Modern finishes", "Community amenities"],
     gradient: "linear-gradient(160deg, rgba(42, 74, 53, 0.4) 0%, rgba(13, 26, 18, 0.1) 100%)",
     floorPlanImage: "/studio_render.png",
+    slug: "2148-north-decatur-unit-1",
   },
   {
-    type: "2 Bedroom Townhome",
+    type: "2 Bedroom Renovated",
     badge: "2 BR",
     price: "From $1,850/mo",
     tagline: "Garden-style townhome.",
     description:
-      "Private entry. Light-filled interiors. A townhome that breathes with the forest around it - your own ground-level retreat.",
+      "Private entry. Light-filled interiors. A townhome that breathes with the forest around it — your own ground-level retreat with premium finishes.",
     features: ["Private entry", "Garden-facing", "Two full bedrooms", "Covered carport"],
     gradient: "linear-gradient(160deg, rgba(201, 168, 76, 0.15) 0%, rgba(13, 26, 18, 0.1) 100%)",
     floorPlanImage: "/2bedroom_render.png",
+    slug: "539-webster-unit-1",
   },
   {
     type: "3 Bedroom Townhome",
@@ -38,8 +40,22 @@ const plans = [
     features: ["Multi-level layout", "Wooded views", "Three bedrooms", "Hardwood floors available"],
     gradient: "linear-gradient(160deg, rgba(42, 61, 46, 0.5) 0%, rgba(13, 26, 18, 0.1) 100%)",
     floorPlanImage: "/3bedroom_render.png",
+    slug: "551-webster-unit-6",
   },
 ];
+
+const row2Plan = {
+  type: "2 Bedroom Classic",
+  badge: "2 BR",
+  price: "From $1,225/mo",
+  tagline: "Classic townhome living.",
+  description:
+    "Spacious 2 bedroom, 1 bath townhome offering comfortable living near Emory University. Great value with access to all community amenities.",
+  features: ["Townhome layout", "Spacious green spaces", "Two full bedrooms", "On-site parking"],
+  gradient: "linear-gradient(160deg, rgba(201, 168, 76, 0.1) 0%, rgba(13, 26, 18, 0.08) 100%)",
+  floorPlanImage: "/2bedroom_classicfloorplan.jpeg",
+  slug: "2122-powell-unit-5",
+};
 
 const containerVariants = {
   hidden: {},
@@ -154,15 +170,22 @@ export default function FloorPlansSection() {
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+          className="flex flex-col gap-6 lg:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {plans.map((plan) => (
-            <FloorPlanCard key={plan.type} plan={plan} />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {row1Plans.map((plan) => (
+              <FloorPlanCard key={plan.type} plan={plan} />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="hidden md:block" />
+            <FloorPlanCard plan={row2Plan} />
+            <div className="hidden md:block" />
+          </div>
         </motion.div>
       </div>
     </section>
@@ -181,6 +204,7 @@ function FloorPlanCard({
     features: string[];
     gradient: string;
     floorPlanImage?: string;
+    slug: string;
   };
 }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -386,8 +410,8 @@ function FloorPlanCard({
             >
               {plan.price}
             </span>
-            <a
-              href="#contact"
+            <Link
+              href={`/listings/${plan.slug}`}
               className="cursor-pointer px-5 py-2.5 text-xs tracking-widest uppercase rounded-sm"
               style={{
                 fontFamily: "var(--font-body)",
@@ -397,6 +421,7 @@ function FloorPlanCard({
                 border: "1px solid var(--color-accent)",
                 color: "var(--color-accent)",
                 background: "transparent",
+                textDecoration: "none",
                 transition: "all 0.35s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
               onMouseEnter={(e) => {
@@ -410,8 +435,8 @@ function FloorPlanCard({
                 el.style.color = "var(--color-accent)";
               }}
             >
-              Inquire
-            </a>
+              More Details
+            </Link>
           </div>
         </div>
       </motion.div>

@@ -54,6 +54,21 @@ const units = [
     lat: 33.7920936,
     lng: -84.3043556,
   },
+  {
+    slug: "2122-powell-unit-5",
+    address: "2122 Powell Lane",
+    unit: "Unit No. 5",
+    city: "Decatur, GA 30033",
+    headline: "Spacious 2 Bedroom Townhome Apartment Located Near Emory University",
+    badge: "2 BR",
+    bedrooms: 2,
+    bathrooms: 1,
+    price: "$1,225 / mo",
+    sqft: "1,040 sqft.",
+    image: "/2bedroom_render.png",
+    lat: 33.7919055,
+    lng: -84.3025824,
+  },
 ];
 
 export default function ListingsPage() {
@@ -62,7 +77,7 @@ export default function ListingsPage() {
 
 
   return (
-    <main style={{ background: "var(--color-bg)", color: "var(--color-text)" }} className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden">
+    <main style={{ background: "var(--color-bg)", color: "var(--color-text)" }} className="flex flex-col h-[100dvh] overflow-hidden">
       {/* Top nav bar */}
       <div style={{ borderBottom: "1px solid var(--color-border)", flexShrink: 0 }} className="flex items-center gap-4 px-5 py-4 md:px-8">
         <Link
@@ -90,17 +105,15 @@ export default function ListingsPage() {
         </span>
       </div>
 
-      {/* Mobile: map on top, listings below (stacked). Desktop: side-by-side */}
-      <div className="flex flex-col lg:flex-row flex-1 lg:overflow-hidden">
-        {/* Map — full width on mobile, 55% on desktop */}
-        <div className="w-full lg:w-[55%] lg:flex-shrink-0 lg:sticky lg:top-0 lg:h-full" style={{ height: "300px" }} >
-          <div className="h-full lg:h-full" style={{ height: "100%" }}>
-            <ListingsMap units={units} activeSlug={activeSlug} />
-          </div>
+      {/* Mobile: top half map / bottom half listings. Desktop: side-by-side */}
+      <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+        {/* Map — top 45% on mobile, 55% width on desktop */}
+        <div className="flex-[45] min-h-0 w-full lg:flex-none lg:w-[55%]">
+          <ListingsMap units={units} activeSlug={activeSlug} />
         </div>
 
-        {/* Listings — scrollable */}
-        <div className="flex-1 overflow-y-auto px-5 py-6 md:px-8 md:py-8 pb-16">
+        {/* Listings — bottom 55% on mobile, remaining width on desktop */}
+        <div className="flex-[55] min-h-0 overflow-y-auto lg:flex-1 px-5 py-5 md:px-8 md:py-8 pb-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,7 +155,7 @@ export default function ListingsPage() {
                   }}
                 >
                   {/* Property image */}
-                  <div style={{ position: "relative", height: "200px", overflow: "hidden" }}>
+                  <div style={{ position: "relative", height: "160px", overflow: "hidden" }}>
                     <img
                       src={unit.image}
                       alt={unit.address}
@@ -286,7 +299,7 @@ export default function ListingsPage() {
                     </Link>
                     <a
                       href="/#contact"
-                      onClick={(e) => { e.preventDefault(); router.push("/#contact"); }}
+                      onClick={(e) => { e.preventDefault(); router.push(`/?message=${encodeURIComponent(`Hello,\n\nI am interested in starting a rental application for the ${unit.badge === "Studio" ? "Studio Apartment" : unit.badge + " Apartment"} at ${unit.address}, ${unit.unit}, ${unit.city}.\n\nPlease let me know the next steps to proceed.\n\nThank you.`)}#contact`); }}
                       style={{
                         display: "flex",
                         alignItems: "center",

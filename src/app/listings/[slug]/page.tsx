@@ -56,6 +56,24 @@ const units = {
     image: "/3bedroom_render.png",
     applyUrl: "mailto:leasing@emorywoods.com?subject=Interest%20in%203%20Bedroom%20Renovated%20Townhome&body=Hello,%0A%0AI am interested in starting a rental application for the 3 Bedroom Renovated Townhome at 551 Webster Drive, Unit No. 6, Decatur, GA 30033.%0A%0APlease let me know the next steps to proceed.%0A%0AThank you.",
   },
+  "2122-powell-unit-5": {
+    address: "2122 Powell Lane",
+    unit: "Unit No. 5",
+    city: "Decatur, GA 30033",
+    type: "2 Bedroom Townhome Apartment",
+    badge: "2 BR",
+    price: "$1,225 / mo",
+    sqft: "1,040 SF",
+    bedrooms: 2,
+    bathrooms: 1,
+    available: "",
+    description: "Spacious 2 bedroom, 1 bath townhome apartment located near Emory University. Beautifully renovated interiors with stainless steel appliances, spacious green spaces, and the comfort and convenience of professional management — all within one of Atlanta's most sought-after corridors.",
+    features: ["Stainless steel appliances", "Renovated interiors", "Townhome layout", "Spacious green spaces", "Professional maintenance", "On-site parking"],
+    nearby: ["Emory University — 5 min", "CDC Headquarters — 7 min", "Emory University Hospital — 4 min", "VA Medical Center — 6 min", "MARTA Transit — 8 min", "I-85 Highway — 10 min"],
+    contact: { phone: "(404) 634-3777", email: "leasing@emorywoods.com" },
+    image: "/2bedroom_render.png",
+    applyUrl: "mailto:leasing@emorywoods.com?subject=Interest%20in%202%20Bedroom%20Townhome%20Apartment&body=Hello,%0A%0AI am interested in starting a rental application for the 2 Bedroom Townhome Apartment at 2122 Powell Lane, Unit No. 5, Decatur, GA 30033.%0A%0APlease let me know the next steps to proceed.%0A%0AThank you.",
+  },
 } as const;
 
 export function generateStaticParams() {

@@ -27,7 +27,7 @@ export default function ListingsMap({ units, activeSlug }: { units: Unit[]; acti
 
     const map = L.map(containerRef.current, {
       center: [33.7919, -84.3022],
-      zoom: 14,
+      zoom: 16,
       zoomControl: true,
       scrollWheelZoom: true,
     });
@@ -96,14 +96,14 @@ export default function ListingsMap({ units, activeSlug }: { units: Unit[]; acti
       const unit = units.find((u) => u.slug === activeSlug);
       if (unit) mapRef.current.flyTo([unit.lat, unit.lng], 17, { duration: 0.8 });
     } else {
-      mapRef.current.flyTo([33.7919, -84.3022], 14, { duration: 0.8 });
+      mapRef.current.flyTo([33.7919, -84.3022], 16, { duration: 0.8 });
     }
   }, [activeSlug, units]);
 
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", height: "100vh" }}
+      style={{ width: "100%", height: "100%" }}
     />
   );
 }
