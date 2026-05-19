@@ -29,7 +29,7 @@ export default function ListingDetail({ listing }: { listing: Listing }) {
 
   return (
     <main style={{ background: "var(--color-bg)", minHeight: "100vh", color: "var(--color-text)" }}>
-      <div className="max-w-7xl mx-auto px-6 pt-8">
+      <div className="max-w-7xl mx-auto px-5 pt-6 md:px-6 md:pt-8">
         <Link
           href="/listings"
           style={{
@@ -51,12 +51,12 @@ export default function ListingDetail({ listing }: { listing: Listing }) {
         </Link>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-5 py-8 md:px-6 md:py-16">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16"
+          className="mb-8 md:mb-16"
         >
           <h1 style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 300, fontSize: "clamp(40px, 6vw, 72px)", lineHeight: 1.05, color: "var(--color-text)" }}>
             {listing.address}
@@ -98,11 +98,11 @@ export default function ListingDetail({ listing }: { listing: Listing }) {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }} className="flex flex-col gap-10">
-            <div className="grid grid-cols-3 gap-4" style={{ borderBottom: "1px solid var(--color-border)", paddingBottom: "32px" }}>
+            <div className="grid grid-cols-3 gap-3 md:gap-4" style={{ borderBottom: "1px solid var(--color-border)", paddingBottom: "24px" }}>
               {[{ label: "Type", value: listing.badge }, { label: "Sq Ft", value: listing.sqft }, { label: "Bath", value: `${listing.bathrooms} Bath` }].map(({ label, value }) => (
                 <div key={label}>
-                  <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>{label}</span>
-                  <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "22px", fontWeight: 300, color: "var(--color-text)" }}>{value}</span>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--color-text-muted)", display: "block", marginBottom: "4px" }}>{label}</span>
+                  <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "clamp(16px, 3.5vw, 22px)", fontWeight: 300, color: "var(--color-text)" }}>{value}</span>
                 </div>
               ))}
             </div>
@@ -118,7 +118,7 @@ export default function ListingDetail({ listing }: { listing: Listing }) {
 
             <div style={{ borderBottom: "1px solid var(--color-border)", paddingBottom: "32px" }}>
               <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--color-text-muted)", display: "block", marginBottom: "16px" }}>Unit Features</span>
-              <ul className="grid grid-cols-2 gap-y-3 gap-x-4">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
                 {listing.features.map((f) => (
                   <li key={f} style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 300, color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--color-accent)", flexShrink: 0 }} />
@@ -157,8 +157,9 @@ export default function ListingDetail({ listing }: { listing: Listing }) {
               >
                 Schedule a Tour
               </a>
-              <div style={{ textAlign: "center", paddingTop: "8px", fontFamily: "var(--font-body)", fontSize: "13px", color: "var(--color-text-muted)", letterSpacing: "0.05em" }}>
-                {listing.contact.phone} &nbsp;·&nbsp; {listing.contact.email}
+              <div style={{ textAlign: "center", paddingTop: "8px", fontFamily: "var(--font-body)", fontSize: "13px", color: "var(--color-text-muted)", letterSpacing: "0.05em", display: "flex", flexDirection: "column", gap: "4px", alignItems: "center" }}>
+                <a href={`tel:${listing.contact.phone}`} style={{ color: "var(--color-text-muted)", textDecoration: "none" }}>{listing.contact.phone}</a>
+                <a href={`mailto:${listing.contact.email}`} style={{ color: "var(--color-text-muted)", textDecoration: "none" }}>{listing.contact.email}</a>
               </div>
             </div>
           </motion.div>

@@ -62,9 +62,9 @@ export default function ListingsPage() {
 
 
   return (
-    <main style={{ background: "var(--color-bg)", height: "100vh", overflow: "hidden", color: "var(--color-text)", display: "flex", flexDirection: "column" }}>
+    <main style={{ background: "var(--color-bg)", color: "var(--color-text)" }} className="flex flex-col min-h-screen lg:h-screen lg:overflow-hidden">
       {/* Top nav bar */}
-      <div style={{ padding: "16px 32px", borderBottom: "1px solid var(--color-border)", display: "flex", alignItems: "center", gap: "24px", flexShrink: 0 }}>
+      <div style={{ borderBottom: "1px solid var(--color-border)", flexShrink: 0 }} className="flex items-center gap-4 px-5 py-4 md:px-8">
         <Link
           href="/"
           style={{
@@ -84,29 +84,28 @@ export default function ListingsPage() {
           </svg>
           Back to Home
         </Link>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", color: "var(--color-text-muted)" }}>·</span>
         <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--color-text-muted)" }}>
-          ·
-        </span>
-        <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--color-text-muted)" }}>
-          Showing {units.length} of {units.length} results
+          {units.length} results
         </span>
       </div>
 
-      {/* Split layout */}
-      <div style={{ display: "flex", flex: 1, overflow: "hidden", height: "calc(100vh - 53px)" }}>
-        {/* Left: sticky map */}
-        <div style={{ width: "55%", flexShrink: 0, position: "sticky", top: 0, height: "100%", overflow: "hidden" }}>
-          <ListingsMap units={units} activeSlug={activeSlug} />
+      {/* Mobile: map on top, listings below (stacked). Desktop: side-by-side */}
+      <div className="flex flex-col lg:flex-row flex-1 lg:overflow-hidden">
+        {/* Map — full width on mobile, 55% on desktop */}
+        <div className="w-full lg:w-[55%] lg:flex-shrink-0 lg:sticky lg:top-0 lg:h-full" style={{ height: "300px" }} >
+          <div className="h-full lg:h-full" style={{ height: "100%" }}>
+            <ListingsMap units={units} activeSlug={activeSlug} />
+          </div>
         </div>
 
-        {/* Right: scrollable listings */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "32px 32px 64px" }}>
-          {/* Header */}
+        {/* Listings — scrollable */}
+        <div className="flex-1 overflow-y-auto px-5 py-6 md:px-8 md:py-8 pb-16">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            style={{ marginBottom: "28px" }}
+            style={{ marginBottom: "24px" }}
           >
             <h1
               style={{
@@ -143,7 +142,7 @@ export default function ListingsPage() {
                   }}
                 >
                   {/* Property image */}
-                  <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
+                  <div style={{ position: "relative", height: "200px", overflow: "hidden" }}>
                     <img
                       src={unit.image}
                       alt={unit.address}
@@ -157,7 +156,6 @@ export default function ListingsPage() {
                         transform: activeSlug === unit.slug ? "scale(1.03)" : "scale(1)",
                       }}
                     />
-                    {/* Address overlay */}
                     <div
                       style={{
                         position: "absolute",
@@ -165,7 +163,7 @@ export default function ListingsPage() {
                         left: 0,
                         right: 0,
                         background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)",
-                        padding: "32px 20px 16px",
+                        padding: "32px 16px 14px",
                       }}
                     >
                       <h2
@@ -173,9 +171,9 @@ export default function ListingsPage() {
                           fontFamily: "var(--font-display)",
                           fontStyle: "italic",
                           fontWeight: 300,
-                          fontSize: "18px",
+                          fontSize: "16px",
                           color: "#fff",
-                          lineHeight: 1.2,
+                          lineHeight: 1.3,
                           margin: 0,
                         }}
                       >
@@ -185,15 +183,15 @@ export default function ListingsPage() {
                   </div>
 
                   {/* Card body */}
-                  <div style={{ padding: "20px 24px 0" }}>
+                  <div style={{ padding: "16px 18px 0" }}>
                     {/* Price */}
-                    <div style={{ marginBottom: "14px" }}>
+                    <div style={{ marginBottom: "12px" }}>
                       <span
                         style={{
                           fontFamily: "var(--font-display)",
                           fontStyle: "italic",
                           fontWeight: 300,
-                          fontSize: "26px",
+                          fontSize: "24px",
                           color: "var(--color-accent)",
                         }}
                       >
@@ -202,11 +200,11 @@ export default function ListingsPage() {
                       <span
                         style={{
                           fontFamily: "var(--font-body)",
-                          fontSize: "13px",
-                          letterSpacing: "0.12em",
+                          fontSize: "12px",
+                          letterSpacing: "0.1em",
                           textTransform: "uppercase",
                           color: "var(--color-text-muted)",
-                          marginLeft: "8px",
+                          marginLeft: "6px",
                         }}
                       >
                         / month
@@ -217,10 +215,10 @@ export default function ListingsPage() {
                     <div
                       style={{
                         display: "flex",
-                        gap: "24px",
-                        paddingBottom: "14px",
+                        gap: "20px",
+                        paddingBottom: "12px",
                         borderBottom: "1px solid var(--color-border)",
-                        marginBottom: "14px",
+                        marginBottom: "12px",
                       }}
                     >
                       {[
@@ -228,13 +226,13 @@ export default function ListingsPage() {
                         { icon: "bath", label: `${unit.bathrooms} bath` },
                         { icon: "sqft", label: unit.sqft },
                       ].map(({ icon, label }) => (
-                        <div key={icon} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ color: "var(--color-text-muted)" }}>
+                        <div key={icon} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ color: "var(--color-text-muted)", flexShrink: 0 }}>
                             {icon === "bed" && <path d="M3 12V7a1 1 0 011-1h16a1 1 0 011 1v5M3 12h18M3 12v5h18v-5M7 6V4M17 6V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />}
                             {icon === "bath" && <path d="M4 12h16v4a4 4 0 01-4 4H8a4 4 0 01-4-4v-4zM6 12V6a2 2 0 012-2h1a2 2 0 012 2v1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />}
                             {icon === "sqft" && <path d="M3 3h5M3 3v5M21 3h-5M21 3v5M3 21h5M3 21v-5M21 21h-5M21 21v-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />}
                           </svg>
-                          <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", color: "var(--color-text-muted)" }}>
+                          <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", color: "var(--color-text-muted)", whiteSpace: "nowrap" }}>
                             {label}
                           </span>
                         </div>
@@ -249,7 +247,7 @@ export default function ListingsPage() {
                         fontSize: "12px",
                         color: "var(--color-text-muted)",
                         lineHeight: 1.65,
-                        marginBottom: "20px",
+                        marginBottom: "16px",
                       }}
                     >
                       {unit.headline}
@@ -264,13 +262,13 @@ export default function ListingsPage() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        gap: "8px",
-                        padding: "14px",
+                        gap: "6px",
+                        padding: "13px 10px",
                         background: "var(--color-surface)",
                         fontFamily: "var(--font-body)",
-                        fontSize: "13px",
+                        fontSize: "11px",
                         fontWeight: 500,
-                        letterSpacing: "0.15em",
+                        letterSpacing: "0.12em",
                         textTransform: "uppercase",
                         color: "var(--color-text)",
                         textDecoration: "none",
@@ -280,7 +278,7 @@ export default function ListingsPage() {
                       onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.05)"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-surface)"; }}
                     >
-                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <svg width="12" height="12" viewBox="0 0 13 13" fill="none">
                         <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.2" />
                         <path d="M6.5 4v3l2 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                       </svg>
@@ -293,13 +291,13 @@ export default function ListingsPage() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        gap: "8px",
-                        padding: "14px",
+                        gap: "6px",
+                        padding: "13px 10px",
                         background: "rgba(201,168,76,0.15)",
                         fontFamily: "var(--font-body)",
-                        fontSize: "13px",
+                        fontSize: "11px",
                         fontWeight: 500,
-                        letterSpacing: "0.15em",
+                        letterSpacing: "0.12em",
                         textTransform: "uppercase",
                         color: "var(--color-accent)",
                         textDecoration: "none",
@@ -309,7 +307,7 @@ export default function ListingsPage() {
                       onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(201,168,76,0.28)"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(201,168,76,0.15)"; }}
                     >
-                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <svg width="12" height="12" viewBox="0 0 13 13" fill="none">
                         <path d="M11 2L2 11M11 2H7M11 2V6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                       Apply Now
