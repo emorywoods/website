@@ -67,7 +67,7 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative w-full py-32 px-6 overflow-hidden"
+      className="relative w-full py-16 md:py-24 lg:py-32 px-5 md:px-6 overflow-hidden"
       style={{ background: "var(--color-surface)" }}
       aria-labelledby="contact-heading"
     >
@@ -86,7 +86,7 @@ export default function ContactSection() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-24">
         {/* Left: Contact info */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}

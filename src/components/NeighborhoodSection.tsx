@@ -36,7 +36,7 @@ export default function NeighborhoodSection() {
         <div
           ref={imageRef}
           className="relative overflow-hidden"
-          style={{ minHeight: "500px" }}
+          style={{ minHeight: "280px" }}
         >
           {/* Clip-path reveal animation left to right wipe */}
           <motion.div
@@ -84,7 +84,7 @@ export default function NeighborhoodSection() {
         </div>
 
         {/* Right: Content */}
-        <div className="flex items-center py-24 px-8 lg:px-16 xl:px-24">
+        <div className="flex items-center py-12 px-6 md:py-16 md:px-10 lg:py-24 lg:px-16 xl:px-24">
           <motion.div
             className="max-w-xl"
             initial={{ opacity: 0, x: 40 }}

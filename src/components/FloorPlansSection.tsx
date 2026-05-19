@@ -64,7 +64,7 @@ export default function FloorPlansSection() {
   return (
     <section
       id="floor-plans"
-      className="relative w-full py-32 px-6"
+      className="relative w-full py-16 md:py-24 lg:py-32 px-5 md:px-6"
       style={{ background: "var(--color-bg)" }}
       aria-labelledby="floorplans-heading"
     >
@@ -78,7 +78,7 @@ export default function FloorPlansSection() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          className="mb-20 text-center"
+          className="mb-10 md:mb-16 lg:mb-20 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -231,7 +231,7 @@ function FloorPlanCard({
           style={{ background: plan.gradient, opacity: isHovered ? 1 : 0.6, transition: "opacity 0.4s ease" }}
         />
 
-        <div className="relative z-10 p-8 flex flex-col h-full" style={{ minHeight: "480px" }}>
+        <div className="relative z-10 p-6 md:p-8 flex flex-col h-full" style={{ minHeight: "auto" }}>
           {plan.floorPlanImage && (
             <>
               <div className="mb-6 -mx-8 -mt-8">

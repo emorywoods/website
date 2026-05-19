@@ -101,7 +101,7 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative w-full py-32 px-6 overflow-hidden noise-overlay"
+      className="relative w-full py-16 md:py-24 lg:py-32 px-5 md:px-6 overflow-hidden noise-overlay"
       style={{ background: "var(--color-bg)" }}
       aria-labelledby="about-heading"
     >

@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
 
 const navLinks = [
@@ -16,6 +16,7 @@ const navLinks = [
 export default function ScrollHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -69,7 +70,7 @@ export default function ScrollHero() {
         aria-label="Primary navigation"
       >
         <div
-          className="mx-4 mt-4 flex items-center justify-between px-6 py-3 rounded-sm"
+          className="mx-3 mt-3 md:mx-4 md:mt-4 flex items-center justify-between px-4 md:px-6 py-3 rounded-sm"
           style={{
             background: "var(--nav-bg)",
             backdropFilter: "blur(20px)",
@@ -82,7 +83,7 @@ export default function ScrollHero() {
             <img
               src={theme === "dark" ? "/LogoWhite.png" : "https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/emorywoodslogo-01-423w.png"}
               alt="Emory Woods Apartments logo"
-              className="h-8 w-auto object-contain"
+              className="h-7 md:h-8 w-auto object-contain"
             />
           </a>
 
@@ -109,7 +110,6 @@ export default function ScrollHero() {
                   }}
                 >
                   {link.label}
-                  {/* Gold underline on hover */}
                   <span
                     className="absolute -bottom-1 left-0 h-px w-0 group-hover:w-full"
                     style={{
@@ -122,10 +122,10 @@ export default function ScrollHero() {
             ))}
           </ul>
 
-          {/* CTA */}
+          {/* Desktop CTA */}
           <a
             href="#contact"
-            className="cursor-pointer text-xs font-medium tracking-widest uppercase px-5 py-2.5 rounded-sm"
+            className="hidden md:inline-flex cursor-pointer text-xs font-medium tracking-widest uppercase px-5 py-2.5 rounded-sm"
             style={{
               fontFamily: "var(--font-body)",
               background: "var(--color-accent)",
@@ -134,26 +134,110 @@ export default function ScrollHero() {
               transition: "all 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "#d4b558";
-              (e.currentTarget as HTMLAnchorElement).style.transform =
-                "translateY(-1px)";
+              (e.currentTarget as HTMLAnchorElement).style.background = "#d4b558";
+              (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "var(--color-accent)";
-              (e.currentTarget as HTMLAnchorElement).style.transform =
-                "translateY(0)";
+              (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-accent)";
+              (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
             }}
           >
             Schedule Tour
           </a>
+
+          {/* Hamburger - mobile only */}
+          <button
+            className="md:hidden flex flex-col justify-center items-center gap-1.5 w-9 h-9 cursor-pointer"
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+          >
+            <motion.span
+              className="block h-px w-5 origin-center rounded-full"
+              style={{ background: "var(--color-text)" }}
+              animate={mobileMenuOpen ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.25 }}
+            />
+            <motion.span
+              className="block h-px w-5 rounded-full"
+              style={{ background: "var(--color-text)" }}
+              animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 0.15 }}
+            />
+            <motion.span
+              className="block h-px w-5 origin-center rounded-full"
+              style={{ background: "var(--color-text)" }}
+              animate={mobileMenuOpen ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.25 }}
+            />
+          </button>
         </div>
+
+        {/* Mobile dropdown menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden mx-3 mt-1 rounded-sm overflow-hidden"
+              style={{
+                background: "var(--nav-bg)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid var(--nav-border)",
+              }}
+            >
+              <ul className="flex flex-col py-2" role="list">
+                {navLinks.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-6 py-3.5 text-xs uppercase tracking-widest cursor-pointer"
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        color: "var(--color-text-muted)",
+                        letterSpacing: "0.2em",
+                        transition: "color 0.2s ease",
+                        borderBottom: "1px solid var(--color-border)",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-text)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-text-muted)";
+                      }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href="#contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block mx-4 my-3 px-5 py-3 text-center text-xs uppercase tracking-widest rounded-sm cursor-pointer"
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      background: "var(--color-accent)",
+                      color: "var(--color-bg)",
+                      letterSpacing: "0.15em",
+                    }}
+                  >
+                    Schedule Tour
+                  </a>
+                </li>
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero content - centered */}
       <motion.div
-        className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center"
+        className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center px-5 md:px-6 text-center pt-24 md:pt-0"
         style={{ opacity: contentOpacity, y: contentY }}
       >
         {/* Location label */}
@@ -176,7 +260,7 @@ export default function ScrollHero() {
             fontFamily: "var(--font-display)",
             fontStyle: "italic",
             fontWeight: 300,
-            fontSize: "clamp(56px, 9vw, 104px)",
+            fontSize: "clamp(40px, 9vw, 104px)",
             lineHeight: 1.05,
             color: "var(--color-text)",
             letterSpacing: "-0.02em",
@@ -197,7 +281,7 @@ export default function ScrollHero() {
           style={{
             fontFamily: "var(--font-body)",
             fontWeight: 500,
-            fontSize: "18px",
+            fontSize: "clamp(15px, 4vw, 18px)",
             color: "var(--color-text-muted)",
             letterSpacing: "0.03em",
             marginBottom: "3rem",

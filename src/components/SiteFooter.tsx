@@ -19,7 +19,7 @@ export default function SiteFooter() {
   const { theme } = useTheme();
   return (
     <footer
-      className="relative w-full pt-16 pb-10 px-6"
+      className="relative w-full pt-12 pb-8 px-5 md:pt-16 md:pb-10 md:px-6"
       style={{ background: "var(--color-bg)" }}
       role="contentinfo"
     >

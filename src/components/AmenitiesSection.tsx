@@ -103,7 +103,7 @@ export default function AmenitiesSection() {
   return (
     <section
       id="amenities"
-      className="relative w-full py-32 px-6"
+      className="relative w-full py-16 md:py-24 lg:py-32 px-5 md:px-6"
       style={{ background: "var(--color-surface)" }}
       aria-labelledby="amenities-heading"
     >
@@ -116,7 +116,7 @@ export default function AmenitiesSection() {
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <motion.div
-          className="mb-20"
+          className="mb-10 md:mb-16 lg:mb-20"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
