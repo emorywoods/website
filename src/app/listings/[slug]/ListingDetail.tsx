@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -17,8 +17,8 @@ type Listing = {
   bathrooms: number;
   available: string;
   description: string;
-  features: string[];
-  nearby: string[];
+  features: readonly string[];
+  nearby: readonly string[];
   contact: { phone: string; email: string };
   image?: string;
   applyUrl: string;
