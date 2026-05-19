@@ -5,6 +5,15 @@ const nextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
+  webpack: (config) => {
+    config.resolve.symlinks = false;
+    config.snapshot = {
+      ...(config.snapshot || {}),
+      managedPaths: [],
+      immutablePaths: [],
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
