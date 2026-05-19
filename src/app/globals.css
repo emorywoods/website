@@ -1,0 +1,164 @@
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0D1A12;
+  --color-text: #F5EFE0;
+  --color-text-muted: #A89F8C;
+  --color-accent: #C9A84C;
+  --color-surface: #141F18;
+  --color-border: #2A3D2E;
+  --color-moss: #2A4A35;
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-montserrat), system-ui, sans-serif;
+  --ease-luxury: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --hero-overlay: rgba(13, 26, 18, 0.58);
+  --hero-gradient: rgba(13, 26, 18, 0.95);
+  --nav-bg: rgba(13, 26, 18, 0.72);
+  --nav-border: rgba(42, 61, 46, 0.6);
+  --card-bg: rgba(13, 26, 18, 0.5);
+  --card-bg-hover: rgba(20, 31, 24, 0.9);
+  --card-border-hover: rgba(201, 168, 76, 0.5);
+}
+
+[data-theme="light"] {
+  --color-bg: #F7F4EE;
+  --color-text: #1A3A25;
+  --color-text-muted: #4A7A5A;
+  --color-accent: #8B6914;
+  --color-surface: #EDE9E0;
+  --color-border: #C8D4C0;
+  --color-moss: #C8D4C0;
+  --hero-overlay: rgba(247, 244, 238, 0.72);
+  --hero-gradient: rgba(247, 244, 238, 0.98);
+  --nav-bg: rgba(237, 233, 224, 0.82);
+  --nav-border: rgba(139, 105, 20, 0.3);
+  --card-bg: rgba(232, 228, 218, 0.7);
+  --card-bg-hover: rgba(220, 215, 204, 0.95);
+  --card-border-hover: rgba(139, 105, 20, 0.5);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(201, 168, 76, 0.3);
+  color: var(--color-text);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Typography base */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+p {
+  line-height: 1.7;
+}
+
+/* Gold accent rule */
+.gold-rule {
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: var(--color-accent);
+  margin-bottom: 1.5rem;
+}
+
+/* Section label */
+.section-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+/* Noise texture overlay for sections */
+.noise-overlay {
+  position: relative;
+}
+
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Smooth page wrapper */
+.page-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}

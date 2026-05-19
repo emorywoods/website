@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0D1A12" />
+  <title>Emory Woods Apartments | Decatur, Georgia</title>
+  <meta name="description" content="A 24-acre wooded sanctuary near Emory University. Luxury apartment living in Decatur, GA — surrounded by nature, minutes from everything." />
+  <meta name="keywords" content="Emory Woods, apartments, Decatur GA, luxury apartments, Emory University, 24-acre, wooded, residential" />
+  <meta property="og:title" content="Emory Woods Apartments | Decatur, Georgia" />
+  <meta property="og:description" content="A 24-acre wooded sanctuary near Emory University. Luxury apartment living in Decatur, GA." />
+  <meta property="og:url" content="https://www.emorywoods.com" />
+  <meta property="og:site_name" content="Emory Woods Apartments" />
+  <meta property="og:image" content="https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/Emory_4-1920w.jpg" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Emory Woods Apartments | Decatur, Georgia" />
+  <meta name="twitter:description" content="A 24-acre wooded sanctuary near Emory University. Luxury apartment living in Decatur, GA." />
+  <meta name="twitter:image" content="https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/Emory_4-1920w.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #0D1A12;
+      --color-text: #F5EFE0;
+      --color-text-muted: #A89F8C;
+      --color-accent: #C9A84C;
+      --color-surface: #141F18;
+      --color-border: #2A3D2E;
+      --color-moss: #2A4A35;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Montserrat', system-ui, sans-serif;
+      --ease-luxury: cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+
+    ::selection { background: rgba(201, 168, 76, 0.3); color: var(--color-text); }
+
+    :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    p { line-height: 1.7; }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .page-wrapper {
+      position: relative;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Animate on scroll */
+    .anim-fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+    }
+    .anim-fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .anim-fade-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+    .anim-fade-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .anim-fade-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+    .anim-fade-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .anim-scale-x {
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.8s var(--ease-out-expo);
+    }
+    .anim-scale-x.visible {
+      transform: scaleX(1);
+    }
+    .anim-wipe {
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 1.1s var(--ease-out-expo) 0.1s;
+    }
+    .anim-wipe.visible {
+      clip-path: inset(0 0% 0 0);
+    }
+
+    /* Stagger delays */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    .delay-5 { transition-delay: 0.5s; }
+    .delay-6 { transition-delay: 0.6s; }
+
+    /* ===== NAV ===== */
+    nav.main-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+    }
+
+    .nav-inner {
+      margin: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2px;
+      background: rgba(13, 26, 18, 0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(42, 61, 46, 0.6);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+    }
+
+    .nav-logo img {
+      height: 2rem;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(1.15) contrast(1.05);
+    }
+
+    .nav-links {
+      display: none;
+      list-style: none;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+    }
+
+    .nav-links a {
+      position: relative;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      height: 1px;
+      width: 0;
+      background: var(--color-accent);
+      transition: width 0.35s var(--ease-luxury);
+    }
+
+    .nav-links a:hover { color: var(--color-text); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.625rem 1.25rem;
+      border-radius: 2px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      text-decoration: none;
+      transition: all 0.3s var(--ease-luxury);
+    }
+
+    .nav-cta:hover {
+      background: #d4b558;
+      transform: translateY(-1px);
+    }
+
+    /* ===== HERO ===== */
+    #home {
+      position: relative;
+      min-height: 100dvh;
+      width: 100%;
+      overflow: hidden;
+      isolation: auto;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(13, 26, 18, 0.58);
+    }
+
+    .hero-vignette {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 16rem;
+      background: linear-gradient(to bottom, transparent, rgba(13,26,18,0.95));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      min-height: 100dvh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .hero-location {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s var(--ease-out-expo) 0.3s, transform 0.8s var(--ease-out-expo) 0.3s;
+    }
+
+    .hero-h1 {
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(56px, 9vw, 104px);
+      line-height: 1.05;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1.0s var(--ease-out-expo) 0.5s, transform 1.0s var(--ease-out-expo) 0.5s;
+    }
+
+    .hero-sub {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 18px;
+      color: var(--color-text-muted);
+      letter-spacing: 0.03em;
+      margin-bottom: 3rem;
+      max-width: 460px;
+      line-height: 1.65;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s var(--ease-out-expo) 0.75s, transform 0.9s var(--ease-out-expo) 0.75s;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.9s var(--ease-out-expo) 1.0s, transform 0.9s var(--ease-out-expo) 1.0s;
+    }
+
+    @media (min-width: 640px) {
+      .hero-ctas { flex-direction: row; }
+    }
+
+    .hero-loaded .hero-location,
+    .hero-loaded .hero-h1,
+    .hero-loaded .hero-sub,
+    .hero-loaded .hero-ctas {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-outline {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      border-radius: 2px;
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      background: transparent;
+      text-decoration: none;
+      transition: all 0.4s var(--ease-luxury);
+    }
+
+    .btn-outline:hover {
+      background: rgba(201, 168, 76, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .btn-solid {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.875rem 2rem;
+      border-radius: 2px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border: 1px solid var(--color-accent);
+      text-decoration: none;
+      transition: all 0.4s var(--ease-luxury);
+    }
+
+    .btn-solid:hover {
+      background: #d4b558;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(201, 168, 76, 0.3);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: opacity 1s var(--ease-out-expo) 1.5s;
+    }
+
+    .hero-loaded .scroll-indicator { opacity: 1; }
+
+    .scroll-label {
+      font-family: var(--font-body);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .scroll-chevron {
+      animation: bounce 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* ===== SIDE DOTS ===== */
+    .side-dots {
+      position: fixed;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 1024px) {
+      .side-dots { display: flex; }
+    }
+
+    .dot-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .dot-label {
+      position: absolute;
+      right: 2rem;
+      white-space: nowrap;
+      font-family: var(--font-body);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      background: rgba(13, 26, 18, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 8px;
+      border-radius: 2px;
+      border: 1px solid var(--color-border);
+      opacity: 0;
+      transform: translateX(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+
+    .dot-item:hover .dot-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .dot-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      text-decoration: none;
+      transition: transform 0.3s var(--ease-luxury);
+    }
+
+    .dot-link:hover { transform: scale(1.15); }
+
+    .dot-outer {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(168, 159, 140, 0.4);
+      transition: border-color 0.3s ease, transform 0.3s var(--ease-luxury);
+    }
+
+    .dot-inner {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(168, 159, 140, 0.5);
+      transition: width 0.3s var(--ease-luxury), height 0.3s var(--ease-luxury), background 0.3s ease, transform 0.3s var(--ease-luxury);
+    }
+
+    .dot-item.active .dot-outer {
+      border-color: var(--color-accent);
+      transform: scale(1);
+    }
+
+    .dot-item.active .dot-link { transform: scale(1); }
+
+    .dot-item.active .dot-inner {
+      width: 8px;
+      height: 8px;
+      background: var(--color-accent);
+    }
+
+    /* ===== AMENITIES ===== */
+    #amenities {
+      position: relative;
+      width: 100%;
+      padding: 8rem 1.5rem;
+      background: var(--color-surface);
+    }
+
+    .section-border-top, .section-border-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    .section-border-top { top: 0; }
+    .section-border-bottom { bottom: 0; }
+
+    .amenities-grid {
+      max-width: 80rem;
+      margin: 0 auto;
+    }
+
+    .amenities-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .amenities-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .amenities-cards { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .amenity-card {
+      position: relative;
+      padding: 2rem;
+      border-radius: 2px;
+      background: rgba(13, 26, 18, 0.5);
+      border: 1px solid var(--color-border);
+      transition: border-color 0.4s var(--ease-luxury), background 0.4s ease, transform 0.35s var(--ease-luxury);
+      cursor: default;
+    }
+
+    .amenity-card:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(20, 31, 24, 0.9);
+      transform: translateY(-4px);
+    }
+
+    .card-corner-h {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2rem;
+      height: 1px;
+      background: var(--color-accent);
+    }
+
+    .card-corner-v {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 2rem;
+      background: var(--color-accent);
+    }
+
+    .amenity-icon {
+      margin-bottom: 1.5rem;
+      color: var(--color-accent);
+    }
+
+    .amenity-title {
+      margin-bottom: 0.75rem;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 22px;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+
+    .amenity-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+    }
+
+    /* ===== FLOOR PLANS ===== */
+    #floor-plans {
+      position: relative;
+      width: 100%;
+      padding: 8rem 1.5rem;
+      background: var(--color-bg);
+    }
+
+    .fp-bg-gradient {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(42, 74, 53, 0.12) 0%, transparent 70%);
+    }
+
+    .fp-grid {
+      max-width: 80rem;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .fp-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .fp-cards { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    }
+
+    .fp-card {
+      position: relative;
+      cursor: default;
+      perspective: 1000px;
+    }
+
+    .fp-card-inner {
+      position: relative;
+      height: 100%;
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      transition: border-color 0.4s ease, transform 0.25s ease, box-shadow 0.4s ease;
+    }
+
+    .fp-card:hover .fp-card-inner {
+      border-color: rgba(201, 168, 76, 0.4);
+      transform: scale(1.02);
+    }
+
+    .fp-gradient-fill {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.6;
+      transition: opacity 0.4s ease;
+    }
+
+    .fp-card:hover .fp-gradient-fill { opacity: 1; }
+
+    .fp-body {
+      position: relative;
+      z-index: 10;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 480px;
+    }
+
+    .fp-badge {
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.375rem 0.75rem;
+      border-radius: 2px;
+      background: rgba(201, 168, 76, 0.15);
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      color: var(--color-accent);
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .fp-rule {
+      width: 40px;
+      height: 1px;
+      background: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .fp-type {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 28px;
+      color: var(--color-text);
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .fp-tagline {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--color-accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .fp-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      flex-grow: 1;
+    }
+
+    .fp-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .fp-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .fp-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    .fp-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .fp-price {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 20px;
+      color: var(--color-accent);
+    }
+
+    .fp-cta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.625rem 1.25rem;
+      border-radius: 2px;
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      background: transparent;
+      text-decoration: none;
+      transition: all 0.35s var(--ease-luxury);
+    }
+
+    .fp-cta:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+    }
+
+    /* ===== NEIGHBORHOOD ===== */
+    #neighborhood {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: var(--color-surface);
+    }
+
+    .neighborhood-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 700px;
+    }
+
+    @media (min-width: 1024px) {
+      .neighborhood-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .neighborhood-image {
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+    }
+
+    .neighborhood-image-wrap {
+      position: absolute;
+      inset: 0;
+    }
+
+    .neighborhood-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .neighborhood-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 70%, var(--color-surface) 100%);
+    }
+
+    .neighborhood-vert-label {
+      position: absolute;
+      bottom: 3rem;
+      left: 2rem;
+      font-family: var(--font-body);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(245, 239, 224, 0.5);
+      writing-mode: vertical-rl;
+    }
+
+    .neighborhood-content {
+      display: flex;
+      align-items: center;
+      padding: 6rem 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .neighborhood-content { padding: 6rem 4rem; }
+    }
+
+    @media (min-width: 1280px) {
+      .neighborhood-content { padding: 6rem 6rem; }
+    }
+
+    .neighborhood-inner {
+      max-width: 36rem;
+    }
+
+    .neighborhood-h2 {
+      margin-bottom: 1.5rem;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(40px, 5vw, 64px);
+      color: var(--color-text);
+      line-height: 1.08;
+    }
+
+    .neighborhood-p {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.8;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+
+    .proximity-list {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+
+    .proximity-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .proximity-place {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .proximity-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    .proximity-name {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--color-text);
+    }
+
+    .proximity-dist {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 12px;
+      color: var(--color-accent);
+      letter-spacing: 0.05em;
+    }
+
+    .neighborhood-divider {
+      height: 1px;
+      background: var(--color-border);
+      margin-bottom: 2rem;
+    }
+
+    .directions-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: gap 0.3s ease;
+    }
+
+    .directions-link svg {
+      transition: transform 0.3s ease;
+    }
+
+    .directions-link:hover svg { transform: translateX(4px); }
+
+    /* ===== ABOUT ===== */
+    #about {
+      position: relative;
+      width: 100%;
+      padding: 8rem 1.5rem;
+      overflow: hidden;
+      background: var(--color-bg);
+    }
+
+    .about-radial {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(42, 74, 53, 0.15) 0%, transparent 70%);
+    }
+
+    .about-inner {
+      max-width: 56rem;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .about-h2 {
+      margin-bottom: 2.5rem;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(44px, 6vw, 72px);
+      color: var(--color-text);
+      line-height: 1.08;
+    }
+
+    .about-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--color-accent);
+      margin: 0 auto 2.5rem;
+    }
+
+    .about-p {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      color: var(--color-text-muted);
+      line-height: 1.85;
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      max-width: 32rem;
+      margin: 4rem auto 0;
+    }
+
+    @media (min-width: 640px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .stat-box {
+      position: relative;
+      padding: 2rem;
+      border-radius: 2px;
+      text-align: center;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      background: rgba(42, 74, 53, 0.1);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .stat-box:hover {
+      border-color: rgba(201, 168, 76, 0.6);
+      background: rgba(42, 74, 53, 0.2);
+    }
+
+    .stat-corner-tr-h {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--color-accent);
+    }
+
+    .stat-corner-tr-v {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 1.5rem;
+      background: var(--color-accent);
+    }
+
+    .stat-corner-bl-h {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--color-accent);
+    }
+
+    .stat-corner-bl-v {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 1px;
+      height: 1.5rem;
+      background: var(--color-accent);
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(48px, 6vw, 72px);
+      color: var(--color-accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      position: relative;
+      width: 100%;
+      padding: 8rem 1.5rem;
+      overflow: hidden;
+      background: var(--color-surface);
+    }
+
+    .contact-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(42, 74, 53, 0.12) 0%, transparent 70%);
+    }
+
+    .contact-grid {
+      max-width: 80rem;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+
+    @media (min-width: 1024px) {
+      .contact-grid { grid-template-columns: repeat(2, 1fr); gap: 6rem; }
+    }
+
+    .contact-h2 {
+      margin-bottom: 2rem;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(40px, 5vw, 64px);
+      color: var(--color-text);
+      line-height: 1.08;
+    }
+
+    .contact-rule {
+      width: 40px;
+      height: 1px;
+      background: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-info-list {
+      margin-top: 2.5rem;
+    }
+
+    .contact-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.2s ease;
+    }
+
+    a.contact-info-item:hover { opacity: 0.75; }
+
+    .contact-icon {
+      color: var(--color-accent);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .contact-item-label {
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-item-value {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .tenant-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-border);
+      transition: color 0.3s ease, border-color 0.3s ease;
+      margin-top: 3rem;
+    }
+
+    .tenant-link:hover {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
+
+    .tenant-link svg { transition: transform 0.3s ease; }
+    .tenant-link:hover svg { transform: translateX(4px); }
+
+    /* Form */
+    .form-field { margin-bottom: 1.25rem; }
+
+    .form-label {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-required {
+      color: var(--color-accent);
+      margin-left: 4px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 2px;
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--color-text);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-textarea {
+      padding: 14px 16px;
+      resize: vertical;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .form-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 1rem;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.4s var(--ease-luxury);
+    }
+
+    .form-submit:hover {
+      background: #d4b558;
+      box-shadow: 0 8px 32px rgba(201, 168, 76, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .form-submit:disabled {
+      opacity: 0.7;
+      background: rgba(201, 168, 76, 0.5);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .form-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 0;
+    }
+
+    .form-success.show { display: flex; }
+    .contact-form.hide { display: none; }
+
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid var(--color-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-h3 {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 32px;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .success-p {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      max-width: 360px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer.site-footer {
+      position: relative;
+      width: 100%;
+      padding: 4rem 1.5rem 2.5rem;
+      background: var(--color-bg);
+    }
+
+    .footer-top-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent 0%, var(--color-accent) 30%, var(--color-accent) 70%, transparent 100%);
+      opacity: 0.5;
+    }
+
+    .footer-grid {
+      max-width: 80rem;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .footer-logo img {
+      height: 2.5rem;
+      width: auto;
+      object-fit: contain;
+      margin-bottom: 1.25rem;
+      filter: brightness(1.2) contrast(1.05);
+    }
+
+    .footer-tagline {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.8;
+      max-width: 260px;
+    }
+
+    .footer-col-title {
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-nav-list {
+      list-style: none;
+    }
+
+    .footer-nav-list li { margin-bottom: 0.75rem; }
+
+    .footer-nav-list a, .footer-portal-list a {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    .footer-nav-list a:hover { color: var(--color-text); }
+
+    .footer-portal-list {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .footer-portal-list li { margin-bottom: 0.75rem; }
+
+    .footer-portal-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-portal-list a:hover { color: var(--color-accent); }
+
+    .footer-contact a, .footer-contact p {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      display: block;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      transition: color 0.25s ease;
+    }
+
+    .footer-contact a:hover { color: var(--color-text); }
+
+    .footer-bottom {
+      max-width: 80rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    @media (min-width: 640px) {
+      .footer-bottom { flex-direction: row; }
+    }
+
+    .footer-copy, .footer-location {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .footer-copy { opacity: 0.7; }
+    .footer-location { opacity: 0.4; font-size: 11px; letter-spacing: 0.05em; }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- ===== NAV ===== -->
+  <nav class="main-nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo" aria-label="Emory Woods home">
+        <img src="https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/emorywoodslogo-01-423w.png" alt="Emory Woods Apartments logo" />
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#amenities">Amenities</a></li>
+        <li><a href="#floor-plans">Floor Plans</a></li>
+        <li><a href="#neighborhood">Neighborhood</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Schedule Tour</a>
+    </div>
+  </nav>
+
+  <!-- ===== SIDE DOTS ===== -->
+  <div class="side-dots" role="navigation" aria-label="Section navigation dots">
+    <div class="dot-item active" data-section="home">
+      <span class="dot-label">Home</span>
+      <a href="#home" class="dot-link" aria-label="Navigate to Home section">
+        <div class="dot-outer"></div>
+        <div class="dot-inner"></div>
+      </a>
+    </div>
+    <div class="dot-item" data-section="amenities">
+      <span class="dot-label">Amenities</span>
+      <a href="#amenities" class="dot-link" aria-label="Navigate to Amenities section">
+        <div class="dot-outer"></div>
+        <div class="dot-inner"></div>
+      </a>
+    </div>
+    <div class="dot-item" data-section="floor-plans">
+      <span class="dot-label">Floor Plans</span>
+      <a href="#floor-plans" class="dot-link" aria-label="Navigate to Floor Plans section">
+        <div class="dot-outer"></div>
+        <div class="dot-inner"></div>
+      </a>
+    </div>
+    <div class="dot-item" data-section="neighborhood">
+      <span class="dot-label">Neighborhood</span>
+      <a href="#neighborhood" class="dot-link" aria-label="Navigate to Neighborhood section">
+        <div class="dot-outer"></div>
+        <div class="dot-inner"></div>
+      </a>
+    </div>
+    <div class="dot-item" data-section="about">
+      <span class="dot-label">About</span>
+      <a href="#about" class="dot-link" aria-label="Navigate to About section">
+        <div class="dot-outer"></div>
+        <div class="dot-inner"></div>
+      </a>
+    </div>
+    <div class="dot-item" data-section="contact">
+      <span class="dot-label">Contact</span>
+      <a href="#contact" class="dot-link" aria-label="Navigate to Contact section">
+        <div class="dot-outer"></div>
+        <div class="dot-inner"></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section id="home" aria-label="Hero section — Emory Woods Apartments">
+    <div class="hero-bg" id="heroBg">
+      <img
+        src="https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/Emory_4-1920w.jpg"
+        alt="Emory Woods Apartments exterior nestled among 24 acres of mature Georgia forest"
+        loading="eager"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-vignette"></div>
+    </div>
+
+    <div class="hero-content">
+      <span class="hero-location">Decatur, Georgia</span>
+      <h1 class="hero-h1">
+        Where Forest Meets<br />Home
+      </h1>
+      <p class="hero-sub">24-acre wooded sanctuary near Emory University</p>
+      <div class="hero-ctas">
+        <a href="#amenities" class="btn-outline">Explore Residences</a>
+        <a href="#contact" class="btn-solid">Schedule Tour</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <span class="scroll-label">Scroll</span>
+      <div class="scroll-chevron">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 6l5 5 5-5" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AMENITIES ===== -->
+  <section id="amenities" aria-labelledby="amenities-heading">
+    <div class="section-border-top"></div>
+    <div class="amenities-grid">
+      <div class="anim-fade-up">
+        <span class="section-label">Amenities</span>
+        <h2 id="amenities-heading" style="font-family:var(--font-display);font-style:italic;font-weight:300;font-size:clamp(44px,6vw,72px);color:var(--color-text);line-height:1.08;max-width:600px;">
+          Everything You Need<br />Within Your Sanctuary
+        </h2>
+      </div>
+
+      <div class="amenities-cards" style="margin-top:5rem;">
+        <!-- Swimming Pool -->
+        <div class="amenity-card anim-fade-up delay-1">
+          <div class="card-corner-h"></div>
+          <div class="card-corner-v"></div>
+          <div class="amenity-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M3 12h18M3 12c0 4.418 4.03 8 9 8s9-3.582 9-8M3 12c0-1.5.5-3 2-4.5M21 12c0-1.5-.5-3-2-4.5M5 7.5C6.5 5.5 9 4 12 4s5.5 1.5 7 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 12a4 4 0 0 0 8 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="amenity-title">Swimming Pool</h3>
+          <p class="amenity-desc">Resort-style pool nestled among 24 acres of wooded grounds — your private escape.</p>
+        </div>
+
+        <!-- Covered Carports -->
+        <div class="amenity-card anim-fade-up delay-2">
+          <div class="card-corner-h"></div>
+          <div class="card-corner-v"></div>
+          <div class="amenity-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="10" width="18" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 10V7a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3 14h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="17" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="amenity-title">Covered Carports</h3>
+          <p class="amenity-desc">Protected parking for every resident, year-round — your vehicle sheltered from Georgia weather.</p>
+        </div>
+
+        <!-- On-Site Laundry -->
+        <div class="amenity-card anim-fade-up delay-3">
+          <div class="card-corner-h"></div>
+          <div class="card-corner-v"></div>
+          <div class="amenity-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="14" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="3" y="13" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M14 13h7M14 17h7M14 21h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="amenity-title">On-Site Laundry</h3>
+          <p class="amenity-desc">Modern laundry facilities in every building — convenient, clean, and always accessible.</p>
+        </div>
+
+        <!-- Central HVAC -->
+        <div class="amenity-card anim-fade-up delay-1">
+          <div class="card-corner-h"></div>
+          <div class="card-corner-v"></div>
+          <div class="amenity-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5.636 5.636l2.828 2.828M15.536 15.536l2.828 2.828M5.636 18.364l2.828-2.828M15.536 8.464l2.828-2.828" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="amenity-title">Central HVAC</h3>
+          <p class="amenity-desc">Climate-controlled comfort in every season — cool Georgia summers, warm winter evenings.</p>
+        </div>
+
+        <!-- Hardwood Floors -->
+        <div class="amenity-card anim-fade-up delay-2">
+          <div class="card-corner-h"></div>
+          <div class="card-corner-v"></div>
+          <div class="amenity-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M3 8h18M8 8v13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M12 13h5M12 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="amenity-title">Hardwood Floors</h3>
+          <p class="amenity-desc">Select units featuring rich hardwood throughout — warmth underfoot, character in every grain.</p>
+        </div>
+
+        <!-- MARTA Access -->
+        <div class="amenity-card anim-fade-up delay-3">
+          <div class="card-corner-h"></div>
+          <div class="card-corner-v"></div>
+          <div class="amenity-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M9 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M15 17l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 9h10M7 13h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="amenity-title">MARTA Access</h3>
+          <p class="amenity-desc">Minutes from public transit — connect to all of Atlanta seamlessly from your doorstep.</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-border-bottom"></div>
+  </section>
+
+  <!-- ===== FLOOR PLANS ===== -->
+  <section id="floor-plans" aria-labelledby="floorplans-heading">
+    <div class="fp-bg-gradient"></div>
+    <div class="fp-grid">
+      <div class="anim-fade-up" style="margin-bottom:5rem;text-align:center;">
+        <span class="section-label" style="display:block;text-align:center;">Floor Plans</span>
+        <h2 id="floorplans-heading" style="font-family:var(--font-display);font-style:italic;font-weight:300;font-size:clamp(44px,6vw,72px);color:var(--color-text);line-height:1.08;">
+          Choose Your Residence
+        </h2>
+      </div>
+
+      <div class="fp-cards">
+        <!-- Studio -->
+        <div class="fp-card anim-fade-up delay-1">
+          <div class="fp-card-inner">
+            <div class="fp-gradient-fill" style="background:linear-gradient(160deg, rgba(42, 74, 53, 0.4) 0%, rgba(13, 26, 18, 0.1) 100%);"></div>
+            <div class="fp-body">
+              <span class="fp-badge">Studio</span>
+              <div class="fp-rule"></div>
+              <h3 class="fp-type">Studio</h3>
+              <p class="fp-tagline">Efficient, elegant living.</p>
+              <p class="fp-desc">Perfectly curated for one. Every square foot intentional, every detail considered. Includes access to all community amenities.</p>
+              <ul class="fp-features" role="list">
+                <li><span class="fp-dot"></span>All utilities access</li>
+                <li><span class="fp-dot"></span>Central HVAC</li>
+                <li><span class="fp-dot"></span>Modern finishes</li>
+                <li><span class="fp-dot"></span>Community amenities</li>
+              </ul>
+              <div class="fp-footer">
+                <span class="fp-price">From $1,200/mo</span>
+                <a href="#contact" class="fp-cta">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Bedroom -->
+        <div class="fp-card anim-fade-up delay-2">
+          <div class="fp-card-inner">
+            <div class="fp-gradient-fill" style="background:linear-gradient(160deg, rgba(201, 168, 76, 0.15) 0%, rgba(13, 26, 18, 0.1) 100%);"></div>
+            <div class="fp-body">
+              <span class="fp-badge">2 BR</span>
+              <div class="fp-rule"></div>
+              <h3 class="fp-type">2 Bedroom Townhome</h3>
+              <p class="fp-tagline">Garden-style townhome.</p>
+              <p class="fp-desc">Private entry. Light-filled interiors. A townhome that breathes with the forest around it — your own ground-level retreat.</p>
+              <ul class="fp-features" role="list">
+                <li><span class="fp-dot"></span>Private entry</li>
+                <li><span class="fp-dot"></span>Garden-facing</li>
+                <li><span class="fp-dot"></span>Two full bedrooms</li>
+                <li><span class="fp-dot"></span>Covered carport</li>
+              </ul>
+              <div class="fp-footer">
+                <span class="fp-price">From $1,800/mo</span>
+                <a href="#contact" class="fp-cta">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Bedroom -->
+        <div class="fp-card anim-fade-up delay-3">
+          <div class="fp-card-inner">
+            <div class="fp-gradient-fill" style="background:linear-gradient(160deg, rgba(42, 61, 46, 0.5) 0%, rgba(13, 26, 18, 0.1) 100%);"></div>
+            <div class="fp-body">
+              <span class="fp-badge">3 BR</span>
+              <div class="fp-rule"></div>
+              <h3 class="fp-type">3 Bedroom Townhome</h3>
+              <p class="fp-tagline">Generous family living.</p>
+              <p class="fp-desc">Multi-level layout with wooded views. Space for everyone — and then some. Where family life unfolds naturally.</p>
+              <ul class="fp-features" role="list">
+                <li><span class="fp-dot"></span>Multi-level layout</li>
+                <li><span class="fp-dot"></span>Wooded views</li>
+                <li><span class="fp-dot"></span>Three bedrooms</li>
+                <li><span class="fp-dot"></span>Hardwood floors available</li>
+              </ul>
+              <div class="fp-footer">
+                <span class="fp-price">From $2,400/mo</span>
+                <a href="#contact" class="fp-cta">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEIGHBORHOOD ===== -->
+  <section id="neighborhood" aria-labelledby="neighborhood-heading">
+    <div class="section-border-top"></div>
+    <div class="neighborhood-grid">
+      <!-- Image -->
+      <div class="neighborhood-image">
+        <div class="neighborhood-image-wrap anim-wipe">
+          <img
+            src="https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/decatur_2-1920w.jpg"
+            alt="Decatur neighborhood near Emory Woods Apartments — tree-lined streets and local charm"
+            loading="lazy"
+          />
+          <div class="neighborhood-img-overlay"></div>
+        </div>
+        <span class="neighborhood-vert-label">Decatur, Georgia</span>
+      </div>
+
+      <!-- Content -->
+      <div class="neighborhood-content">
+        <div class="neighborhood-inner anim-fade-right">
+          <span class="section-label">Location</span>
+          <h2 id="neighborhood-heading" class="neighborhood-h2">
+            The Heart of<br />Decatur
+          </h2>
+          <p class="neighborhood-p">
+            Nestled just minutes from Emory University, the CDC, and Emory University Hospital.
+            Walk to local shops, cafes, and MARTA. Explore the vibrant DeKalb County lifestyle
+            while returning to your wooded sanctuary.
+          </p>
+
+          <ul class="proximity-list" role="list" aria-label="Nearby destinations">
+            <li>
+              <div class="proximity-place"><span class="proximity-dot"></span><span class="proximity-name">Emory University</span></div>
+              <span class="proximity-dist">0.8 miles</span>
+            </li>
+            <li>
+              <div class="proximity-place"><span class="proximity-dot"></span><span class="proximity-name">CDC Headquarters</span></div>
+              <span class="proximity-dist">1.2 miles</span>
+            </li>
+            <li>
+              <div class="proximity-place"><span class="proximity-dot"></span><span class="proximity-name">Emory University Hospital</span></div>
+              <span class="proximity-dist">1.0 miles</span>
+            </li>
+            <li>
+              <div class="proximity-place"><span class="proximity-dot"></span><span class="proximity-name">MARTA Station</span></div>
+              <span class="proximity-dist">Walking distance</span>
+            </li>
+            <li>
+              <div class="proximity-place"><span class="proximity-dot"></span><span class="proximity-name">Downtown Decatur</span></div>
+              <span class="proximity-dist">2 miles</span>
+            </li>
+          </ul>
+
+          <div class="neighborhood-divider"></div>
+
+          <a href="https://maps.google.com/?q=2085+Powell+Ln,+Decatur+GA+30033" target="_blank" rel="noopener noreferrer" class="directions-link">
+            Get Directions
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="section-border-bottom"></div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" aria-labelledby="about-heading">
+    <div class="about-radial"></div>
+    <div class="about-inner">
+      <span class="section-label anim-fade-up" style="display:block;text-align:center;">Our Story</span>
+      <h2 id="about-heading" class="about-h2 anim-fade-up delay-1">
+        A History of<br />Excellence
+      </h2>
+      <div class="about-rule anim-scale-x delay-2"></div>
+      <p class="about-p anim-fade-up delay-2">
+        For decades, Emory Woods has stood as a premier residential community in Decatur, Georgia.
+        Our dedicated team of property managers are polite, hardworking, efficient and considerate —
+        ensuring smooth operations and courteous communication with every resident.
+      </p>
+      <p class="about-p anim-fade-up delay-3">
+        We believe exceptional living begins with exceptional service. Our staff maintains the highest
+        standards — from tending our lush 24-acre grounds to addressing every resident need with care
+        and professionalism.
+      </p>
+
+      <div class="stats-grid anim-fade-up delay-4">
+        <div class="stat-box">
+          <div class="stat-corner-tr-h"></div>
+          <div class="stat-corner-tr-v"></div>
+          <div class="stat-corner-bl-h"></div>
+          <div class="stat-corner-bl-v"></div>
+          <div class="stat-number" data-count="24" data-suffix="">0</div>
+          <div class="stat-label">Wooded Acres</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-corner-tr-h"></div>
+          <div class="stat-corner-tr-v"></div>
+          <div class="stat-corner-bl-h"></div>
+          <div class="stat-corner-bl-v"></div>
+          <div class="stat-number" data-count="50" data-suffix="+">0</div>
+          <div class="stat-label">Years of Excellence</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" aria-labelledby="contact-heading">
+    <div class="section-border-top"></div>
+    <div class="contact-glow"></div>
+
+    <div class="contact-grid">
+      <!-- Left: Info -->
+      <div class="anim-fade-left">
+        <span class="section-label">Contact</span>
+        <h2 id="contact-heading" class="contact-h2">
+          Begin Your<br />Journey Home
+        </h2>
+        <div class="contact-rule"></div>
+
+        <div class="contact-info-list">
+          <a href="https://maps.google.com/?q=2085+Powell+Ln,+Decatur+GA+30033" class="contact-info-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-item-label">Address</div>
+              <div class="contact-item-value">2085 Powell Ln, Decatur, GA 30033</div>
+            </div>
+          </a>
+
+          <a href="tel:+14046343777" class="contact-info-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-item-label">Phone</div>
+              <div class="contact-item-value">(404) 634-3777</div>
+            </div>
+          </a>
+
+          <a href="mailto:leasing@emorywoods.com" class="contact-info-item">
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value">leasing@emorywoods.com</div>
+            </div>
+          </a>
+        </div>
+
+        <a href="https://www.emorywoods.com/tenant-portal" target="_blank" rel="noopener noreferrer" class="tenant-link">
+          Tenant Portal — Pay Rent
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="anim-fade-right">
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="success-h3">Inquiry Sent</h3>
+          <p class="success-p">Thank you for reaching out. Our leasing team will contact you within one business day.</p>
+        </div>
+
+        <form class="contact-form" id="contactForm" novalidate aria-label="Contact inquiry form" onsubmit="handleFormSubmit(event)">
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="firstName">First Name <span class="form-required" aria-hidden="true">*</span></label>
+              <input class="form-input" id="firstName" name="firstName" type="text" required autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="lastName">Last Name <span class="form-required" aria-hidden="true">*</span></label>
+              <input class="form-input" id="lastName" name="lastName" type="text" required autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="email">Email Address <span class="form-required" aria-hidden="true">*</span></label>
+            <input class="form-input" id="email" name="email" type="email" required autocomplete="email" />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="phone">Phone (optional)</label>
+            <input class="form-input" id="phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+
+          <div class="form-field" style="margin-bottom:2rem;">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-textarea" id="message" name="message" rows="4" placeholder="Tell us about your interest in Emory Woods..."></textarea>
+          </div>
+
+          <button type="submit" class="form-submit" id="submitBtn">Send Inquiry</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-top-border"></div>
+
+    <div class="footer-grid">
+      <!-- Logo + tagline -->
+      <div class="footer-logo">
+        <a href="#home" aria-label="Emory Woods — back to top">
+          <img src="https://lirp.cdn-website.com/6cfb94ae/dms3rep/multi/opt/emorywoodslogo-01-423w.png" alt="Emory Woods Apartments" loading="lazy" />
+        </a>
+        <p class="footer-tagline">A 24-acre wooded sanctuary in Decatur, Georgia — minutes from Emory University and the heart of Atlanta.</p>
+      </div>
+
+      <!-- Navigation -->
+      <div>
+        <p class="footer-col-title">Navigate</p>
+        <nav aria-label="Footer navigation">
+          <ul class="footer-nav-list" role="list">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#amenities">Amenities</a></li>
+            <li><a href="#floor-plans">Floor Plans</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Portals + Contact -->
+      <div>
+        <p class="footer-col-title">Resident Services</p>
+        <ul class="footer-portal-list" role="list">
+          <li>
+            <a href="https://www.emorywoods.com/tenant-portal" target="_blank" rel="noopener noreferrer">
+              Tenant Portal
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 8L8 2M4 2h4v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.emorywoods.com/owner-portal" target="_blank" rel="noopener noreferrer">
+              Owner Portal
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 8L8 2M4 2h4v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <div class="footer-contact">
+          <a href="tel:+14046343777">(404) 634-3777</a>
+          <a href="mailto:leasing@emorywoods.com">leasing@emorywoods.com</a>
+          <p>2085 Powell Ln, Decatur, GA 30033</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2024 Emory Woods Apartments. All rights reserved.</p>
+      <p class="footer-location">Decatur, Georgia 30033</p>
+    </div>
+  </footer>
+
+</div><!-- .page-wrapper -->
+
+<script>
+  // ===== HERO ENTRY ANIMATIONS =====
+  window.addEventListener('load', () => {
+    document.querySelector('.hero-content').classList.add('hero-loaded');
+    document.querySelector('.scroll-indicator').closest('section').querySelector('.scroll-indicator').parentElement.classList.add('hero-loaded');
+    // target hero section directly
+    document.getElementById('home').classList.add('hero-loaded');
+  });
+
+  // ===== PARALLAX HERO =====
+  const heroBg = document.getElementById('heroBg');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const heroH = document.getElementById('home').offsetHeight;
+    const progress = Math.min(scrollY / heroH, 1);
+    const yPct = progress * 30;
+    const scale = 1 + progress * 0.08;
+    heroBg.style.transform = `translateY(${yPct}%) scale(${scale})`;
+
+    // Fade hero content
+    const heroContent = document.querySelector('.hero-content');
+    const contentProgress = Math.min(scrollY / (heroH * 0.4), 1);
+    heroContent.style.opacity = 1 - contentProgress;
+    heroContent.style.transform = `translateY(${-contentProgress * 60}px)`;
+
+    // Fade scroll indicator
+    const scrollInd = document.querySelector('.scroll-indicator');
+    const indProgress = Math.min(scrollY / (heroH * 0.15), 1);
+    scrollInd.style.opacity = 1 - indProgress;
+  }, { passive: true });
+
+  // ===== INTERSECTION OBSERVER — scroll animations =====
+  const animEls = document.querySelectorAll('.anim-fade-up, .anim-fade-left, .anim-fade-right, .anim-scale-x, .anim-wipe');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Count-up trigger for stats
+        const statNum = entry.target.querySelector ? entry.target.querySelector('.stat-number') : null;
+        if (statNum) triggerCountUp(statNum);
+      }
+    });
+  }, { rootMargin: '-100px 0px -100px 0px', threshold: 0 });
+
+  animEls.forEach(el => observer.observe(el));
+
+  // Observe stats grid separately
+  const statsGrid = document.querySelector('.stats-grid');
+  if (statsGrid) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.stat-number').forEach(el => triggerCountUp(el));
+          statsObserver.disconnect();
+        }
+      });
+    }, { rootMargin: '-100px 0px' });
+    statsObserver.observe(statsGrid);
+  }
+
+  // ===== COUNT-UP =====
+  function triggerCountUp(el) {
+    if (el.dataset.animated) return;
+    el.dataset.animated = '1';
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    let startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  // ===== SIDE DOTS — active section tracking =====
+  const dotSections = ['home','amenities','floor-plans','neighborhood','about','contact'];
+  const dotItems = document.querySelectorAll('.dot-item');
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        dotItems.forEach(d => {
+          d.classList.toggle('active', d.dataset.section === id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+
+  dotSections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObserver.observe(el);
+  });
+
+  // ===== CONTACT FORM =====
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    setTimeout(() => {
+      document.getElementById('contactForm').classList.add('hide');
+      document.getElementById('formSuccess').classList.add('show');
+    }, 1200);
+  }
+</script>
+</body>
+</html>
