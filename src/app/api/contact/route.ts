@@ -10,9 +10,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
+  }
+
+  if (phone) {
+    const digitsOnly = phone.replace(/\D/g, "");
+    if (digitsOnly.length < 10 || digitsOnly.length > 15) {
+      return NextResponse.json({ error: "Invalid phone number" }, { status: 400 });
+    }
+  }
+
   const { error } = await resend.emails.send({
     from: "Emory Woods Contact <onboarding@resend.dev>",
     to: ["leasing@emorywoods.com"],
+    //cc: ["35gw@duck.com"],
     subject: `New Inquiry from ${firstName} ${lastName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">

@@ -40,8 +40,23 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
     setError(null);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formState.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (formState.phone) {
+      const digitsOnly = formState.phone.replace(/\D/g, "");
+      if (digitsOnly.length < 10 || digitsOnly.length > 15) {
+        setError("Please enter a valid phone number.");
+        return;
+      }
+    }
+
+    setSubmitting(true);
 
     try {
       const res = await fetch("/api/contact", {
