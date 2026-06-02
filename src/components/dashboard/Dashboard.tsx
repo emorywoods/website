@@ -5,7 +5,6 @@ import type { DashboardEntry, EntryKind } from "@/lib/db";
 import type { Unit } from "@/lib/units";
 import { BUILDINGS, buildingByCode } from "@/lib/buildings";
 import UnitRoster, { getLeaseAlert, LEASE_WARN_DAYS, EditModal } from "./UnitRoster";
-import type { Unit } from "@/lib/units";
 import ExportPDF from "./ExportPDF";
 import PropertyMap, { type BuildingCounts, type BuildingEntries } from "./PropertyMap";
 
