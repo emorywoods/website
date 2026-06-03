@@ -12,7 +12,7 @@ interface EntryFormProps {
   onCancel: () => void;
 }
 
-const UNIT_TYPES = ["Studio", "1BR", "2BR", "3BR"];
+const UNIT_TYPES = ["Studio", "2BR", "3BR"];
 const CONDITIONS = ["Classic", "Renovated"];
 
 export default function EntryForm({ kind, accessCode, defaultBuilding, onSaved, onCancel }: EntryFormProps) {

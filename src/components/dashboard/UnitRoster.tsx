@@ -12,7 +12,7 @@ interface UnitRosterProps {
   emptyMessage?: string;
 }
 
-const UNIT_TYPES = ["Studio", "1BR", "2BR", "3BR"];
+const UNIT_TYPES = ["Studio", "2BR", "3BR"];
 const CONDITIONS = ["Classic", "Renovated"];
 const STATUSES: UnitStatus[] = ["occupied", "vacant", "notice"];
 

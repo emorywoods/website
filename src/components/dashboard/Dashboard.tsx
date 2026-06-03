@@ -204,6 +204,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const [tab, setTab] = useState<DashTab>("vacant");
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string>("");
   const [searchEditUnit, setSearchEditUnit] = useState<Unit | null>(null);
 
   const load = useCallback(async () => {
@@ -268,7 +269,8 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   }
 
   // Units filtered by status (and building if selected) — drives Vacant/Notice tabs
-  const filteredUnits = selected ? units.filter((u) => u.building === selected) : units;
+  const buildingFiltered = selected ? units.filter((u) => u.building === selected) : units;
+  const filteredUnits = typeFilter ? buildingFiltered.filter((u) => u.unit_type === typeFilter) : buildingFiltered;
   const vacantUnits = filteredUnits.filter((u) => u.status === "vacant");
   const noticeUnits = filteredUnits.filter((u) => u.status === "notice");
   const renewalUnits = filteredUnits.filter((u) => getLeaseAlert(u) !== null);
@@ -278,7 +280,8 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const allUnitsForSearch = searchQuery
     ? units.filter((u) => {
         const building = buildingByCode(u.building);
-        return (
+        const matchesType = !typeFilter || u.unit_type === typeFilter;
+        return matchesType && (
           u.apt_number.toLowerCase().includes(searchQuery) ||
           (u.tenant_name ?? "").toLowerCase().includes(searchQuery) ||
           u.building.toLowerCase().includes(searchQuery) ||
@@ -408,6 +411,28 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               >✕</button>
             )}
           </div>
+          {/* Type filter */}
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            style={{
+              background: "var(--color-bg)",
+              border: "1px solid var(--color-border)",
+              borderRadius: "6px",
+              padding: "8px 12px",
+              color: typeFilter ? "var(--color-text)" : "var(--color-text-muted)",
+              fontFamily: "var(--font-body)",
+              fontSize: "0.9rem",
+              outline: "none",
+              cursor: "pointer",
+              ...(typeFilter ? { borderColor: "rgba(201,168,76,0.5)", color: "var(--color-accent)" } : {}),
+            }}
+          >
+            <option value="">All Types</option>
+            <option value="Studio">Studio</option>
+            <option value="2BR">2BR</option>
+            <option value="3BR">3BR</option>
+          </select>
           <span style={{ color: "var(--color-text-muted)", fontSize: "0.96rem" }}>{today}</span>
           <ExportPDF units={units} />
         </div>
@@ -593,7 +618,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
             {tab === "units" ? (
               <UnitRoster
                 units={filteredUnits}
-                selectedBuilding={selected}
+                selectedBuilding={selected ?? "all"}
                 accessCode={accessCode}
                 onRefresh={() => loadUnits(selected)}
                 loading={unitsLoading}
