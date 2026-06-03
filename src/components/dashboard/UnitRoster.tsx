@@ -122,13 +122,20 @@ function leaseEndDate(moveIn: Date): Date {
 }
 
 export function getLeaseAlert(unit: Unit): LeaseAlert | null {
-  if (unit.lease_type !== "12-month" || !unit.move_in_date) return null;
-  const moveIn = parseUTCDate(unit.move_in_date);
-  if (!moveIn) return null;
+  if (unit.lease_type !== "12-month") return null;
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
 
-  const anniversary = leaseEndDate(moveIn);
+  // Prefer explicit lease_to (move_out_date); fall back to computed from move_in_date
+  let anniversary: Date | null = null;
+  if (unit.move_out_date) {
+    anniversary = parseUTCDate(unit.move_out_date);
+  } else if (unit.move_in_date) {
+    const moveIn = parseUTCDate(unit.move_in_date);
+    if (moveIn) anniversary = leaseEndDate(moveIn);
+  }
+  if (!anniversary) return null;
+
   const daysUntil = Math.round((anniversary.getTime() - today.getTime()) / 86_400_000);
   if (daysUntil > LEASE_WARN_DAYS) return null;
 
