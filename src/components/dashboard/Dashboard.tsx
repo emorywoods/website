@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import type { DashboardEntry, EntryKind } from "@/lib/db";
 import type { Unit } from "@/lib/units";
 import { BUILDINGS, buildingByCode } from "@/lib/buildings";
@@ -203,7 +203,9 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [tab, setTab] = useState<DashTab>("vacant");
   const [showForm, setShowForm] = useState(false);
-  const [search, setSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>("");
   const [searchEditUnit, setSearchEditUnit] = useState<Unit | null>(null);
 
@@ -275,19 +277,33 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const noticeUnits = filteredUnits.filter((u) => u.status === "notice");
   const renewalUnits = filteredUnits.filter((u) => getLeaseAlert(u) !== null);
 
-  // Search filter — matches unit number, tenant name, building code, or address
-  const searchQuery = search.trim().toLowerCase();
-  const allUnitsForSearch = searchQuery
+  // Build a compact slug for a unit: "2194nd01" from code "2194 ND" + apt "01"
+  // Also produce a zero-stripped variant: "2194nd1" so either form matches
+  function unitSlugs(buildingCode: string, aptNumber: string): string[] {
+    const slug = (buildingCode + aptNumber).toLowerCase().replace(/\s+/g, "");
+    // strip leading zeros from the unit portion only
+    const unitStripped = aptNumber.replace(/^0+(\d)/, "$1").toLowerCase();
+    const slugStripped = buildingCode.toLowerCase().replace(/\s+/g, "") + unitStripped;
+    return slug === slugStripped ? [slug] : [slug, slugStripped];
+  }
+
+  // Search filter — matches unit number, tenant name, building code, address, or compact slug
+  const slugQuery = searchQuery.trim().toLowerCase().replace(/\s+/g, "");
+  const rawQuery = searchQuery.trim().toLowerCase();
+  const allUnitsForSearch = searchQuery.trim()
     ? units.filter((u) => {
         const building = buildingByCode(u.building);
         const matchesType = !typeFilter || u.unit_type === typeFilter;
-        return matchesType && (
-          u.apt_number.toLowerCase().includes(searchQuery) ||
-          (u.tenant_name ?? "").toLowerCase().includes(searchQuery) ||
-          u.building.toLowerCase().includes(searchQuery) ||
-          (building?.address ?? "").toLowerCase().includes(searchQuery) ||
-          (u.notes ?? "").toLowerCase().includes(searchQuery)
-        );
+        if (!matchesType) return false;
+        if (
+          u.apt_number.toLowerCase().includes(rawQuery) ||
+          (u.tenant_name ?? "").toLowerCase().includes(rawQuery) ||
+          u.building.toLowerCase().includes(rawQuery) ||
+          (building?.address ?? "").toLowerCase().includes(rawQuery) ||
+          (u.notes ?? "").toLowerCase().includes(rawQuery)
+        ) return true;
+        const slugs = unitSlugs(u.building, u.apt_number);
+        return slugs.some((s) => s.includes(slugQuery));
       })
     : null;
 
@@ -295,8 +311,8 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const selectedBuilding = selected ? buildingByCode(selected) : null;
 
   const tabStyle = (t: DashTab): React.CSSProperties => ({
-    flex: 1,
-    padding: "10px 12px",
+    flexShrink: 0,
+    padding: "10px 16px",
     background: tab === t ? "var(--color-surface)" : "transparent",
     border: "none",
     borderBottom: tab === t ? "2px solid var(--color-accent)" : "2px solid transparent",
@@ -308,6 +324,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
     cursor: "pointer",
     fontWeight: tab === t ? 600 : 400,
     transition: "color 0.15s, border-color 0.15s",
+    whiteSpace: "nowrap",
   });
 
   return (
@@ -364,29 +381,33 @@ export default function Dashboard({ accessCode }: DashboardProps) {
       )}
       {/* Top bar */}
       <div
+        className="dash-topbar"
         style={{
           borderBottom: "1px solid var(--color-border)",
-          padding: "18px 32px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
           background: "var(--color-surface)",
           position: "sticky",
           top: 0,
           zIndex: 10,
         }}
       >
-        <div>
-          <span style={{ fontFamily: "var(--font-display)", color: "var(--color-accent)", fontSize: "1.35rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-            Emory Woods
-          </span>
-          <span style={{ color: "var(--color-text-muted)", fontSize: "0.96rem", letterSpacing: "0.1em", textTransform: "uppercase", marginLeft: "12px" }}>
-            Leasing Dashboard
-          </span>
+        {/* Row 1: logo + actions */}
+        <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "10px", minWidth: 0 }}>
+            <span style={{ fontFamily: "var(--font-display)", color: "var(--color-accent)", fontSize: "1.2rem", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+              Emory Woods
+            </span>
+            <span className="dash-subtitle" style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+              Leasing Dashboard
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+            <span className="dash-date" style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", whiteSpace: "nowrap" }}>{today}</span>
+            <ExportPDF units={units} />
+          </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          {/* Search */}
-          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+        {/* Row 2: search + filter */}
+        <div style={{ padding: "0 20px 12px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ position: "relative", display: "flex", alignItems: "center", flex: 1 }}>
             <svg
               width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
               style={{ position: "absolute", left: "10px", color: "var(--color-text-muted)", pointerEvents: "none" }}
@@ -394,16 +415,29 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
+              ref={searchInputRef}
               type="text"
               placeholder="Search unit, tenant, address…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => e.key === "Escape" && setSearch("")}
+              defaultValue=""
+              onChange={(e) => {
+                const val = e.target.value;
+                if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+                searchDebounceRef.current = setTimeout(() => setSearchQuery(val), 150);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  if (searchInputRef.current) searchInputRef.current.value = "";
+                  setSearchQuery("");
+                }
+              }}
               className="dash-search-input"
             />
-            {search && (
+            {searchQuery && (
               <button
-                onClick={() => setSearch("")}
+                onClick={() => {
+                  if (searchInputRef.current) searchInputRef.current.value = "";
+                  setSearchQuery("");
+                }}
                 style={{
                   position: "absolute", right: "8px", background: "transparent", border: "none",
                   color: "var(--color-text-muted)", cursor: "pointer", fontSize: "0.9rem", lineHeight: 1,
@@ -420,12 +454,13 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               border: "1px solid var(--color-border)",
               borderRadius: "6px",
               padding: "8px 12px",
-              color: typeFilter ? "var(--color-text)" : "var(--color-text-muted)",
+              color: typeFilter ? "var(--color-accent)" : "var(--color-text-muted)",
               fontFamily: "var(--font-body)",
               fontSize: "0.9rem",
               outline: "none",
               cursor: "pointer",
-              ...(typeFilter ? { borderColor: "rgba(201,168,76,0.5)", color: "var(--color-accent)" } : {}),
+              flexShrink: 0,
+              ...(typeFilter ? { borderColor: "rgba(201,168,76,0.5)" } : {}),
             }}
           >
             <option value="">All Types</option>
@@ -433,21 +468,20 @@ export default function Dashboard({ accessCode }: DashboardProps) {
             <option value="2BR">2BR</option>
             <option value="3BR">3BR</option>
           </select>
-          <span style={{ color: "var(--color-text-muted)", fontSize: "0.96rem" }}>{today}</span>
-          <ExportPDF units={units} />
         </div>
       </div>
 
 
       {/* Search results overlay */}
-      <div style={{
-        position: "fixed", top: "72px", left: 0, right: 0, bottom: 0,
-        background: "var(--color-bg)", zIndex: 9, overflowY: "auto", padding: "24px 32px",
+      <div className="dash-search-overlay" style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        background: "var(--color-bg)", zIndex: 9, overflowY: "auto", padding: "24px 20px",
+        paddingTop: "calc(var(--dash-topbar-h, 120px) + 8px)",
         display: allUnitsForSearch ? "block" : "none",
       }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
             <span style={{ color: "var(--color-text-muted)", fontSize: "0.9rem", letterSpacing: "0.06em" }}>
-              {allUnitsForSearch?.length ?? 0} result{(allUnitsForSearch?.length ?? 0) !== 1 ? "s" : ""} for &ldquo;{search}&rdquo;
+              {allUnitsForSearch?.length ?? 0} result{(allUnitsForSearch?.length ?? 0) !== 1 ? "s" : ""} for &ldquo;{searchQuery}&rdquo;
             </span>
           </div>
           {(allUnitsForSearch?.length ?? 0) === 0 ? (
@@ -476,7 +510,8 @@ export default function Dashboard({ accessCode }: DashboardProps) {
                     onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
                     onClick={() => {
                       setSearchEditUnit(u);
-                      setSearch("");
+                      if (searchInputRef.current) searchInputRef.current.value = "";
+                      setSearchQuery("");
                     }}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -518,12 +553,13 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           display: "grid",
           gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr)",
           gap: "0",
-          height: "calc(100dvh - 72px)",
+          height: "calc(100dvh - 110px)",
         }}
         className="dashboard-grid"
       >
         {/* Left — map */}
         <div
+          className="dash-map-panel"
           style={{
             borderRight: "1px solid var(--color-border)",
             overflow: "hidden",
@@ -541,7 +577,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
         </div>
 
         {/* Right — tabbed panel */}
-        <div style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div className="dash-panel" style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
           {/* Filter indicator */}
           {selected && selectedBuilding && (
             <div
@@ -578,7 +614,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           )}
 
           {/* Tabs */}
-          <div style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)" }}>
+          <div className="dash-tabs" style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", overflowX: "auto", scrollbarWidth: "none" }}>
             <button style={tabStyle("vacant")} onClick={() => setTab("vacant")}>
               Vacant
               {!unitsLoading && (
@@ -657,11 +693,6 @@ export default function Dashboard({ accessCode }: DashboardProps) {
 
       {/* Mobile responsive override */}
       <style>{`
-        @media (max-width: 900px) {
-          .dashboard-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
         .dash-search-input {
           background: var(--color-bg);
           border: 1px solid var(--color-border);
@@ -671,11 +702,71 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           font-family: var(--font-body);
           font-size: 0.9rem;
           outline: none;
-          width: 240px;
+          width: 100%;
           transition: border-color 0.15s;
+          box-sizing: border-box;
         }
         .dash-search-input:focus {
           border-color: rgba(201,168,76,0.5);
+        }
+        .dash-tabs::-webkit-scrollbar { display: none; }
+
+        /* ── Desktop (>900px) ── */
+        @media (min-width: 901px) {
+          .dashboard-grid {
+            grid-template-columns: minmax(0,1.6fr) minmax(0,1fr) !important;
+            height: calc(100dvh - 110px) !important;
+          }
+          .dash-map-panel {
+            display: flex !important;
+            position: static !important;
+            height: 100% !important;
+          }
+          .dash-panel {
+            display: flex !important;
+            position: static !important;
+            height: 100% !important;
+          }
+        }
+
+        /* ── Mobile (≤900px) ── */
+        @media (max-width: 900px) {
+          .dash-subtitle { display: none !important; }
+          .dash-date { display: none !important; }
+
+          /* Grid: single column, full remaining height */
+          .dashboard-grid {
+            grid-template-columns: 1fr !important;
+            height: calc(100dvh - 110px) !important;
+            position: relative !important;
+            display: block !important;
+          }
+
+          /* Map fills the top ~45% */
+          .dash-map-panel {
+            display: flex !important;
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 45% !important;
+            border-right: none !important;
+            border-bottom: 1px solid var(--color-border);
+          }
+
+          /* Panel sits in the bottom 55% */
+          .dash-panel {
+            display: flex !important;
+            position: absolute !important;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 55% !important;
+            border-top: 1px solid var(--color-border);
+            background: var(--color-bg);
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+          }
         }
       `}</style>
     </div>

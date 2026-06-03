@@ -376,7 +376,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
         </div>
 
         {/* Dates */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "14px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "14px" }}>
           <div>
             <label style={labelStyle}>{form.status === "occupied" && form.lease_type === "12-month" ? "Last Lease Renewal / Lease From" : "Move-In"}</label>
             <input type="date" style={inputStyle} value={form.move_in_date ?? ""} onChange={(e) => set("move_in_date", e.target.value)} />
