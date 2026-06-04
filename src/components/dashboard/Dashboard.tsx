@@ -6,9 +6,11 @@ import type { Unit } from "@/lib/units";
 import { BUILDINGS, buildingByCode } from "@/lib/buildings";
 import UnitRoster, { getLeaseAlert, LEASE_WARN_DAYS, EditModal } from "./UnitRoster";
 import ExportPDF from "./ExportPDF";
+import UnitTable from "./UnitTable";
 import PropertyMap, { type BuildingCounts, type BuildingEntries } from "./PropertyMap";
 
 type DashTab = EntryKind | "units" | "renewals";
+type ViewMode = "map" | "table";
 
 interface DashboardProps {
   accessCode: string;
@@ -57,6 +59,15 @@ function DeleteButton({ onDelete }: { onDelete: () => void }) {
     </button>
   );
 }
+
+const tdS: React.CSSProperties = {
+  padding: "6px 10px",
+  borderBottom: "1px solid var(--color-border)",
+  borderRight: "1px solid var(--color-border)",
+  verticalAlign: "middle",
+  fontSize: "0.82rem",
+  whiteSpace: "nowrap",
+};
 
 const ghostBtn: React.CSSProperties = {
   background: "transparent",
@@ -202,6 +213,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const [initialLoad, setInitialLoad] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
   const [tab, setTab] = useState<DashTab>("vacant");
+  const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -275,7 +287,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const filteredUnits = typeFilter ? buildingFiltered.filter((u) => u.unit_type === typeFilter) : buildingFiltered;
   const vacantUnits = filteredUnits.filter((u) => u.status === "vacant");
   const noticeUnits = filteredUnits.filter((u) => u.status === "notice");
-  const renewalUnits = filteredUnits.filter((u) => getLeaseAlert(u) !== null);
+  const renewalUnits = filteredUnits.filter((u) => u.status === "occupied" && getLeaseAlert(u) !== null);
 
   // Build a compact slug for a unit: "2194nd01" from code "2194 ND" + apt "01"
   // Also produce a zero-stripped variant: "2194nd1" so either form matches
@@ -402,6 +414,39 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
             <span className="dash-date" style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", whiteSpace: "nowrap" }}>{today}</span>
+            {/* View mode switch */}
+            <div style={{ display: "flex", border: "1px solid var(--color-border)", borderRadius: "6px", overflow: "hidden" }}>
+              {(["map", "table"] as ViewMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setViewMode(mode)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: "5px",
+                    padding: "6px 12px",
+                    background: viewMode === mode ? "rgba(201,168,76,0.15)" : "transparent",
+                    border: "none",
+                    borderRight: mode === "map" ? "1px solid var(--color-border)" : "none",
+                    color: viewMode === mode ? "var(--color-accent)" : "var(--color-text-muted)",
+                    fontFamily: "var(--font-body)", fontSize: "0.82rem", letterSpacing: "0.08em",
+                    textTransform: "uppercase", cursor: "pointer", transition: "all 0.15s",
+                  }}
+                >
+                  {mode === "map" ? (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                      <line x1="9" y1="3" x2="9" y2="18" /><line x1="15" y1="6" x2="15" y2="21" />
+                    </svg>
+                  ) : (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <line x1="3" y1="9" x2="21" y2="9" /><line x1="3" y1="15" x2="21" y2="15" />
+                      <line x1="9" y1="3" x2="9" y2="21" />
+                    </svg>
+                  )}
+                  {mode}
+                </button>
+              ))}
+            </div>
             <ExportPDF units={units} />
           </div>
         </div>
@@ -547,11 +592,22 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           )}
       </div>
 
+      {/* Main content — table view */}
+      {viewMode === "table" && (
+        <div style={{ height: "calc(100dvh - 110px)" }}>
+          <UnitTable
+            units={units}
+            loading={unitsLoading}
+            onClickUnit={(u) => setSearchEditUnit(u)}
+          />
+        </div>
+      )}
+
       {/* Main content — map + sidebar */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr)",
+          display: viewMode === "map" ? "grid" : "none",
+          gridTemplateColumns: "minmax(0,1.1fr) minmax(0,0.9fr)",
           gap: "0",
           height: "calc(100dvh - 110px)",
         }}
@@ -714,7 +770,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
         /* ── Desktop (>900px) ── */
         @media (min-width: 901px) {
           .dashboard-grid {
-            grid-template-columns: minmax(0,1.6fr) minmax(0,1fr) !important;
+            grid-template-columns: minmax(0,1.1fr) minmax(0,0.9fr) !important;
             height: calc(100dvh - 110px) !important;
           }
           .dash-map-panel {

@@ -18,6 +18,9 @@ export interface Unit {
   move_out_date: string | null;
   notice_date: string | null;
   maintenance_needed: string;
+  maintenance_done: boolean;
+  lock_change_needed: boolean;
+  ready_for_tour: boolean;
   notes: string;
   future_tenant: string;
   future_move_in_date: string | null;
@@ -59,6 +62,9 @@ export function ensureUnitsTable(): Promise<void> {
       pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS lease_type TEXT NOT NULL DEFAULT ''`),
       pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS future_tenant TEXT NOT NULL DEFAULT ''`),
       pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS future_move_in_date DATE`),
+      pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS maintenance_done BOOLEAN NOT NULL DEFAULT FALSE`),
+      pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS lock_change_needed BOOLEAN NOT NULL DEFAULT FALSE`),
+      pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS ready_for_tour BOOLEAN NOT NULL DEFAULT FALSE`),
     ]);
   })();
   return tableReady;
@@ -92,12 +98,13 @@ export async function getUnits(building?: string): Promise<Unit[]> {
 }
 
 const DATE_FIELDS = new Set(["move_in_date", "move_out_date", "notice_date", "future_move_in_date"]);
+const TEXT_FIELDS = new Set(["tenant_name", "tenant_contact", "unit_type", "unit_condition", "rent", "lease_type", "maintenance_needed", "notes", "future_tenant"]);
 
 export async function updateUnit(id: number, patch: UnitPatch): Promise<Unit> {
   await ensureUnitsTable();
   const allowed: (keyof UnitPatch)[] = [
     "status", "tenant_name", "tenant_contact", "unit_type", "unit_condition",
-    "rent", "lease_type", "move_in_date", "move_out_date", "notice_date", "maintenance_needed", "notes",
+    "rent", "lease_type", "move_in_date", "move_out_date", "notice_date", "maintenance_needed", "maintenance_done", "lock_change_needed", "ready_for_tour", "notes",
     "future_tenant", "future_move_in_date",
   ];
   const sets: string[] = [];
@@ -107,7 +114,11 @@ export async function updateUnit(id: number, patch: UnitPatch): Promise<Unit> {
     if (key in patch) {
       sets.push(`${key} = $${idx}`);
       const raw = (patch as Record<string, unknown>)[key];
-      vals.push(DATE_FIELDS.has(key) && (raw === "" || raw === null || raw === undefined) ? null : (raw ?? null));
+      vals.push(
+        DATE_FIELDS.has(key) && (raw === "" || raw === null || raw === undefined) ? null
+        : TEXT_FIELDS.has(key) && (raw === null || raw === undefined) ? ""
+        : (raw ?? null)
+      );
       idx++;
     }
   }

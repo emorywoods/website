@@ -225,7 +225,7 @@ export default function AboutSection() {
           transition={{ duration: 0.9, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
           <StatBox value={24} label="Wooded Acres" active={isInView} />
-          <StatBox value={50} label="Years of Excellence" suffix="+" active={isInView} />
+          <StatBox value={75} label="Years of Excellence" suffix="+" active={isInView} />
         </motion.div>
       </div>
     </section>

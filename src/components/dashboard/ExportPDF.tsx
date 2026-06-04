@@ -7,8 +7,16 @@ interface ExportPDFProps {
 }
 
 function fmt(date: string | null): string {
-  if (!date) return "—";
-  return new Date(date.slice(0, 10) + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  if (!date) return "";
+  const d = new Date(date.slice(0, 10) + "T00:00:00Z");
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  const y = d.getUTCFullYear();
+  return `${m}/${day}/${y}`;
+}
+
+function unitCode(building: string, apt: string): string {
+  return building.replace(/\s+/g, "") + apt.replace(/\s+/g, "");
 }
 
 function displayStatus(u: Unit): string {
@@ -17,8 +25,20 @@ function displayStatus(u: Unit): string {
 }
 
 export default function ExportPDF({ units }: ExportPDFProps) {
-  const vacants = units.filter((u) => u.status === "vacant");
-  const notices = units.filter((u) => u.status === "notice");
+  const TYPE_ORDER: Record<string, number> = { Studio: 0, "2BR": 1, "3BR": 2 };
+  function typeRank(t: string) { return TYPE_ORDER[t] ?? 99; }
+
+  const vacants = units
+    .filter((u) => u.status === "vacant")
+    .sort((a, b) => {
+      const aHas = !!(a.future_tenant || a.future_move_in_date);
+      const bHas = !!(b.future_tenant || b.future_move_in_date);
+      if (aHas !== bHas) return Number(aHas) - Number(bHas);
+      return typeRank(a.unit_type) - typeRank(b.unit_type);
+    });
+  const notices = units
+    .filter((u) => u.status === "notice")
+    .sort((a, b) => typeRank(a.unit_type) - typeRank(b.unit_type));
 
   function doExport() {
     const today = new Date().toLocaleDateString("en-US", {
@@ -26,25 +46,44 @@ export default function ExportPDF({ units }: ExportPDFProps) {
     });
 
     function buildRows(rows: Unit[], isVacant = false): string {
-      const cols = isVacant ? 7 : 8;
+      const cols = 13;
       if (rows.length === 0) {
         return `<tr><td colspan="${cols}" style="text-align:center;color:#999;padding:16px;font-style:italic">No entries</td></tr>`;
       }
-      return rows.map((u) => `
-        <tr>
-          <td>${u.building}</td>
-          <td>${u.apt_number}</td>
+      return rows.map((u, i) => {
+        const hasFuture = !!(u.future_tenant || u.future_move_in_date);
+        const bg = i % 2 === 0 ? "#ffffff" : "#f7f3ec";
+        const rowStyle = `background:${bg};border-left:3px solid ${hasFuture && isVacant ? "#c9a84c" : isVacant ? "#e05c5c" : "#9bbfa8"};`;
+        function cb(checked: boolean): string {
+          return checked
+            ? `<td style="text-align:center;border-right:1px solid #f0ebe0;padding:1px 3px;background:rgba(26,58,37,0.08);">&#10003;</td>`
+            : `<td style="text-align:center;border-right:1px solid #f0ebe0;padding:1px 3px;"></td>`;
+        }
+        const items = (u.maintenance_needed || "").split(",").map((s: string) => s.trim()).filter(Boolean);
+        const maintCells = [
+          cb(items.includes("Paint")),
+          cb(items.includes("Maintenance")),
+          cb(items.includes("Cleaning")),
+          cb(items.includes("Flooring")),
+          cb(!!u.maintenance_done),
+          cb(!!u.lock_change_needed),
+        ].join("");
+        return `
+        <tr style="${rowStyle}">
+          <td style="font-weight:600;letter-spacing:0.02em;">${unitCode(u.building, u.apt_number)}</td>
           <td>${displayStatus(u)}</td>
-          <td>${u.unit_type || "—"}</td>
-          <td>${u.unit_condition || "—"}</td>
-          <td>${u.rent || "—"}</td>
+          <td>${u.unit_type || ""}</td>
+          <td>${u.unit_condition || ""}</td>
+          <td>${u.rent || ""}</td>
           ${isVacant
-            ? `<td>${u.future_tenant || "—"}${u.future_move_in_date ? `<br><span style="color:#888;font-size:10px">Move-in: ${fmt(u.future_move_in_date)}</span>` : ""}</td>`
-            : `<td>${u.move_in_date ? fmt(u.move_in_date) : u.move_out_date ? fmt(u.move_out_date) : "—"}</td>
-               <td>${u.tenant_name || "—"}</td>`
+            ? `<td>${u.future_tenant || ""}</td>
+               <td>${u.future_move_in_date ? fmt(u.future_move_in_date) : ""}</td>`
+            : `<td>${u.move_in_date ? fmt(u.move_in_date) : u.move_out_date ? fmt(u.move_out_date) : ""}</td>
+               <td>${u.tenant_name || ""}</td>`
           }
+          ${maintCells}
         </tr>
-      `).join("");
+      `}).join("");
     }
 
     const html = `<!DOCTYPE html>
@@ -54,29 +93,31 @@ export default function ExportPDF({ units }: ExportPDFProps) {
   <title>Emory Woods — Leasing Report</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Georgia, serif; color: #111; padding: 40px; font-size: 15px; }
-    header { margin-bottom: 32px; }
-    header h1 { font-size: 28px; letter-spacing: 0.08em; text-transform: uppercase; color: #1a3a25; }
-    header p { color: #777; font-size: 14px; margin-top: 4px; letter-spacing: 0.04em; }
-    section { margin-bottom: 36px; }
+    body { font-family: Arial, sans-serif; color: #111; padding: 14px; font-size: 11px; }
+    header { margin-bottom: 10px; display: flex; align-items: baseline; gap: 14px; }
+    header h1 { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #1a3a25; }
+    header p { color: #777; font-size: 9px; letter-spacing: 0.04em; }
+    .two-col { display: flex; gap: 14px; align-items: flex-start; }
+    .two-col section { flex: 1; min-width: 0; margin-bottom: 0; }
     section h2 {
-      font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #888; border-bottom: 1px solid #ddd; padding-bottom: 6px; margin-bottom: 12px;
+      font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #888; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin-bottom: 5px;
     }
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 100%; border-collapse: collapse; border: 1px solid #ddd; }
     thead tr { background: #f5f0e8; }
     th {
-      text-align: left; padding: 8px 10px; font-size: 12px;
-      letter-spacing: 0.1em; text-transform: uppercase; color: #555;
-      border-bottom: 2px solid #c9a84c;
+      text-align: left; padding: 3px 5px; font-size: 8px;
+      letter-spacing: 0.07em; text-transform: uppercase; color: #555;
+      border-bottom: 2px solid #c9a84c; border-right: 1px solid #e0d8c8; white-space: nowrap;
     }
-    td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; font-size: 14px; }
+    th:last-child { border-right: none; }
+    td { padding: 1px 4px; border-bottom: 1px solid #eee; border-right: 1px solid #f0ebe0; vertical-align: middle; font-size: 9px; line-height: 1.15; }
+    td:last-child { border-right: none; }
     tr:last-child td { border-bottom: none; }
-    tr:nth-child(even) { background: #fafafa; }
-    footer { margin-top: 40px; font-size: 12px; color: #bbb; text-align: right; letter-spacing: 0.04em; }
+    footer { margin-top: 10px; font-size: 8px; color: #bbb; text-align: right; letter-spacing: 0.04em; }
+    @page { margin: 0.7cm; size: A4 landscape; }
     @media print {
-      body { padding: 24px; }
-      @page { margin: 1.5cm; size: landscape; }
+      body { padding: 0; }
     }
   </style>
 </head>
@@ -86,31 +127,35 @@ export default function ExportPDF({ units }: ExportPDFProps) {
     <p>Leasing Report &mdash; ${today}</p>
   </header>
 
-  <section>
-    <h2>Vacant Units (${vacants.length})</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Building</th><th>Unit</th><th>Status</th><th>Type</th>
-          <th>Condition</th><th>Rent</th><th>Future Tenant</th>
-        </tr>
-      </thead>
-      <tbody>${buildRows(vacants, true)}</tbody>
-    </table>
-  </section>
+  <div class="two-col">
+    <section>
+      <h2>Vacant Units (${vacants.length})</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Unit</th><th>Status</th><th>Type</th>
+            <th>Cond</th><th>Rent</th><th>Future Tenant</th><th>Move-In</th>
+            <th style="text-align:center;width:18px;">P</th><th style="text-align:center;width:18px;">M</th><th style="text-align:center;width:18px;">C</th><th style="text-align:center;width:18px;">F</th><th style="text-align:center;width:28px;">Done</th><th style="text-align:center;width:36px;border-right:none;">Lock</th>
+          </tr>
+        </thead>
+        <tbody>${buildRows(vacants, true)}</tbody>
+      </table>
+    </section>
 
-  <section>
-    <h2>Move-Out Notices (${notices.length})</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Building</th><th>Unit</th><th>Status</th><th>Type</th>
-          <th>Condition</th><th>Rent</th><th>Move-Out</th><th>Tenant</th>
-        </tr>
-      </thead>
-      <tbody>${buildRows(notices)}</tbody>
-    </table>
-  </section>
+    <section>
+      <h2>Move-Out Notices (${notices.length})</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Unit</th><th>Status</th><th>Type</th>
+            <th>Cond</th><th>Rent</th><th>Move-Out</th><th>Tenant</th>
+            <th style="text-align:center;width:18px;">P</th><th style="text-align:center;width:18px;">M</th><th style="text-align:center;width:18px;">C</th><th style="text-align:center;width:18px;">F</th><th style="text-align:center;width:28px;">Done</th><th style="text-align:center;width:36px;border-right:none;">Lock</th>
+          </tr>
+        </thead>
+        <tbody>${buildRows(notices)}</tbody>
+      </table>
+    </section>
+  </div>
 
   <footer>Generated by Emory Woods Leasing Dashboard</footer>
 

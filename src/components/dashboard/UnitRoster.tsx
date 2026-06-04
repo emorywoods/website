@@ -175,6 +175,9 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     move_out_date: initMoveOut,
     notice_date: toDateInput(unit.notice_date),
     maintenance_needed: unit.maintenance_needed,
+    maintenance_done: unit.maintenance_done ?? false,
+    lock_change_needed: unit.lock_change_needed ?? false,
+    ready_for_tour: unit.ready_for_tour ?? false,
     notes: unit.notes,
     future_tenant: unit.future_tenant ?? "",
     future_move_in_date: toDateInput(unit.future_move_in_date),
@@ -400,8 +403,97 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
 
         {/* Maintenance */}
         <div style={fieldWrap}>
-          <label style={labelStyle}>Maintenance Needed</label>
-          <input style={inputStyle} placeholder="e.g. Paint, carpet, HVAC..." value={form.maintenance_needed ?? ""} onChange={(e) => set("maintenance_needed", e.target.value)} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+            <label style={{ ...labelStyle, marginBottom: 0 }}>Maintenance Needed</label>
+            <button
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, maintenance_done: !f.maintenance_done }))}
+              style={{
+                display: "flex", alignItems: "center", gap: "5px",
+                background: form.maintenance_done ? "rgba(42,74,53,0.25)" : "transparent",
+                border: `1px solid ${form.maintenance_done ? "rgba(42,74,53,0.6)" : "var(--color-border)"}`,
+                borderRadius: "5px", padding: "4px 10px", cursor: "pointer",
+                color: form.maintenance_done ? "rgb(60,150,90)" : "var(--color-text-muted)",
+                fontFamily: "var(--font-body)", fontSize: "0.82rem", letterSpacing: "0.08em", textTransform: "uppercase",
+                transition: "all 0.15s",
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {form.maintenance_done ? "Done" : "Mark Done"}
+            </button>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "7px", marginBottom: "8px" }}>
+            {["Paint", "Maintenance", "Cleaning", "Flooring"].map((item) => {
+              const current = (form.maintenance_needed ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+              const active = current.includes(item);
+              return (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => {
+                    const next = active ? current.filter((x) => x !== item) : [...current, item];
+                    setForm((f) => ({ ...f, maintenance_needed: next.join(", "), maintenance_done: next.length === 0 ? false : f.maintenance_done }));
+                  }}
+                  style={{
+                    padding: "5px 12px", borderRadius: "5px", cursor: "pointer",
+                    fontFamily: "var(--font-body)", fontSize: "0.88rem", letterSpacing: "0.06em",
+                    textTransform: "uppercase", transition: "all 0.15s",
+                    background: active ? (form.maintenance_done ? "rgba(42,74,53,0.2)" : "rgba(224,154,60,0.15)") : "transparent",
+                    color: active ? (form.maintenance_done ? "rgb(60,150,90)" : "var(--color-accent)") : "var(--color-text-muted)",
+                    border: `1px solid ${active ? (form.maintenance_done ? "rgba(42,74,53,0.5)" : "rgba(201,168,76,0.5)") : "var(--color-border)"}`,
+                    textDecoration: active && form.maintenance_done ? "line-through" : "none",
+                    opacity: form.maintenance_done ? 0.7 : 1,
+                  }}
+                >
+                  {item}
+                </button>
+              );
+            })}
+          </div>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, lock_change_needed: !f.lock_change_needed }))}
+              style={{
+                display: "flex", alignItems: "center", gap: "6px",
+                background: form.lock_change_needed ? "rgba(224,92,92,0.1)" : "transparent",
+                border: `1px solid ${form.lock_change_needed ? "rgba(224,92,92,0.45)" : "var(--color-border)"}`,
+                borderRadius: "5px", padding: "5px 12px", cursor: "pointer",
+                color: form.lock_change_needed ? "#e05c5c" : "var(--color-text-muted)",
+                fontFamily: "var(--font-body)", fontSize: "0.88rem", letterSpacing: "0.06em", textTransform: "uppercase",
+                transition: "all 0.15s",
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Lock Change Needed
+            </button>
+            {(form.status === "vacant" || form.status === "notice") && (
+              <button
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, ready_for_tour: !f.ready_for_tour }))}
+                style={{
+                  display: "flex", alignItems: "center", gap: "6px",
+                  background: form.ready_for_tour ? "rgba(40,140,80,0.12)" : "transparent",
+                  border: `1px solid ${form.ready_for_tour ? "rgba(40,140,80,0.5)" : "var(--color-border)"}`,
+                  borderRadius: "5px", padding: "5px 12px", cursor: "pointer",
+                  color: form.ready_for_tour ? "rgb(30,150,80)" : "var(--color-text-muted)",
+                  fontFamily: "var(--font-body)", fontSize: "0.88rem", letterSpacing: "0.06em", textTransform: "uppercase",
+                  transition: "all 0.15s",
+                }}
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                {form.ready_for_tour ? "Ready for Tour" : "Mark Ready for Tour"}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Notes */}
@@ -591,6 +683,20 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                     {selectedBuilding === "all" ? `${u.building} — Unit ${u.apt_number}` : `Unit ${u.apt_number}`}
                   </span>
                   <StatusBadge unit={u} />
+                  {u.ready_for_tour && (
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: "4px",
+                      padding: "2px 8px", borderRadius: "4px", fontSize: "0.87rem",
+                      letterSpacing: "0.07em", textTransform: "uppercase",
+                      background: "rgba(40,140,80,0.12)", color: "rgb(30,150,80)", border: "1px solid rgba(40,140,80,0.45)",
+                    }}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                      </svg>
+                      Ready for Tour
+                    </span>
+                  )}
                   {(() => {
                     const alert = getLeaseAlert(u);
                     if (!alert) return null;
@@ -644,7 +750,17 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                   <div><strong style={{ color: "var(--color-text)" }}>Notice:</strong> {fmt(u.notice_date)}</div>
                 )}
                 {u.maintenance_needed && (
-                  <div><strong style={{ color: "var(--color-text)" }}>Maintenance:</strong> {u.maintenance_needed}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                    <strong style={{ color: "var(--color-text)" }}>Maintenance:</strong>
+                    <span style={{ textDecoration: u.maintenance_done ? "line-through" : "none", opacity: u.maintenance_done ? 0.6 : 1 }}>{u.maintenance_needed}</span>
+                    {u.maintenance_done && <span style={{ fontSize: "0.8rem", color: "rgb(60,150,90)", background: "rgba(42,74,53,0.15)", border: "1px solid rgba(42,74,53,0.35)", borderRadius: "3px", padding: "1px 5px", letterSpacing: "0.06em", textTransform: "uppercase" }}>Done</span>}
+                  </div>
+                )}
+                {u.lock_change_needed && (
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", marginTop: "2px", color: "#e05c5c", fontSize: "0.88rem" }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                    Lock Change Needed
+                  </div>
                 )}
                 {u.notes && (
                   <div><strong style={{ color: "var(--color-text)" }}>Notes:</strong> {u.notes}</div>
