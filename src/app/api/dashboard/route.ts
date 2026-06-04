@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEntries, addEntry, deleteEntry, EntryKind } from "@/lib/db";
 
-const DASHBOARD_CODE = process.env.DASHBOARD_CODE ?? "Decatur01";
+const DASHBOARD_CODE = process.env.DASHBOARD_CODE ?? "Decatur1";
 
 function authorized(req: NextRequest): boolean {
   return req.headers.get("x-access-code") === DASHBOARD_CODE;
