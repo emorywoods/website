@@ -599,6 +599,8 @@ export default function Dashboard({ accessCode }: DashboardProps) {
             units={units}
             loading={unitsLoading}
             onClickUnit={(u) => setSearchEditUnit(u)}
+            selectedBuilding={selected}
+            onClearBuilding={() => setSelected(null)}
           />
         </div>
       )}

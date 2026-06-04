@@ -8,6 +8,8 @@ interface UnitTableProps {
   units: Unit[];
   loading: boolean;
   onClickUnit: (u: Unit) => void;
+  selectedBuilding?: string | null;
+  onClearBuilding?: () => void;
 }
 
 function fmt(date: string | null): string {
@@ -122,7 +124,7 @@ const inputS: React.CSSProperties = {
   boxSizing: "border-box",
 };
 
-export default function UnitTable({ units, loading, onClickUnit }: UnitTableProps) {
+export default function UnitTable({ units, loading, onClickUnit, selectedBuilding, onClearBuilding }: UnitTableProps) {
   const [sortCol, setSortCol] = useState<ColKey>("building");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [filters, setFilters] = useState<Partial<Record<ColKey, string>>>({});
@@ -149,7 +151,7 @@ export default function UnitTable({ units, loading, onClickUnit }: UnitTableProp
   }, [units]);
 
   const displayed = useMemo(() => {
-    let rows = [...units];
+    let rows = selectedBuilding ? units.filter((u) => u.building === selectedBuilding) : [...units];
 
     // Filter
     for (const [key, val] of Object.entries(filters) as [ColKey, string][]) {
@@ -191,6 +193,29 @@ export default function UnitTable({ units, loading, onClickUnit }: UnitTableProp
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      {/* Building filter indicator */}
+      {selectedBuilding && (
+        <div style={{
+          padding: "6px 14px", background: "rgba(201,168,76,0.08)",
+          borderBottom: "1px solid rgba(201,168,76,0.2)",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          fontSize: "0.82rem",
+        }}>
+          <span style={{ color: "var(--color-accent)" }}>Building: {selectedBuilding}</span>
+          {onClearBuilding && (
+            <button
+              onClick={onClearBuilding}
+              style={{
+                background: "transparent", border: "1px solid rgba(201,168,76,0.4)",
+                borderRadius: "4px", padding: "2px 8px", color: "var(--color-accent)",
+                fontSize: "0.78rem", letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer",
+              }}
+            >
+              ✕ Clear
+            </button>
+          )}
+        </div>
+      )}
       {/* Active filter count + clear */}
       {activeFilters > 0 && (
         <div style={{

@@ -123,6 +123,7 @@ function leaseEndDate(moveIn: Date): Date {
 
 export function getLeaseAlert(unit: Unit): LeaseAlert | null {
   if (unit.lease_type !== "12-month") return null;
+  if (unit.status === "notice") return null;
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
 
