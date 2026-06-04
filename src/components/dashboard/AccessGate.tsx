@@ -11,11 +11,14 @@ export default function AccessGate({ onUnlock }: AccessGateProps) {
   const [error, setError] = useState(false);
   const [shake, setShake] = useState(false);
 
-  function attempt() {
-    if (input.trim() === "Decatur01") {
+  async function attempt() {
+    const code = input.trim();
+    if (!code) return;
+    const res = await fetch("/api/units", { headers: { "x-access-code": code } });
+    if (res.ok || res.status !== 401) {
       setError(false);
-      localStorage.setItem("ew-dash-auth", input.trim());
-      onUnlock(input.trim());
+      localStorage.setItem("ew-dash-auth", code);
+      onUnlock(code);
     } else {
       setError(true);
       setShake(true);
