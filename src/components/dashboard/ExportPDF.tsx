@@ -46,7 +46,7 @@ export default function ExportPDF({ units }: ExportPDFProps) {
     });
 
     function buildRows(rows: Unit[], isVacant = false): string {
-      const cols = 13;
+      const cols = 14;
       if (rows.length === 0) {
         return `<tr><td colspan="${cols}" style="text-align:center;color:#999;padding:16px;font-style:italic">No entries</td></tr>`;
       }
@@ -67,6 +67,7 @@ export default function ExportPDF({ units }: ExportPDFProps) {
           cb(items.includes("Flooring")),
           cb(!!u.maintenance_done),
           cb(!!u.lock_change_needed),
+          cb(!!u.ready_for_tour),
         ].join("");
         return `
         <tr style="${rowStyle}">
@@ -135,7 +136,7 @@ export default function ExportPDF({ units }: ExportPDFProps) {
           <tr>
             <th>Unit</th><th>Status</th><th>Type</th>
             <th>Cond</th><th>Rent</th><th>Future Tenant</th><th>Move-In</th>
-            <th style="text-align:center;width:18px;">P</th><th style="text-align:center;width:18px;">M</th><th style="text-align:center;width:18px;">C</th><th style="text-align:center;width:18px;">F</th><th style="text-align:center;width:28px;">Done</th><th style="text-align:center;width:36px;border-right:none;">Lock</th>
+            <th style="text-align:center;width:18px;">P</th><th style="text-align:center;width:18px;">M</th><th style="text-align:center;width:18px;">C</th><th style="text-align:center;width:18px;">F</th><th style="text-align:center;width:28px;">Done</th><th style="text-align:center;width:36px;">Lock</th><th style="text-align:center;width:36px;border-right:none;">Tour</th>
           </tr>
         </thead>
         <tbody>${buildRows(vacants, true)}</tbody>
@@ -149,7 +150,7 @@ export default function ExportPDF({ units }: ExportPDFProps) {
           <tr>
             <th>Unit</th><th>Status</th><th>Type</th>
             <th>Cond</th><th>Rent</th><th>Move-Out</th><th>Tenant</th>
-            <th style="text-align:center;width:18px;">P</th><th style="text-align:center;width:18px;">M</th><th style="text-align:center;width:18px;">C</th><th style="text-align:center;width:18px;">F</th><th style="text-align:center;width:28px;">Done</th><th style="text-align:center;width:36px;border-right:none;">Lock</th>
+            <th style="text-align:center;width:18px;">P</th><th style="text-align:center;width:18px;">M</th><th style="text-align:center;width:18px;">C</th><th style="text-align:center;width:18px;">F</th><th style="text-align:center;width:28px;">Done</th><th style="text-align:center;width:36px;">Lock</th><th style="text-align:center;width:36px;border-right:none;">Tour</th>
           </tr>
         </thead>
         <tbody>${buildRows(notices)}</tbody>

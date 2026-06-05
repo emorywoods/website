@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { Building } from "@/lib/buildings";
+import type { CarportBuilding } from "@/lib/carports";
 import type { DashboardEntry } from "@/lib/db";
 
 export interface BuildingCounts {
@@ -14,12 +15,21 @@ export interface BuildingEntries {
   notice: DashboardEntry[];
 }
 
+export interface CarportAvail {
+  available: number;
+  leased: number;
+}
+
 interface PropertyMapProps {
   buildings: Building[];
   selected: string | null;
   onSelect: (code: string | null) => void;
   counts: Record<string, BuildingCounts>;
   entriesByBuilding: Record<string, BuildingEntries>;
+  carports: CarportBuilding[];
+  carportAvail: Record<string, CarportAvail>;
+  selectedCarport: string | null;
+  onSelectCarport: (code: string | null) => void;
 }
 
 const CENTER: [number, number] = [-84.30340, 33.79200];
@@ -50,10 +60,14 @@ const COMPLEX_FILL = "complex-fill";
 const COMPLEX_OUTLINE = "complex-outline";
 const COMPLEX_LABEL = "complex-label";
 
+const CARPORT_SOURCE = "carport-buildings";
+const CARPORT_FILL = "carport-fill";
+const CARPORT_OUTLINE = "carport-outline";
+
 // Minimal light road map — roads only, no POIs, no building labels
 const MAP_STYLE = "https://tiles.openfreemap.org/styles/positron";
 
-export default function PropertyMap({ buildings, selected, onSelect, counts, entriesByBuilding }: PropertyMapProps) {
+export default function PropertyMap({ buildings, selected, onSelect, counts, entriesByBuilding, carports, carportAvail, selectedCarport, onSelectCarport }: PropertyMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null);
@@ -65,12 +79,63 @@ export default function PropertyMap({ buildings, selected, onSelect, counts, ent
   const countsRef = useRef(counts);
   const buildingsRef = useRef(buildings);
   const entriesRef = useRef(entriesByBuilding);
+  const carportsRef = useRef(carports);
+  const carportAvailRef = useRef(carportAvail);
+  const selectedCarportRef = useRef(selectedCarport);
+  const onSelectCarportRef = useRef(onSelectCarport);
 
   selectedRef.current = selected;
   onSelectRef.current = onSelect;
   countsRef.current = counts;
   buildingsRef.current = buildings;
   entriesRef.current = entriesByBuilding;
+  carportsRef.current = carports;
+  carportAvailRef.current = carportAvail;
+  selectedCarportRef.current = selectedCarport;
+  onSelectCarportRef.current = onSelectCarport;
+
+  // Rotate a [lng, lat] corner around a center by `deg` degrees clockwise
+  function rotateCorner(cx: number, cy: number, px: number, py: number, deg: number): [number, number] {
+    const rad = (deg * Math.PI) / 180;
+    const cos = Math.cos(rad);
+    const sin = Math.sin(rad);
+    const dx = px - cx;
+    const dy = py - cy;
+    return [cx + dx * cos - dy * sin, cy + dx * sin + dy * cos];
+  }
+
+  // Carport footprints — narrow rectangle rotated per-building bearing
+  function carportGeoJSON(sel: string | null): GeoJSON.FeatureCollection {
+    const hw = 0.00012;   // half-width  (long axis)
+    const hh = 0.000055;  // half-height (short axis)
+    return {
+      type: "FeatureCollection",
+      features: carportsRef.current.map((c) => {
+        const avail = carportAvailRef.current[c.code];
+        const hasAvailable = avail ? avail.available > 0 : true;
+        const isSelected = sel === c.code;
+        const deg = c.bearing ?? 0;
+        const corners: [number, number][] = [
+          [c.lng - hw, c.lat - hh],
+          [c.lng + hw, c.lat - hh],
+          [c.lng + hw, c.lat + hh],
+          [c.lng - hw, c.lat + hh],
+        ].map(([px, py]) => rotateCorner(c.lng, c.lat, px, py, deg));
+        return {
+          type: "Feature" as const,
+          geometry: {
+            type: "Polygon",
+            coordinates: [[...corners, corners[0]]],
+          },
+          properties: {
+            code: c.code,
+            selected: isSelected ? 1 : 0,
+            hasAvailable: hasAvailable ? 1 : 0,
+          },
+        };
+      }),
+    };
+  }
 
   // Merge static OSM footprints with runtime state (selected / counts)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -192,6 +257,63 @@ export default function PropertyMap({ buildings, selected, onSelect, counts, ent
         },
       });
 
+      // ── Carport layer ─────────────────────────────────────────────────────
+      map.addSource(CARPORT_SOURCE, {
+        type: "geojson",
+        data: carportGeoJSON(selectedCarportRef.current),
+      });
+
+      map.addLayer({
+        id: CARPORT_FILL,
+        type: "fill-extrusion",
+        source: CARPORT_SOURCE,
+        paint: {
+          "fill-extrusion-color": [
+            "case",
+            ["==", ["get", "selected"], 1],      "rgba(160,120,255,1)",
+            ["==", ["get", "hasAvailable"], 1],   "rgba(80,50,140,0.95)",
+            "rgba(50,30,90,0.85)",
+          ],
+          "fill-extrusion-height": [
+            "case",
+            ["==", ["get", "selected"], 1], 8,
+            5,
+          ],
+          "fill-extrusion-base": 0,
+          "fill-extrusion-opacity": 0.9,
+          "fill-extrusion-vertical-gradient": true,
+        },
+      });
+
+      map.addLayer({
+        id: CARPORT_OUTLINE,
+        type: "line",
+        source: CARPORT_SOURCE,
+        paint: {
+          "line-color": [
+            "case",
+            ["==", ["get", "selected"], 1], "rgba(220,190,255,1)",
+            "rgba(100,70,180,0.7)",
+          ],
+          "line-width": [
+            "case",
+            ["==", ["get", "selected"], 1], 2.5,
+            1,
+          ],
+        },
+      });
+
+      map.on("click", CARPORT_FILL, (e) => {
+        if (!e.features?.length) return;
+        e.originalEvent.stopPropagation();
+        const code = e.features[0].properties.code as string;
+        onSelectCarportRef.current(selectedCarportRef.current === code ? null : code);
+      });
+
+      map.on("mouseenter", CARPORT_FILL, () => { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", CARPORT_FILL, () => { map.getCanvas().style.cursor = ""; });
+      // ─────────────────────────────────────────────────────────────────────
+
       map.on("click", COMPLEX_FILL, (e) => {
         if (!e.features?.length) return;
         e.originalEvent.stopPropagation();
@@ -201,9 +323,10 @@ export default function PropertyMap({ buildings, selected, onSelect, counts, ent
 
       // Click anywhere outside a building → deselect + close popup
       map.on("click", (e) => {
-        const hits = map.queryRenderedFeatures(e.point, { layers: [COMPLEX_FILL] });
+        const hits = map.queryRenderedFeatures(e.point, { layers: [COMPLEX_FILL, CARPORT_FILL] });
         if (!hits.length) {
           onSelectRef.current(null);
+          onSelectCarportRef.current(null);
           popupRef.current?.remove();
         }
       });
@@ -227,33 +350,52 @@ export default function PropertyMap({ buildings, selected, onSelect, counts, ent
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buildings]);
 
+  // Update carport layer when availability or selection changes
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !map.isStyleLoaded()) return;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const base = (map as any)._complexBase;
-    if (!base) return;
+    const cpSrc = map.getSource(CARPORT_SOURCE) as any;
+    if (cpSrc) cpSrc.setData(carportGeoJSON(selectedCarport));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCarport, carportAvail]);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const src = map.getSource(COMPLEX_SOURCE) as any;
-    if (src) src.setData(annotateGeoJSON(base, selected));
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
 
-    const popup = popupRef.current;
+    function applySelection() {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const base = (map as any)._complexBase;
+      if (!base) return;
 
-    if (selected) {
-      const b = buildings.find((x) => x.code === selected);
-      if (b) {
-        map.flyTo({ center: [b.lng, b.lat], zoom: 17.5, pitch: 30, bearing: -15, duration: 700 });
-        if (popup) {
-          popup
-            .setLngLat([b.lng, b.lat])
-            .setHTML(buildPopupHTML(b))
-            .addTo(map);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const src = map.getSource(COMPLEX_SOURCE) as any;
+      if (src) src.setData(annotateGeoJSON(base, selected));
+
+      const popup = popupRef.current;
+
+      if (selected) {
+        const b = buildings.find((x) => x.code === selected);
+        if (b) {
+          map.flyTo({ center: [b.lng, b.lat], zoom: 18, pitch: 45, bearing: -15, duration: 800 });
+          if (popup) {
+            popup
+              .setLngLat([b.lng, b.lat])
+              .setHTML(buildPopupHTML(b))
+              .addTo(map);
+          }
         }
+      } else {
+        map.flyTo({ center: CENTER, zoom: 16.2, pitch: 30, bearing: -15, duration: 700 });
+        if (popup) popup.remove();
       }
+    }
+
+    if (map.isStyleLoaded()) {
+      applySelection();
     } else {
-      map.flyTo({ center: CENTER, zoom: 16.2, pitch: 30, bearing: -15, duration: 700 });
-      if (popup) popup.remove();
+      map.once("idle", applySelection);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, counts, entriesByBuilding]);
@@ -276,6 +418,10 @@ export default function PropertyMap({ buildings, selected, onSelect, counts, ent
         <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <span style={{ width: "10px", height: "10px", borderRadius: "2px", background: "rgba(255,210,80,0.9)", display: "inline-block" }} />
           Selected
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <span style={{ width: "10px", height: "10px", borderRadius: "2px", background: "rgba(80,50,140,0.95)", display: "inline-block" }} />
+          Carport
         </span>
         <span style={{ opacity: 0.5 }}>Drag · Scroll to zoom</span>
       </div>

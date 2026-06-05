@@ -225,6 +225,23 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     }
   }
 
+  function movedIn() {
+    setForm((f) => {
+      const moveIn = toDateInput(f.future_move_in_date as string);
+      return {
+        ...f,
+        status: "occupied",
+        tenant_name: f.future_tenant ?? "",
+        move_in_date: moveIn || null,
+        lease_type: "12-month",
+        move_out_date: moveIn ? (computedLeaseEnd(moveIn) || null) : null,
+        future_tenant: "",
+        future_move_in_date: "",
+      };
+    });
+    setShowFutureTenant(false);
+  }
+
   const fieldWrap: React.CSSProperties = { marginBottom: "14px" };
 
   return (
@@ -471,7 +488,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
-              Lock Change Needed
+              Locks Changed
             </button>
             {(form.status === "vacant" || form.status === "notice") && (
               <button
@@ -540,19 +557,37 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
                   <span style={{ fontSize: "1rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-accent)" }}>
                     Future Tenant
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowFutureTenant(false);
-                      setForm((f) => ({ ...f, future_tenant: "", future_move_in_date: "" }));
-                    }}
-                    style={{
-                      background: "transparent", border: "none", color: "var(--color-text-muted)",
-                      fontSize: "0.94rem", cursor: "pointer", padding: "2px 4px",
-                    }}
-                  >
-                    ✕ Remove
-                  </button>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <button
+                      type="button"
+                      onClick={movedIn}
+                      disabled={!form.future_tenant}
+                      style={{
+                        display: "flex", alignItems: "center", gap: "6px",
+                        background: form.future_tenant ? "rgba(201,168,76,0.1)" : "transparent",
+                        border: `1px solid ${form.future_tenant ? "rgba(201,168,76,0.45)" : "var(--color-border)"}`,
+                        borderRadius: "5px", padding: "5px 12px", cursor: form.future_tenant ? "pointer" : "not-allowed",
+                        color: form.future_tenant ? "var(--color-accent)" : "var(--color-text-muted)",
+                        fontFamily: "var(--font-body)", fontSize: "0.88rem", letterSpacing: "0.06em", textTransform: "uppercase",
+                        transition: "all 0.15s", opacity: form.future_tenant ? 1 : 0.45,
+                      }}
+                    >
+                      Moved In?
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowFutureTenant(false);
+                        setForm((f) => ({ ...f, future_tenant: "", future_move_in_date: "" }));
+                      }}
+                      style={{
+                        background: "transparent", border: "none", color: "var(--color-text-muted)",
+                        fontSize: "0.94rem", cursor: "pointer", padding: "2px 4px",
+                      }}
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   <div>
@@ -760,7 +795,7 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                 {u.lock_change_needed && (
                   <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", marginTop: "2px", color: "#e05c5c", fontSize: "0.88rem" }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-                    Lock Change Needed
+                    Locks Changed
                   </div>
                 )}
                 {u.notes && (

@@ -4,13 +4,17 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import type { DashboardEntry, EntryKind } from "@/lib/db";
 import type { Unit } from "@/lib/units";
 import { BUILDINGS, buildingByCode } from "@/lib/buildings";
+import { CARPORTS, carportByCode } from "@/lib/carports";
+import type { CarportSpace } from "@/lib/carportSpaces";
 import UnitRoster, { getLeaseAlert, LEASE_WARN_DAYS, EditModal } from "./UnitRoster";
 import ExportPDF from "./ExportPDF";
 import UnitTable from "./UnitTable";
-import PropertyMap, { type BuildingCounts, type BuildingEntries } from "./PropertyMap";
+import CarportTable from "./CarportTable";
+import PropertyMap, { type BuildingCounts, type BuildingEntries, type CarportAvail } from "./PropertyMap";
 
-type DashTab = EntryKind | "units" | "renewals";
+type DashTab = EntryKind | "units" | "renewals" | "carports";
 type ViewMode = "map" | "table";
+type TableSection = "units" | "carports";
 
 interface DashboardProps {
   accessCode: string;
@@ -208,18 +212,23 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const [vacants, setVacants] = useState<DashboardEntry[]>([]);
   const [notices, setNotices] = useState<DashboardEntry[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
+  const [carportSpaces, setCarportSpaces] = useState<CarportSpace[]>([]);
   const [loading, setLoading] = useState(true);
   const [unitsLoading, setUnitsLoading] = useState(true);
+  const [carportsLoading, setCarportsLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedCarport, setSelectedCarport] = useState<string | null>(null);
   const [tab, setTab] = useState<DashTab>("vacant");
   const [viewMode, setViewMode] = useState<ViewMode>("map");
+  const [tableSection, setTableSection] = useState<TableSection>("units");
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>("");
   const [searchEditUnit, setSearchEditUnit] = useState<Unit | null>(null);
+  const [carportBuildingFilter, setCarportBuildingFilter] = useState<string>("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -255,8 +264,20 @@ export default function Dashboard({ accessCode }: DashboardProps) {
     }
   }, [accessCode]);
 
+  const loadCarports = useCallback(async () => {
+    setCarportsLoading(true);
+    try {
+      const res = await fetch("/api/carports", { headers: { "x-access-code": accessCode } });
+      const data = res.ok ? await res.json() : {};
+      if (data.error) console.error("Carports API error:", data.error);
+      setCarportSpaces(data.spaces ?? []);
+    } finally {
+      setCarportsLoading(false);
+    }
+  }, [accessCode]);
+
   useEffect(() => {
-    Promise.all([load(), loadUnits(null)]).finally(() => setInitialLoad(false));
+    Promise.all([load(), loadUnits(null), loadCarports()]).finally(() => setInitialLoad(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -280,6 +301,14 @@ export default function Dashboard({ accessCode }: DashboardProps) {
     counts[e.building].notice++;
     if (!entriesByBuilding[e.building]) entriesByBuilding[e.building] = { vacant: [], notice: [] };
     entriesByBuilding[e.building].notice.push(e);
+  }
+
+  // Per-building carport availability counts for map coloring
+  const carportAvail: Record<string, CarportAvail> = {};
+  for (const s of carportSpaces) {
+    if (!carportAvail[s.building]) carportAvail[s.building] = { available: 0, leased: 0 };
+    if (s.assigned_to) carportAvail[s.building].leased++;
+    else carportAvail[s.building].available++;
   }
 
   // Units filtered by status (and building if selected) — drives Vacant/Notice tabs
@@ -341,6 +370,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
 
   return (
     <div style={{ minHeight: "100dvh", background: "var(--color-bg)", fontFamily: "var(--font-body)" }}>
+
       {/* Search result modal */}
       {searchEditUnit && (
         <EditModal
@@ -594,14 +624,61 @@ export default function Dashboard({ accessCode }: DashboardProps) {
 
       {/* Main content — table view */}
       {viewMode === "table" && (
-        <div style={{ height: "calc(100dvh - 110px)" }}>
-          <UnitTable
-            units={units}
-            loading={unitsLoading}
-            onClickUnit={(u) => setSearchEditUnit(u)}
-            selectedBuilding={selected}
-            onClearBuilding={() => setSelected(null)}
-          />
+        <div style={{ height: "calc(100dvh - 110px)", display: "flex", flexDirection: "column" }}>
+          {/* Units / Carports toggle */}
+          <div style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", flexShrink: 0 }}>
+            {(["units", "carports"] as TableSection[]).map((sec) => (
+              <button
+                key={sec}
+                onClick={() => setTableSection(sec)}
+                style={{
+                  padding: "9px 18px",
+                  background: tableSection === sec ? "var(--color-surface)" : "transparent",
+                  border: "none",
+                  borderBottom: tableSection === sec
+                    ? `2px solid ${sec === "carports" ? "rgba(80,50,140,0.95)" : "var(--color-accent)"}`
+                    : "2px solid transparent",
+                  color: tableSection === sec
+                    ? sec === "carports" ? "rgba(160,120,255,1)" : "var(--color-accent)"
+                    : "var(--color-text-muted)",
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.88rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  fontWeight: tableSection === sec ? 600 : 400,
+                }}
+              >
+                {sec === "units" ? "Units" : "Carports"}
+                {sec === "carports" && !carportsLoading && (
+                  <span style={{ marginLeft: "6px", background: "rgba(80,50,140,0.2)", color: "rgba(160,120,255,1)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.8rem" }}>
+                    {carportSpaces.filter((s) => !s.assigned_to).length} avail
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+          {/* Table content */}
+          <div style={{ flex: 1, minHeight: 0 }}>
+            {tableSection === "units" ? (
+              <UnitTable
+                units={units}
+                loading={unitsLoading}
+                onClickUnit={(u) => setSearchEditUnit(u)}
+                selectedBuilding={selected}
+                onClearBuilding={() => setSelected(null)}
+              />
+            ) : (
+              <CarportTable
+                spaces={carportSpaces}
+                units={units}
+                loading={carportsLoading}
+                accessCode={accessCode}
+                onRefresh={loadCarports}
+                initialAddressFilter={carportBuildingFilter}
+              />
+            )}
+          </div>
         </div>
       )}
 
@@ -628,9 +705,25 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           <PropertyMap
             buildings={BUILDINGS}
             selected={selected}
-            onSelect={setSelected}
+            onSelect={(code) => {
+              setSelected(code);
+              if (code) { setSelectedCarport(null); setCarportBuildingFilter(""); setTab("vacant"); }
+            }}
             counts={counts}
             entriesByBuilding={entriesByBuilding}
+            carports={CARPORTS}
+            carportAvail={carportAvail}
+            selectedCarport={selectedCarport}
+            onSelectCarport={(code) => {
+              setSelectedCarport(code);
+              if (code) {
+                const address = carportByCode(code)?.address ?? "";
+                setCarportBuildingFilter(address);
+                setTab("carports");
+              } else {
+                setCarportBuildingFilter("");
+              }
+            }}
           />
         </div>
 
@@ -671,45 +764,103 @@ export default function Dashboard({ accessCode }: DashboardProps) {
             </div>
           )}
 
-          {/* Tabs */}
-          <div className="dash-tabs" style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", overflowX: "auto", scrollbarWidth: "none" }}>
-            <button style={tabStyle("vacant")} onClick={() => setTab("vacant")}>
-              Vacant
-              {!unitsLoading && (
-                <span style={{ marginLeft: "6px", background: "rgba(201,168,76,0.15)", color: "var(--color-accent)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
-                  {vacantUnits.length}
-                </span>
-              )}
-            </button>
-            <button style={tabStyle("notice")} onClick={() => setTab("notice")}>
-              Notices
-              {!unitsLoading && (
-                <span style={{ marginLeft: "6px", background: "rgba(201,168,76,0.15)", color: "var(--color-accent)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
-                  {noticeUnits.length}
-                </span>
-              )}
-            </button>
-            <button style={tabStyle("units")} onClick={() => setTab("units")}>
-              All Units
-              {!unitsLoading && (
-                <span style={{ marginLeft: "6px", background: "rgba(201,168,76,0.15)", color: "var(--color-accent)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
-                  {filteredUnits.length}
-                </span>
-              )}
-            </button>
-            <button style={tabStyle("renewals")} onClick={() => setTab("renewals")}>
-              Renewals
-              {!unitsLoading && renewalUnits.length > 0 && (
-                <span style={{ marginLeft: "6px", background: "rgba(224,154,60,0.18)", color: "#e09a3c", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
-                  {renewalUnits.length}
-                </span>
-              )}
-            </button>
+          {/* Apartment / Carport switch */}
+          <div style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", flexShrink: 0 }}>
+            {([
+              { key: "apartment", label: "Apartments" },
+              { key: "carport",   label: "Carports"   },
+            ] as { key: "apartment" | "carport"; label: string }[]).map(({ key, label }) => {
+              const isCarport = key === "carport";
+              const active = isCarport ? tab === "carports" : tab !== "carports";
+              return (
+                <button
+                  key={key}
+                  onClick={() => setTab(isCarport ? "carports" : "vacant")}
+                  style={{
+                    flex: 1,
+                    padding: "9px 0",
+                    background: "transparent",
+                    border: "none",
+                    borderBottom: active
+                      ? `2px solid ${isCarport ? "rgba(80,50,140,0.95)" : "var(--color-accent)"}`
+                      : "2px solid transparent",
+                    color: active
+                      ? isCarport ? "rgba(160,120,255,1)" : "var(--color-accent)"
+                      : "var(--color-text-muted)",
+                    fontFamily: "var(--font-body)",
+                    fontSize: "0.86rem",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    fontWeight: active ? 600 : 400,
+                    transition: "color 0.15s, border-color 0.15s",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                  }}
+                >
+                  {label}
+                  {isCarport && !carportsLoading && (
+                    <span style={{ background: "rgba(80,50,140,0.2)", color: "rgba(160,120,255,1)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.8rem" }}>
+                      {carportSpaces.filter((s) => !s.assigned_to).length} avail
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* List content */}
-          <div style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
-            {tab === "units" ? (
+          {/* Apartment tabs — hidden when carport view active */}
+          {tab !== "carports" && (
+            <div className="dash-tabs" style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", overflowX: "auto", scrollbarWidth: "none" }}>
+              <button style={tabStyle("vacant")} onClick={() => setTab("vacant")}>
+                Vacant
+                {!unitsLoading && (
+                  <span style={{ marginLeft: "6px", background: "rgba(201,168,76,0.15)", color: "var(--color-accent)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
+                    {vacantUnits.length}
+                  </span>
+                )}
+              </button>
+              <button style={tabStyle("notice")} onClick={() => setTab("notice")}>
+                Notices
+                {!unitsLoading && (
+                  <span style={{ marginLeft: "6px", background: "rgba(201,168,76,0.15)", color: "var(--color-accent)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
+                    {noticeUnits.length}
+                  </span>
+                )}
+              </button>
+              <button style={tabStyle("units")} onClick={() => setTab("units")}>
+                All Units
+                {!unitsLoading && (
+                  <span style={{ marginLeft: "6px", background: "rgba(201,168,76,0.15)", color: "var(--color-accent)", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
+                    {filteredUnits.length}
+                  </span>
+                )}
+              </button>
+              <button style={tabStyle("renewals")} onClick={() => setTab("renewals")}>
+                Renewals
+                {!unitsLoading && renewalUnits.length > 0 && (
+                  <span style={{ marginLeft: "6px", background: "rgba(224,154,60,0.18)", color: "#e09a3c", borderRadius: "10px", padding: "1px 6px", fontSize: "0.86rem" }}>
+                    {renewalUnits.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* Panel content */}
+          <div style={{ flex: 1, padding: tab === "carports" ? "0" : "20px", overflowY: tab === "carports" ? "hidden" : "auto", display: "flex", flexDirection: "column" }}>
+            {tab === "carports" ? (
+              <CarportTable
+                spaces={carportSpaces}
+                units={units}
+                loading={carportsLoading}
+                accessCode={accessCode}
+                onRefresh={loadCarports}
+                initialAddressFilter={carportBuildingFilter}
+              />
+            ) : tab === "units" ? (
               <UnitRoster
                 units={filteredUnits}
                 selectedBuilding={selected ?? "all"}
