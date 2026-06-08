@@ -239,6 +239,8 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
         move_out_date: moveIn ? (computedLeaseEnd(moveIn) || null) : null,
         future_tenant: "",
         future_move_in_date: "",
+        past_tenant: "",
+        past_tenant_move_out_date: "",
       };
     });
     setShowFutureTenant(false);
@@ -361,7 +363,13 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
                 <button
                   key={s}
                   type="button"
-                  onClick={() => set("status", s)}
+                  onClick={() => {
+                    if (s === "occupied") {
+                      setForm((f) => ({ ...f, status: s, past_tenant: "", past_tenant_move_out_date: "" }));
+                    } else {
+                      set("status", s);
+                    }
+                  }}
                   style={{
                     flex: 1,
                     padding: "10px 8px",
