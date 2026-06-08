@@ -445,9 +445,6 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
             <input type="date" style={inputStyle} value={form.notice_date ?? ""} onChange={(e) => set("notice_date", e.target.value)} />
           </div>
           <div>
-<<<<<<< HEAD
-            <label style={labelStyle}>{form.status === "occupied" && form.lease_type === "12-month" ? "Lease To" : "Move-Out"}</label>
-=======
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "5px" }}>
               <label style={{ ...labelStyle, marginBottom: 0 }}>{form.status === "occupied" && form.lease_type === "12-month" ? "Lease To" : "Move-Out"}</label>
               {form.status === "notice" && (
@@ -474,7 +471,6 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
                 </button>
               )}
             </div>
->>>>>>> 6f6d19f (adjust remote folder and add move out button)
             <input type="date" style={inputStyle} value={form.move_out_date ?? ""} onChange={(e) => set("move_out_date", e.target.value)} />
           </div>
         </div>
@@ -674,8 +670,6 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
           </div>
         )}
 
-<<<<<<< HEAD
-=======
         {/* Past Tenant — read-only historical record */}
         {(form.past_tenant || form.past_tenant_move_out_date) && (
           <div style={{ marginBottom: "14px" }}>
@@ -711,7 +705,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
           </div>
         )}
 
->>>>>>> 6f6d19f (adjust remote folder and add move out button)
+
         {error && <p style={{ color: "#e05c5c", fontSize: "1rem", marginBottom: "12px" }}>{error}</p>}
 
         <div style={{ display: "flex", gap: "10px" }}>
@@ -917,8 +911,6 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                     {u.future_move_in_date && <span style={{ color: "var(--color-text-muted)" }}>· moves in {fmt(u.future_move_in_date)}</span>}
                   </div>
                 )}
-<<<<<<< HEAD
-=======
                 {u.past_tenant && (
                   <div
                     style={{
@@ -937,7 +929,6 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                     {u.past_tenant_move_out_date && <span style={{ color: "var(--color-text-muted)", opacity: 0.7 }}>· moved out {fmt(u.past_tenant_move_out_date)}</span>}
                   </div>
                 )}
->>>>>>> 6f6d19f (adjust remote folder and add move out button)
               </div>
             </div>
           ))}
