@@ -246,8 +246,6 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     setShowFutureTenant(false);
   }
 
-<<<<<<< HEAD
-=======
   function moveOut() {
     setForm((f) => {
       const outDate =
@@ -269,7 +267,6 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     });
   }
 
->>>>>>> 6f6d19f (adjust remote folder and add move out button)
   const fieldWrap: React.CSSProperties = { marginBottom: "14px" };
 
   return (
