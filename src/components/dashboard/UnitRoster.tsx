@@ -182,6 +182,8 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     notes: unit.notes,
     future_tenant: unit.future_tenant ?? "",
     future_move_in_date: toDateInput(unit.future_move_in_date),
+    past_tenant: unit.past_tenant ?? "",
+    past_tenant_move_out_date: toDateInput(unit.past_tenant_move_out_date),
   });
   const [showFutureTenant, setShowFutureTenant] = useState(
     !!(unit.future_tenant || unit.future_move_in_date)
@@ -242,6 +244,30 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     setShowFutureTenant(false);
   }
 
+<<<<<<< HEAD
+=======
+  function moveOut() {
+    setForm((f) => {
+      const outDate =
+        toDateInput(f.move_out_date as string) ||
+        toDateInput(f.notice_date as string) ||
+        toDateInput(new Date().toISOString());
+      return {
+        ...f,
+        status: "vacant",
+        past_tenant: f.tenant_name ?? "",
+        past_tenant_move_out_date: outDate || null,
+        tenant_name: "",
+        tenant_contact: "",
+        lease_type: "",
+        move_in_date: null,
+        notice_date: null,
+        move_out_date: null,
+      };
+    });
+  }
+
+>>>>>>> 6f6d19f (adjust remote folder and add move out button)
   const fieldWrap: React.CSSProperties = { marginBottom: "14px" };
 
   return (
@@ -414,7 +440,36 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
             <input type="date" style={inputStyle} value={form.notice_date ?? ""} onChange={(e) => set("notice_date", e.target.value)} />
           </div>
           <div>
+<<<<<<< HEAD
             <label style={labelStyle}>{form.status === "occupied" && form.lease_type === "12-month" ? "Lease To" : "Move-Out"}</label>
+=======
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "5px" }}>
+              <label style={{ ...labelStyle, marginBottom: 0 }}>{form.status === "occupied" && form.lease_type === "12-month" ? "Lease To" : "Move-Out"}</label>
+              {form.status === "notice" && (
+                <button
+                  type="button"
+                  onClick={moveOut}
+                  disabled={!form.tenant_name}
+                  style={{
+                    display: "flex", alignItems: "center", gap: "5px",
+                    background: form.tenant_name ? "rgba(40,140,80,0.12)" : "transparent",
+                    border: `1px solid ${form.tenant_name ? "rgba(40,140,80,0.5)" : "var(--color-border)"}`,
+                    borderRadius: "5px", padding: "4px 10px", cursor: form.tenant_name ? "pointer" : "not-allowed",
+                    color: form.tenant_name ? "rgb(30,150,80)" : "var(--color-text-muted)",
+                    fontFamily: "var(--font-body)", fontSize: "0.82rem", letterSpacing: "0.08em", textTransform: "uppercase",
+                    transition: "all 0.15s", opacity: form.tenant_name ? 1 : 0.45,
+                  }}
+                >
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
+                  Move Out
+                </button>
+              )}
+            </div>
+>>>>>>> 6f6d19f (adjust remote folder and add move out button)
             <input type="date" style={inputStyle} value={form.move_out_date ?? ""} onChange={(e) => set("move_out_date", e.target.value)} />
           </div>
         </div>
@@ -614,6 +669,44 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
           </div>
         )}
 
+<<<<<<< HEAD
+=======
+        {/* Past Tenant — read-only historical record */}
+        {(form.past_tenant || form.past_tenant_move_out_date) && (
+          <div style={{ marginBottom: "14px" }}>
+            <div style={{ borderTop: "1px solid var(--color-border)", marginBottom: "14px" }} />
+            <span style={{ fontSize: "1rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--color-text-muted)" }}>
+              Past Tenant
+            </span>
+            <div
+              style={{
+                marginTop: "10px",
+                padding: "12px 14px",
+                background: "rgba(100,100,100,0.06)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "6px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+              }}
+            >
+              {form.past_tenant && (
+                <div style={{ fontSize: "1rem", color: "var(--color-text)" }}>
+                  <strong style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>Name</strong>{" "}
+                  <span>{form.past_tenant}</span>
+                </div>
+              )}
+              {form.past_tenant_move_out_date && (
+                <div style={{ fontSize: "0.97rem", color: "var(--color-text-muted)" }}>
+                  <strong style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>Moved Out</strong>{" "}
+                  <span>{fmt(form.past_tenant_move_out_date as string)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+>>>>>>> 6f6d19f (adjust remote folder and add move out button)
         {error && <p style={{ color: "#e05c5c", fontSize: "1rem", marginBottom: "12px" }}>{error}</p>}
 
         <div style={{ display: "flex", gap: "10px" }}>
@@ -819,6 +912,27 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                     {u.future_move_in_date && <span style={{ color: "var(--color-text-muted)" }}>· moves in {fmt(u.future_move_in_date)}</span>}
                   </div>
                 )}
+<<<<<<< HEAD
+=======
+                {u.past_tenant && (
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      padding: "4px 8px",
+                      background: "rgba(100,100,100,0.06)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: "4px",
+                      display: "inline-flex",
+                      gap: "6px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", letterSpacing: "0.06em", textTransform: "uppercase" }}>Past:</span>
+                    <span style={{ color: "var(--color-text-muted)" }}>{u.past_tenant}</span>
+                    {u.past_tenant_move_out_date && <span style={{ color: "var(--color-text-muted)", opacity: 0.7 }}>· moved out {fmt(u.past_tenant_move_out_date)}</span>}
+                  </div>
+                )}
+>>>>>>> 6f6d19f (adjust remote folder and add move out button)
               </div>
             </div>
           ))}
