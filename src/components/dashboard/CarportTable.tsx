@@ -15,7 +15,7 @@ interface CarportTableProps {
   initialAddressFilter?: string;
 }
 
-type ColKey = "address" | "space_number" | "status" | "tenant_name" | "tenant_address" | "rental_date" | "rate";
+type ColKey = "address" | "space_number" | "status" | "tenant_name" | "tenant_address" | "rental_date" | "rate" | "notes";
 type SortDir = "asc" | "desc";
 
 function fmt(date: string | null): string {
@@ -54,6 +54,7 @@ function cellValue(s: CarportSpace, key: ColKey): string {
     case "tenant_address": return s.tenant_address;
     case "rental_date":    return s.rental_date ? fmt(s.rental_date) : "";
     case "rate":           return s.rate;
+    case "notes":          return s.notes ?? "";
   }
 }
 
@@ -65,6 +66,7 @@ const COLS: { key: ColKey; label: string; filterable: "text" | "select" }[] = [
   { key: "tenant_address", label: "Tenant Address",   filterable: "text"   },
   { key: "rental_date",    label: "Rental Date",      filterable: "text"   },
   { key: "rate",           label: "Rate",             filterable: "text"   },
+  { key: "notes",          label: "Notes",            filterable: "text"   },
 ];
 
 const thBase: React.CSSProperties = {
@@ -259,7 +261,7 @@ export default function CarportTable({ spaces, units, loading, accessCode, onRef
             <tbody>
               {displayed.length === 0 ? (
                 <tr>
-                  <td colSpan={7} style={{ padding: "32px", textAlign: "center", color: "var(--color-text-muted)", fontStyle: "italic" }}>
+                  <td colSpan={8} style={{ padding: "32px", textAlign: "center", color: "var(--color-text-muted)", fontStyle: "italic" }}>
                     No carport spaces match filters.
                   </td>
                 </tr>
@@ -293,6 +295,7 @@ export default function CarportTable({ spaces, units, loading, accessCode, onRef
                     <td style={tdBase}>{s.tenant_address || "—"}</td>
                     <td style={tdBase}>{s.rental_date ? fmt(s.rental_date) : "—"}</td>
                     <td style={tdBase}>{s.rate || "—"}</td>
+                    <td style={{ ...tdBase, whiteSpace: "normal", maxWidth: "200px" }}>{s.notes || "—"}</td>
                   </tr>
                 );
               })}

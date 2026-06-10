@@ -76,6 +76,7 @@ function SpaceRow({ space, units, accessCode, onSaved }: SpaceRowProps) {
   const [rate, setRate] = useState(space.rate);
   const [externalName, setExternalName] = useState(space.external_name ?? "");
   const [externalPhone, setExternalPhone] = useState(space.external_phone ?? "");
+  const [notes, setNotes] = useState(space.notes ?? "");
   const [saving, setSaving] = useState(false);
 
   const isTenant = assignedTo === "tenant";
@@ -92,13 +93,14 @@ function SpaceRow({ space, units, accessCode, onSaved }: SpaceRowProps) {
     setRate(space.rate);
     setExternalName(space.external_name ?? "");
     setExternalPhone(space.external_phone ?? "");
+    setNotes(space.notes ?? "");
     setEditing(false);
   }
 
   async function save() {
     setSaving(true);
     try {
-      const body: Record<string, unknown> = { assigned_to: assignedTo };
+      const body: Record<string, unknown> = { assigned_to: assignedTo, notes };
       if (assignedTo === "tenant") {
         body.unit_id = unitId ? Number(unitId) : null;
         body.rental_date = rentalDate || null;
@@ -179,6 +181,11 @@ function SpaceRow({ space, units, accessCode, onSaved }: SpaceRowProps) {
           )}
           {space.assigned_to === "external" && space.rate && (
             <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>{space.rate}</span>
+          )}
+          {space.notes && (
+            <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", fontStyle: "italic" }}>
+              {space.notes}
+            </span>
           )}
         </div>
         <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
@@ -301,6 +308,12 @@ function SpaceRow({ space, units, accessCode, onSaved }: SpaceRowProps) {
               </div>
             </>
           )}
+
+          {/* Notes — always visible in edit mode */}
+          <div>
+            <label style={{ fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-text-muted)", display: "block", marginBottom: "3px" }}>Notes</label>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes…" rows={2} style={{ ...inputStyle, resize: "vertical" }} />
+          </div>
 
           <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
             <button onClick={resetForm} style={ghostBtn}>Cancel</button>
