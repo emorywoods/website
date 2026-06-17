@@ -241,6 +241,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
         future_move_in_date: "",
         past_tenant: "",
         past_tenant_move_out_date: "",
+        ready_for_tour: false,
       };
     });
     setShowFutureTenant(false);
