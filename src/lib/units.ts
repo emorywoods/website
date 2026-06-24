@@ -21,6 +21,7 @@ export interface Unit {
   maintenance_done: boolean;
   lock_change_needed: boolean;
   ready_for_tour: boolean;
+  promo_eligible: boolean;
   notes: string;
   future_tenant: string;
   future_move_in_date: string | null;
@@ -69,6 +70,7 @@ export function ensureUnitsTable(): Promise<void> {
       pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS maintenance_done BOOLEAN NOT NULL DEFAULT FALSE`),
       pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS lock_change_needed BOOLEAN NOT NULL DEFAULT FALSE`),
       pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS ready_for_tour BOOLEAN NOT NULL DEFAULT FALSE`),
+      pool().query(`ALTER TABLE units ADD COLUMN IF NOT EXISTS promo_eligible BOOLEAN NOT NULL DEFAULT FALSE`),
     ]);
   })();
   return tableReady;
@@ -108,7 +110,7 @@ export async function updateUnit(id: number, patch: UnitPatch): Promise<Unit> {
   await ensureUnitsTable();
   const allowed: (keyof UnitPatch)[] = [
     "status", "tenant_name", "tenant_contact", "unit_type", "unit_condition",
-    "rent", "lease_type", "move_in_date", "move_out_date", "notice_date", "maintenance_needed", "maintenance_done", "lock_change_needed", "ready_for_tour", "notes",
+    "rent", "lease_type", "move_in_date", "move_out_date", "notice_date", "maintenance_needed", "maintenance_done", "lock_change_needed", "ready_for_tour", "promo_eligible", "notes",
     "future_tenant", "future_move_in_date",
     "past_tenant", "past_tenant_move_out_date",
   ];

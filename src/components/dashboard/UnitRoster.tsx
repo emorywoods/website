@@ -179,6 +179,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
     maintenance_done: unit.maintenance_done ?? false,
     lock_change_needed: unit.lock_change_needed ?? false,
     ready_for_tour: unit.ready_for_tour ?? false,
+    promo_eligible: unit.promo_eligible ?? false,
     notes: unit.notes,
     future_tenant: unit.future_tenant ?? "",
     future_move_in_date: toDateInput(unit.future_move_in_date),
@@ -241,6 +242,9 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
         future_move_in_date: "",
         past_tenant: "",
         past_tenant_move_out_date: "",
+        maintenance_needed: "",
+        maintenance_done: false,
+        lock_change_needed: false,
         ready_for_tour: false,
       };
     });
@@ -568,6 +572,25 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
                 {form.ready_for_tour ? "Ready for Tour" : "Mark Ready for Tour"}
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, promo_eligible: !f.promo_eligible }))}
+              style={{
+                display: "flex", alignItems: "center", gap: "6px",
+                background: form.promo_eligible ? "rgba(160,90,30,0.18)" : "transparent",
+                border: `1px solid ${form.promo_eligible ? "rgba(160,90,30,0.6)" : "var(--color-border)"}`,
+                borderRadius: "5px", padding: "5px 12px", cursor: "pointer",
+                color: form.promo_eligible ? "rgb(190,110,40)" : "var(--color-text-muted)",
+                fontFamily: "var(--font-body)", fontSize: "0.88rem", letterSpacing: "0.06em", textTransform: "uppercase",
+                transition: "all 0.15s",
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+              </svg>
+              {form.promo_eligible ? "13-Month Promo Eligible" : "Mark 13-Month Promo"}
+            </button>
           </div>
         </div>
 
@@ -824,6 +847,20 @@ export default function UnitRoster({ units, selectedBuilding, accessCode, onRefr
                         <polyline points="9 22 9 12 15 12 15 22" />
                       </svg>
                       Ready for Tour
+                    </span>
+                  )}
+                  {u.promo_eligible && (
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: "4px",
+                      padding: "2px 8px", borderRadius: "4px", fontSize: "0.87rem",
+                      letterSpacing: "0.07em", textTransform: "uppercase",
+                      background: "rgba(160,90,30,0.18)", color: "rgb(190,110,40)", border: "1px solid rgba(160,90,30,0.5)",
+                    }}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                      </svg>
+                      13-Month Promo
                     </span>
                   )}
                   {(() => {

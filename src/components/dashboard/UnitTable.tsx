@@ -23,7 +23,7 @@ type ColKey =
   | "building" | "status" | "unit_type" | "unit_condition"
   | "rent" | "tenant_name" | "lease_type" | "move_in_date" | "move_out_date"
   | "maint_paint" | "maint_maintenance" | "maint_cleaning" | "maint_flooring"
-  | "maintenance_done" | "lock_change_needed" | "ready_for_tour" | "notes"
+  | "maintenance_done" | "lock_change_needed" | "ready_for_tour" | "promo_eligible" | "notes"
   | "future_tenant" | "future_move_in_date";
 
 type SortDir = "asc" | "desc";
@@ -45,6 +45,7 @@ const COLS: { key: ColKey; label: string; filterable: "text" | "select" | "bool"
   { key: "maintenance_done",   label: "Done",       filterable: "bool"   },
   { key: "lock_change_needed", label: "Lock",        filterable: "bool"   },
   { key: "ready_for_tour",     label: "Tour",        filterable: "bool"   },
+  { key: "promo_eligible",     label: "13-Mo Promo", filterable: "bool"   },
   { key: "notes",              label: "Notes",       filterable: "text"   },
   { key: "future_tenant",      label: "Future",      filterable: "text"   },
   { key: "future_move_in_date",label: "Future In",   filterable: "text"   },
@@ -68,6 +69,7 @@ function cellValue(u: Unit, key: ColKey): string {
     case "maintenance_done":   return u.maintenance_done ? "yes" : "no";
     case "lock_change_needed": return u.lock_change_needed ? "yes" : "no";
     case "ready_for_tour":     return u.ready_for_tour ? "yes" : "no";
+    case "promo_eligible":     return u.promo_eligible ? "yes" : "no";
     default: return String((u as unknown as Record<string, unknown>)[key] ?? "");
   }
 }
@@ -82,7 +84,7 @@ function sortVal(u: Unit, key: ColKey): string | number {
     return isNaN(n) ? 0 : n;
   }
   // bool cols sort checked first
-  if (["maint_paint","maint_maintenance","maint_cleaning","maint_flooring","maintenance_done","lock_change_needed","ready_for_tour"].includes(key)) {
+  if (["maint_paint","maint_maintenance","maint_cleaning","maint_flooring","maintenance_done","lock_change_needed","ready_for_tour","promo_eligible"].includes(key)) {
     return cellValue(u, key) === "yes" ? 0 : 1;
   }
   return cellValue(u, key).toLowerCase();
@@ -310,7 +312,7 @@ export default function UnitTable({ units, loading, onClickUnit, selectedBuildin
           <tbody>
             {displayed.length === 0 ? (
               <tr>
-                <td colSpan={19} style={{ padding: "32px", textAlign: "center", color: "var(--color-text-muted)", fontStyle: "italic" }}>
+                <td colSpan={20} style={{ padding: "32px", textAlign: "center", color: "var(--color-text-muted)", fontStyle: "italic" }}>
                   No units match filters.
                 </td>
               </tr>
@@ -356,6 +358,9 @@ export default function UnitTable({ units, loading, onClickUnit, selectedBuildin
                   </td>
                   <td style={{ ...tdBase, textAlign: "center", padding: "4px", width: "28px", background: u.ready_for_tour ? "rgba(40,140,80,0.08)" : undefined }}>
                     {u.ready_for_tour && <span style={{ color: "rgb(30,150,80)", fontSize: "0.9rem" }}>✓</span>}
+                  </td>
+                  <td style={{ ...tdBase, textAlign: "center", padding: "4px", width: "28px", background: u.promo_eligible ? "rgba(160,90,30,0.1)" : undefined }}>
+                    {u.promo_eligible && <span style={{ color: "rgb(190,110,40)", fontSize: "0.9rem" }}>✓</span>}
                   </td>
                   <td style={{ ...tdBase, maxWidth: "120px", overflow: "hidden", textOverflow: "ellipsis", color: "var(--color-text-muted)" }}>{u.notes || "—"}</td>
                   <td style={{ ...tdBase, maxWidth: "110px", overflow: "hidden", textOverflow: "ellipsis", color: u.future_tenant ? "rgb(60,120,210)" : "var(--color-text-muted)" }}>

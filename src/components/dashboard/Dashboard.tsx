@@ -229,6 +229,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const [typeFilter, setTypeFilter] = useState<string>("");
   const [searchEditUnit, setSearchEditUnit] = useState<Unit | null>(null);
   const [carportBuildingFilter, setCarportBuildingFilter] = useState<string>("");
+  const [rosterFilters, setRosterFilters] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -317,6 +318,26 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const vacantUnits = filteredUnits.filter((u) => u.status === "vacant");
   const noticeUnits = filteredUnits.filter((u) => u.status === "notice");
   const renewalUnits = filteredUnits.filter((u) => u.status === "occupied" && getLeaseAlert(u) !== null);
+
+  function applyRosterFilters(list: Unit[]): Unit[] {
+    if (rosterFilters.size === 0) return list;
+    return list.filter((u) => {
+      if (rosterFilters.has("maintenance") && !u.maintenance_needed) return false;
+      if (rosterFilters.has("promo") && !u.promo_eligible) return false;
+      if (rosterFilters.has("tour") && !u.ready_for_tour) return false;
+      if (rosterFilters.has("locks") && !u.lock_change_needed) return false;
+      if (rosterFilters.has("done") && !u.maintenance_done) return false;
+      return true;
+    });
+  }
+
+  function toggleRosterFilter(key: string) {
+    setRosterFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  }
 
   // Build a compact slug for a unit: "2194nd01" from code "2194 ND" + apt "01"
   // Also produce a zero-stripped variant: "2194nd1" so either form matches
@@ -813,7 +834,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
 
           {/* Apartment tabs — hidden when carport view active */}
           {tab !== "carports" && (
-            <div className="dash-tabs" style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", overflowX: "auto", scrollbarWidth: "none" }}>
+            <div className="dash-tabs" style={{ display: "flex", borderBottom: "1px solid var(--color-border)", background: "var(--color-surface)", overflowX: "auto", scrollbarWidth: "none", alignItems: "center" }}>
               <button style={tabStyle("vacant")} onClick={() => setTab("vacant")}>
                 Vacant
                 {!unitsLoading && (
@@ -849,6 +870,59 @@ export default function Dashboard({ accessCode }: DashboardProps) {
             </div>
           )}
 
+          {/* Roster filter chips — apartments only */}
+          {tab !== "carports" && (
+            <div style={{
+              display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap",
+              padding: "7px 14px", borderBottom: "1px solid var(--color-border)",
+              background: "var(--color-surface)", flexShrink: 0,
+            }}>
+              {([
+                { key: "maintenance", label: "Needs Maint." },
+                { key: "promo",       label: "13-Mo Promo"  },
+                { key: "tour",        label: "Ready for Tour" },
+                { key: "locks",       label: "Locks Changed" },
+                { key: "done",        label: "Maint. Done"  },
+              ] as { key: string; label: string }[]).map(({ key, label }) => {
+                const active = rosterFilters.has(key);
+                return (
+                  <button
+                    key={key}
+                    onClick={() => toggleRosterFilter(key)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: "4px",
+                      padding: "3px 9px", borderRadius: "20px", cursor: "pointer",
+                      fontFamily: "var(--font-body)", fontSize: "0.75rem",
+                      letterSpacing: "0.07em", textTransform: "uppercase",
+                      transition: "all 0.15s",
+                      background: active ? "rgba(201,168,76,0.18)" : "transparent",
+                      border: `1px solid ${active ? "rgba(201,168,76,0.55)" : "var(--color-border)"}`,
+                      color: active ? "var(--color-accent)" : "var(--color-text-muted)",
+                      fontWeight: active ? 600 : 400,
+                    }}
+                  >
+                    {active && <span style={{ fontSize: "0.65rem" }}>✓</span>}
+                    {label}
+                  </button>
+                );
+              })}
+              {rosterFilters.size > 0 && (
+                <button
+                  onClick={() => setRosterFilters(new Set())}
+                  style={{
+                    marginLeft: "2px", padding: "3px 8px", borderRadius: "20px",
+                    background: "transparent", border: "1px solid var(--color-border)",
+                    color: "var(--color-text-muted)", fontSize: "0.72rem",
+                    letterSpacing: "0.07em", textTransform: "uppercase",
+                    cursor: "pointer", fontFamily: "var(--font-body)",
+                  }}
+                >
+                  ✕ Clear
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Panel content */}
           <div style={{ flex: 1, padding: tab === "carports" ? "0" : "20px", overflowY: tab === "carports" ? "hidden" : "auto", display: "flex", flexDirection: "column" }}>
             {tab === "carports" ? (
@@ -862,7 +936,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               />
             ) : tab === "units" ? (
               <UnitRoster
-                units={filteredUnits}
+                units={applyRosterFilters(filteredUnits)}
                 selectedBuilding={selected ?? "all"}
                 accessCode={accessCode}
                 onRefresh={() => loadUnits(selected)}
@@ -870,7 +944,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               />
             ) : tab === "vacant" ? (
               <UnitRoster
-                units={vacantUnits}
+                units={applyRosterFilters(vacantUnits)}
                 selectedBuilding={selected ?? "all"}
                 accessCode={accessCode}
                 onRefresh={() => loadUnits(selected)}
@@ -879,7 +953,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               />
             ) : tab === "renewals" ? (
               <UnitRoster
-                units={renewalUnits}
+                units={applyRosterFilters(renewalUnits)}
                 selectedBuilding={selected ?? "all"}
                 accessCode={accessCode}
                 onRefresh={() => loadUnits(selected)}
@@ -888,7 +962,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               />
             ) : (
               <UnitRoster
-                units={noticeUnits}
+                units={applyRosterFilters(noticeUnits)}
                 selectedBuilding={selected ?? "all"}
                 accessCode={accessCode}
                 onRefresh={() => loadUnits(selected)}
