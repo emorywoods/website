@@ -360,6 +360,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
         if (
           u.apt_number.toLowerCase().includes(rawQuery) ||
           (u.tenant_name ?? "").toLowerCase().includes(rawQuery) ||
+          (u.future_tenant ?? "").toLowerCase().includes(rawQuery) ||
           u.building.toLowerCase().includes(rawQuery) ||
           (building?.address ?? "").toLowerCase().includes(rawQuery) ||
           (u.notes ?? "").toLowerCase().includes(rawQuery)
@@ -634,6 +635,12 @@ export default function Dashboard({ accessCode }: DashboardProps) {
                         {u.tenant_name && <span><strong style={{ color: "var(--color-text)" }}>{u.tenant_name}</strong></span>}
                         {u.unit_type && <span style={{ marginLeft: u.tenant_name ? "8px" : 0 }}>· {u.unit_type}{u.unit_condition ? ` · ${u.unit_condition}` : ""}</span>}
                         {u.rent && <span> · {u.rent}</span>}
+                      </div>
+                    )}
+                    {u.future_tenant && (
+                      <div style={{ marginTop: "4px", fontSize: "0.85rem", color: "rgb(60,120,210)" }}>
+                        <strong>Future:</strong> {u.future_tenant}
+                        {u.future_move_in_date && <span style={{ color: "var(--color-text-muted)" }}> · moves in {new Date(u.future_move_in_date).toLocaleDateString()}</span>}
                       </div>
                     )}
                   </div>

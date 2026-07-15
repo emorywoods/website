@@ -136,7 +136,7 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
 
       const otherLabels: string[] = [];
       if (liabilityInsurance) otherLabels.push("Liability to Landlord Insurance");
-      if (pet) otherLabels.push("Pet");
+      if (pet) otherLabels.push("Pet Fee");
 
       const res = await fetch("/DepositReceipt.pdf");
       const bytes = await res.arrayBuffer();
@@ -198,8 +198,9 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
     try {
       const { moveIn, firstMonthRent } = computeAmounts();
 
+      const wlFile = unit.unit_type === "Studio" ? "/WelcomeLetterStudio.pdf" : "/WelcomeLetter.pdf";
       const [wlRes, fontRes] = await Promise.all([
-        fetch("/WelcomeLetter.pdf"),
+        fetch(wlFile),
         fetch("/fonts/Gelasio-Bold.ttf"),
       ]);
       const wlBytes = await wlRes.arrayBuffer();
