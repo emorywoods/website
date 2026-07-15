@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Emory Woods Leasing Dashboard — User Guide</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, serif;
+      color: #222;
+      font-size: 12px;
+      line-height: 1.7;
+      padding: 32px 44px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #1a3a25;
+      margin-bottom: 4px;
+      font-family: Arial, sans-serif;
+    }
+    .subtitle {
+      color: #888;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: Arial, sans-serif;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #1a3a25;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #c9a84c;
+      padding-bottom: 4px;
+      font-family: Arial, sans-serif;
+    }
+    h3 {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #333;
+      margin-top: 18px;
+      margin-bottom: 5px;
+      font-family: Arial, sans-serif;
+    }
+
+    p { margin-bottom: 8px; }
+    ul, ol { margin: 5px 0 10px 20px; }
+    li { margin-bottom: 4px; }
+
+    .tip {
+      background: #f9f6ef;
+      border-left: 3px solid #c9a84c;
+      padding: 9px 13px;
+      margin: 10px 0 14px 0;
+      font-size: 11px;
+      color: #555;
+      border-radius: 0 4px 4px 0;
+    }
+    .tip strong { color: #8a6a00; }
+
+    .badge {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 3px;
+      font-size: 9.5px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-right: 3px;
+      font-family: Arial, sans-serif;
+    }
+    .b-gold   { background: rgba(201,168,76,0.18);  color: #7a5c00; border: 1px solid rgba(201,168,76,0.55); }
+    .b-green  { background: rgba(40,140,80,0.14);   color: #1a6a3a; border: 1px solid rgba(40,140,80,0.45); }
+    .b-blue   { background: rgba(80,140,220,0.14);  color: #1a4a8a; border: 1px solid rgba(80,140,220,0.45); }
+    .b-purple { background: rgba(80,50,140,0.16);   color: #4a1a8a; border: 1px solid rgba(80,50,140,0.45); }
+    .b-red    { background: rgba(224,92,92,0.14);   color: #8a1a1a; border: 1px solid rgba(224,92,92,0.45); }
+    .b-gray   { background: rgba(42,74,53,0.22);    color: #2a4a35; border: 1px solid rgba(42,74,53,0.4);  }
+    .b-orange { background: rgba(224,154,60,0.18);  color: #7a4a00; border: 1px solid rgba(224,154,60,0.5);}
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 14px 0;
+      font-size: 11px;
+    }
+    thead tr { background: #f5f0e8; }
+    th {
+      text-align: left;
+      padding: 5px 8px;
+      font-size: 9.5px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #555;
+      border-bottom: 2px solid #c9a84c;
+      border-right: 1px solid #e0d8c8;
+      white-space: nowrap;
+      font-family: Arial, sans-serif;
+    }
+    th:last-child { border-right: none; }
+    td {
+      padding: 5px 8px;
+      border-bottom: 1px solid #eee;
+      border-right: 1px solid #f0ebe0;
+      vertical-align: top;
+    }
+    td:last-child { border-right: none; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #fafaf7; }
+
+    .step {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 7px;
+      align-items: baseline;
+    }
+    .step-num {
+      min-width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #c9a84c;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-family: Arial, sans-serif;
+    }
+
+    hr { border: none; border-top: 1px solid #e8e0d0; margin: 20px 0; }
+
+    .page-break { page-break-before: always; }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      font-size: 9px;
+      color: #bbb;
+      letter-spacing: 0.05em;
+      text-align: right;
+      font-family: Arial, sans-serif;
+    }
+
+    @page { margin: 1.5cm 2cm; }
+    @media print { body { padding: 0; max-width: none; } }
+  </style>
+</head>
+<body>
+
+  <h1>Emory Woods — Leasing Dashboard</h1>
+  <p class="subtitle">User Guide &nbsp;·&nbsp; July 2025</p>
+
+  <p>This guide explains how to use the Leasing Dashboard at <strong>/jr-dashboard</strong>. It covers logging in, finding units, editing unit details, managing carports, and exporting a printable report. No technical knowledge is needed.</p>
+
+  <!-- ═══════════════════════════ -->
+  <h2>1. Logging In</h2>
+
+  <p>When you open the dashboard, you will see a login screen asking for an <strong>Access Code</strong>. Type the code you were given and press <strong>Enter</strong> or click the Enter button.</p>
+
+  <div class="tip"><strong>Staying logged in:</strong> The dashboard remembers your login in the browser. You will not need to enter the code again unless someone changes it or you use a different browser/device.</div>
+
+  <!-- ═══════════════════════════ -->
+  <h2>2. The Dashboard Layout</h2>
+
+  <p>After logging in, you will see two main areas:</p>
+  <ul>
+    <li><strong>Top bar</strong> — search box, unit type filter, and the Map / Table toggle and Export PDF button.</li>
+    <li><strong>Main area</strong> — either the property map (default) or the full unit table, depending on the toggle.</li>
+  </ul>
+
+  <h3>Map View vs. Table View</h3>
+  <p>Use the <strong>Map / Table</strong> toggle buttons in the top-right corner to switch between views.</p>
+
+  <table>
+    <thead><tr><th>View</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Map</strong></td><td>Seeing the property visually, clicking a building to drill into its units, switching between Vacant / Notices / All Units / Renewals / Carports.</td></tr>
+      <tr><td><strong>Table</strong></td><td>Seeing all units (or all carports) in a spreadsheet with sort and filter on every column.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ═══════════════════════════ -->
+  <h2>3. Map View — Navigating Buildings</h2>
+
+  <p>The map shows colored pins for each building. Each pin displays how many <span class="badge b-gold">Vacant</span> units and pending <span class="badge b-green">Notices</span> the building has.</p>
+
+  <div class="step"><div class="step-num">1</div><div>Click a building pin to select it. A gold bar appears on the right panel showing the building address.</div></div>
+  <div class="step"><div class="step-num">2</div><div>The right panel now shows only units from that building, filtered by the active tab.</div></div>
+  <div class="step"><div class="step-num">3</div><div>Click <strong>✕ Clear</strong> in the gold bar to go back to viewing all buildings.</div></div>
+
+  <h3>The Tabs (right panel)</h3>
+  <p>There are two main sections — <strong>Apartments</strong> and <strong>Carports</strong> — with a toggle at the top of the panel. Under Apartments, there are four tabs:</p>
+
+  <table>
+    <thead><tr><th>Tab</th><th>Shows</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Vacant</strong></td><td>Units currently empty (no tenant).</td></tr>
+      <tr><td><strong>Notices</strong></td><td>Units where the current tenant has given notice to move out.</td></tr>
+      <tr><td><strong>All Units</strong></td><td>Every unit in the selected building (or all buildings).</td></tr>
+      <tr><td><strong>Renewals</strong></td><td>Occupied units whose 12-month lease is expiring within 30 days.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Filter Chips</h3>
+  <p>Below the tabs are small filter buttons. Click one to narrow the list to only units that have that flag set:</p>
+  <ul>
+    <li><strong>Needs Maint.</strong> — has maintenance items listed.</li>
+    <li><strong>13-Mo Promo</strong> — marked as eligible for the 13-month promotion.</li>
+    <li><strong>Ready for Tour</strong> — unit is ready to show to prospects.</li>
+    <li><strong>Locks Changed</strong> — lock has been changed.</li>
+    <li><strong>Maint. Done</strong> — all maintenance is marked complete.</li>
+  </ul>
+  <p>Multiple chips can be active at once. Click <strong>✕ Clear</strong> to remove all chips.</p>
+
+  <!-- ═══════════════════════════ -->
+  <h2 class="page-break">4. Editing a Unit</h2>
+
+  <p>Click any unit card in the panel (or any row in Table View) to open the <strong>Edit Unit</strong> form.</p>
+
+  <h3>Status</h3>
+  <p>Select the unit's current situation using the three buttons at the top of the form:</p>
+  <table>
+    <thead><tr><th>Status</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge b-gray">Occupied</span></td><td>A tenant currently lives there and has not given notice.</td></tr>
+      <tr><td><span class="badge b-gold">Vacant</span></td><td>The unit is empty.</td></tr>
+      <tr><td><span class="badge b-green">Notice</span></td><td>The current tenant has given notice they are leaving.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tenant Information</h3>
+  <ul>
+    <li><strong>Tenant Name</strong> — full name of the current resident.</li>
+    <li><strong>Contact</strong> — phone number or email.</li>
+  </ul>
+
+  <h3>Unit Details</h3>
+  <ul>
+    <li><strong>Unit Type</strong> — Studio, 2BR, or 3BR.</li>
+    <li><strong>Condition</strong> — Classic or Renovated.</li>
+    <li><strong>Rent</strong> — the rent amount (e.g. $1,850). Type freely.</li>
+    <li><strong>Lease Type</strong> — Month-to-Month or 12-Month Lease.</li>
+  </ul>
+
+  <h3>Dates</h3>
+  <table>
+    <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Last Lease Renewal / Move-In</strong></td><td>The date the current tenant moved in, or the date their most recent 12-month lease started.</td></tr>
+      <tr><td><strong>Notice Date</strong></td><td>The date the tenant told you they are leaving (only relevant for Notice status).</td></tr>
+      <tr><td><strong>Lease To / Move-Out</strong></td><td>The date the lease ends or the tenant plans to move out. For 12-month leases, this fills in automatically from the move-in date.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip"><strong>12-Month Lease auto-calculation:</strong> When you set Lease Type to "12-Month" and enter the Move-In date, the Lease To date is automatically set to the last day of that same month one year later. You can override it manually if needed.</div>
+
+  <h3>Maintenance</h3>
+  <p>Click the maintenance tags to mark what the unit needs: <strong>Paint</strong>, <strong>Maintenance</strong>, <strong>Cleaning</strong>, <strong>Flooring</strong>. Multiple items can be selected at once.</p>
+  <p>When all work is done, click <strong>Mark Done</strong>. The tags will show with a strikethrough to indicate completion.</p>
+
+  <p>Additional toggles in this section:</p>
+  <ul>
+    <li><strong>Locks Changed</strong> — toggle on when the unit's locks have been rekeyed.</li>
+    <li><strong>Ready for Tour</strong> — toggle on when the unit is presentable for prospects. (Only shown for Vacant or Notice units.)</li>
+    <li><strong>13-Month Promo</strong> — toggle on to flag this unit as eligible for the 13-month lease promotion.</li>
+  </ul>
+
+  <h3>Notes</h3>
+  <p>A free-text area for anything else you want to record about the unit.</p>
+
+  <!-- ═══════════════════════════ -->
+  <h2>5. Special Unit Actions</h2>
+
+  <h3>Adding a Future Tenant (Vacant or Notice units)</h3>
+  <p>When a unit is Vacant or Notice, you can record who is moving in next <em>before</em> they actually arrive.</p>
+
+  <div class="step"><div class="step-num">1</div><div>Scroll to the bottom of the edit form and click <strong>+ Add Future Tenant</strong>.</div></div>
+  <div class="step"><div class="step-num">2</div><div>Enter the future tenant's name and their scheduled move-in date.</div></div>
+  <div class="step"><div class="step-num">3</div><div>Save. The unit will now show a <span class="badge b-blue">Vacant (Rented)</span> badge on the card, and a blue "Future:" label with their name and move-in date.</div></div>
+
+  <h3>Marking a Tenant as Moved In</h3>
+  <p>Once the future tenant has actually moved in:</p>
+
+  <div class="step"><div class="step-num">1</div><div>Open the unit's edit form.</div></div>
+  <div class="step"><div class="step-num">2</div><div>In the Future Tenant section, click <strong>Moved In?</strong>.</div></div>
+  <div class="step"><div class="step-num">3</div><div>The form will automatically set the status to Occupied, copy the future tenant's name to Tenant Name, set their move-in date, set the lease to 12-month, and clear all maintenance flags.</div></div>
+  <div class="step"><div class="step-num">4</div><div>Click <strong>Save Unit</strong>.</div></div>
+
+  <h3>Marking a Tenant as Moved Out (Notice → Vacant)</h3>
+  <p>When a tenant with Notice status has physically left:</p>
+
+  <div class="step"><div class="step-num">1</div><div>Open the unit's edit form.</div></div>
+  <div class="step"><div class="step-num">2</div><div>Next to the Move-Out date field, click the <strong>Move Out</strong> button.</div></div>
+  <div class="step"><div class="step-num">3</div><div>The form sets the unit to Vacant, saves the previous tenant's name and move-out date as a historical record, and clears all current tenant fields.</div></div>
+  <div class="step"><div class="step-num">4</div><div>Click <strong>Save Unit</strong>.</div></div>
+
+  <!-- ═══════════════════════════ -->
+  <h2 class="page-break">6. Searching for a Unit</h2>
+
+  <p>The search bar at the top works across all units at once, regardless of which building or tab is selected.</p>
+
+  <p>You can search by:</p>
+  <ul>
+    <li>Unit number (e.g. <strong>01</strong> or <strong>12</strong>)</li>
+    <li>Tenant name (e.g. <strong>Johnson</strong>)</li>
+    <li>Building code (e.g. <strong>2194 ND</strong>)</li>
+    <li>Street address (e.g. <strong>Webster Drive</strong>)</li>
+    <li>Notes text</li>
+    <li>Combined building + unit shorthand (e.g. <strong>2194nd01</strong>)</li>
+  </ul>
+
+  <p>Results appear as a list overlay. Click any result to immediately open the edit form for that unit. Press <strong>Escape</strong> or click <strong>✕</strong> to close the search.</p>
+
+  <div class="tip"><strong>Type filter:</strong> Next to the search bar, there is a dropdown to filter by unit type (All Types / Studio / 2BR / 3BR). This applies to both search results and the main panel.</div>
+
+  <!-- ═══════════════════════════ -->
+  <h2>7. Table View</h2>
+
+  <p>Switch to Table View using the <strong>Table</strong> button in the top-right. This shows all units in a spreadsheet format.</p>
+
+  <p>At the top of the table there are two tabs:</p>
+  <ul>
+    <li><strong>Units</strong> — all apartment units.</li>
+    <li><strong>Carports</strong> — all carport spaces.</li>
+  </ul>
+
+  <h3>Sorting</h3>
+  <p>Click any column header to sort by that column. Click again to reverse the sort direction.</p>
+
+  <h3>Filtering</h3>
+  <p>Below each column header is a filter box. Type in it to narrow the rows to only those matching your input. For Yes/No columns (like Maintenance, Lock, Tour), a dropdown lets you filter to only rows where the flag is checked or unchecked.</p>
+
+  <p>To clear all filters, click the <strong>Clear all</strong> button that appears when any filter is active.</p>
+
+  <h3>Clicking a row</h3>
+  <p>Clicking any unit row opens the same Edit Unit form described in Section 4.</p>
+
+  <!-- ═══════════════════════════ -->
+  <h2>8. Carports</h2>
+
+  <h3>Viewing Carport Spaces</h3>
+  <p>In Map View, click the <strong>Carports</strong> section toggle (above the tabs) to switch the right panel to carports. You can also click a carport marker on the map directly.</p>
+
+  <p>In Table View, select the <strong>Carports</strong> tab at the top of the table. The summary bar shows: <em>X available · Y tenant · Z office · W shop · N total</em>.</p>
+
+  <h3>Carport Status Types</h3>
+  <table>
+    <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>Available</td><td>Space is unoccupied and available to lease.</td></tr>
+      <tr><td><span class="badge b-purple">Tenant</span></td><td>Rented to a current Emory Woods apartment tenant. The tenant's name and unit are linked automatically.</td></tr>
+      <tr><td><span class="badge b-blue">Office</span></td><td>Reserved for the leasing office.</td></tr>
+      <tr><td>Shop</td><td>Reserved for the maintenance shop.</td></tr>
+      <tr><td>External</td><td>Rented to someone who is not an Emory Woods tenant (e.g. a neighbor).</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Assigning a Carport Space</h3>
+  <div class="step"><div class="step-num">1</div><div>Click any row in the Carports table (or click a carport pin on the map). A modal opens showing all spaces for that carport area.</div></div>
+  <div class="step"><div class="step-num">2</div><div>Find the space you want and click <strong>Assign</strong> (or <strong>Edit</strong> if it already has an assignment).</div></div>
+  <div class="step"><div class="step-num">3</div><div>Select the assignment type: Tenant, Office, Shop, or External.</div></div>
+  <div class="step"><div class="step-num">4</div><div>
+    Fill in the fields that appear:
+    <ul>
+      <li><strong>Tenant</strong> — pick the unit from the dropdown. Tenant name and address fill in automatically. Add a rental date and rate.</li>
+      <li><strong>External</strong> — enter the person's name and phone, plus rental date and rate.</li>
+      <li><strong>Office / Shop</strong> — only a notes field appears.</li>
+    </ul>
+  </div></div>
+  <div class="step"><div class="step-num">5</div><div>Click <strong>Save</strong>.</div></div>
+
+  <h3>Removing a Carport Assignment</h3>
+  <p>In the carport modal, click <strong>Unassign</strong> next to the space. This clears all tenant info and marks the space as Available again.</p>
+
+  <!-- ═══════════════════════════ -->
+  <h2>9. Lease Renewal Alerts</h2>
+
+  <p>The dashboard automatically watches for 12-month leases that are expiring soon. When a lease is within <strong>30 days</strong> of its end date, the unit will:</p>
+  <ul>
+    <li>Show an <span class="badge b-orange">Lease ends in Xd</span> badge on its card.</li>
+    <li>Show a warning banner inside the edit form.</li>
+    <li>Appear in the <strong>Renewals</strong> tab.</li>
+  </ul>
+  <p>If the lease has already expired, the badge turns <span class="badge b-red">red</span> and says "Lease expired."</p>
+
+  <div class="tip"><strong>How the lease end date is calculated:</strong> If no Move-Out date is set manually, the dashboard calculates it as the last day of the same month, one year after the Move-In date. For example, a move-in of October 24, 2024 gives a lease end of October 31, 2025.</div>
+
+  <!-- ═══════════════════════════ -->
+  <h2>10. Exporting a PDF Report</h2>
+
+  <p>Click the <strong>Export PDF</strong> button in the top-right corner. A new browser tab opens with a printable report showing:</p>
+  <ul>
+    <li><strong>Left side:</strong> all Vacant units with their type, condition, rent, any future tenant, and maintenance flags.</li>
+    <li><strong>Right side:</strong> all Move-Out Notices with move-out date, current tenant, and maintenance flags.</li>
+  </ul>
+
+  <p>The browser's print dialog will open automatically. Select <strong>Save as PDF</strong> as the destination to save a PDF file, or choose a printer to print directly.</p>
+
+  <div class="tip"><strong>Landscape format:</strong> The report is designed for landscape (horizontal) paper orientation. This should be set automatically, but if not, switch to landscape in the print dialog before printing.</div>
+
+  <!-- ═══════════════════════════ -->
+  <h2>11. Unit Status Quick Reference</h2>
+
+  <table>
+    <thead><tr><th>Badge</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge b-gray">Occupied</span></td><td>Tenant is currently living there.</td></tr>
+      <tr><td><span class="badge b-gold">Vacant</span></td><td>Unit is empty, no one scheduled to move in.</td></tr>
+      <tr><td><span class="badge b-blue">Vacant (Rented)</span></td><td>Unit is empty, but a future tenant is recorded with a scheduled move-in date.</td></tr>
+      <tr><td><span class="badge b-green">Notice</span></td><td>Current tenant has given notice they are leaving.</td></tr>
+      <tr><td><span class="badge b-green">Ready for Tour</span></td><td>Unit is clean and ready to show to prospects.</td></tr>
+      <tr><td><span class="badge b-orange">13-Month Promo</span></td><td>Unit is eligible for the 13-month lease promotion.</td></tr>
+      <tr><td><span class="badge b-orange">Lease ends in Xd</span></td><td>12-month lease expiring within 30 days. Xd = days remaining.</td></tr>
+      <tr><td><span class="badge b-red">Lease expired</span></td><td>12-month lease has already passed its end date.</td></tr>
+    </tbody>
+  </table>
+
+  <footer>Emory Woods Leasing Dashboard — User Guide &nbsp;·&nbsp; July 2025</footer>
+
+</body>
+</html>

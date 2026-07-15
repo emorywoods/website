@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Unit, UnitStatus, UnitPatch } from "@/lib/units";
+import DepositReceiptModal from "./DepositReceiptModal";
 
 interface UnitRosterProps {
   units: Unit[];
@@ -191,6 +192,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [showReceipt, setShowReceipt] = useState(false);
 
   function set(key: keyof UnitPatch, value: string) {
     setForm((f) => {
@@ -731,6 +733,23 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
 
 
         {error && <p style={{ color: "#e05c5c", fontSize: "1rem", marginBottom: "12px" }}>{error}</p>}
+
+        <button
+          type="button"
+          onClick={() => setShowReceipt(true)}
+          style={{
+            width: "100%", background: "transparent", border: "1px solid rgba(201,168,76,0.5)",
+            borderRadius: "6px", padding: "11px", color: "var(--color-accent)",
+            fontFamily: "var(--font-body)", fontSize: "0.95rem", letterSpacing: "0.08em",
+            textTransform: "uppercase", cursor: "pointer", marginBottom: "10px",
+          }}
+        >
+          Create Welcome Letter and Deposit Receipt
+        </button>
+
+        {showReceipt && (
+          <DepositReceiptModal unit={unit} onClose={() => setShowReceipt(false)} />
+        )}
 
         <div style={{ display: "flex", gap: "10px" }}>
           <button

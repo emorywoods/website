@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "@types/leaflet": "^1.9.21",
     "@vercel/postgres": "^0.10.0",
     "framer-motion": "^11.3.8",
     "leaflet": "^1.9.4",
     "maplibre-gl": "^5.24.0",
     "next": "14.2.5",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
