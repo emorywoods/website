@@ -196,7 +196,7 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
     setError("");
     const tab = window.open("", "_blank");
     try {
-      const { moveIn, firstMonthRent } = computeAmounts();
+      const { moveIn, balanceDue } = computeAmounts();
 
       const wlFile = unit.unit_type === "Studio" ? "/WelcomeLetterStudio.pdf" : "/WelcomeLetter.pdf";
       const [wlRes, fontRes] = await Promise.all([
@@ -225,7 +225,7 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
       setWlField("street_address", building?.address ?? "");
       setWlField("apt_number", `#${unit.apt_number}`);
       setWlField("move_in_date", moveIn ? fmtSlash(moveIn) : "");
-      setWlField("rent_amount", moveIn ? `$${fmtMoney(firstMonthRent)}` : "");
+      setWlField("rent_amount", moveIn ? `$${fmtMoney(balanceDue)}` : "");
 
       const wlFilled = await wlDoc.save();
       const wlBlob = new Blob([wlFilled.slice().buffer], { type: "application/pdf" });
