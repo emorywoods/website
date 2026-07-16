@@ -9,6 +9,7 @@ import { buildingByCode } from "@/lib/buildings";
 interface DepositReceiptModalProps {
   unit: Unit;
   onClose: () => void;
+  onlyDoc?: "welcome" | "deposit";
 }
 
 const inputStyle: React.CSSProperties = {
@@ -61,11 +62,20 @@ function waterSewer(unitType: string, unitCondition: string): number {
   return 0;
 }
 
+// True if move-in falls within the last 3 days of the month (daysRemaining < 4) — rolls into next month's rent
+function rollsToNextMonth(moveIn: Date): boolean {
+  const daysInMonth = endOfMonth(moveIn).getUTCDate();
+  const daysRemaining = daysInMonth - moveIn.getUTCDate() + 1;
+  return daysRemaining < 4;
+}
+
 // Prorated rent for the partial first month: (days from move-in through end of month, inclusive) / days in month * monthly amount
+// If move-in rolls to next month, add that next month's full rent too
 function proratedFirstMonth(moveIn: Date, monthlyAmount: number): number {
   const daysInMonth = endOfMonth(moveIn).getUTCDate();
   const daysRemaining = daysInMonth - moveIn.getUTCDate() + 1;
-  return (daysRemaining / daysInMonth) * monthlyAmount;
+  const prorated = (daysRemaining / daysInMonth) * monthlyAmount;
+  return rollsToNextMonth(moveIn) ? prorated + monthlyAmount : prorated;
 }
 
 function parseUTCDate(val: string): Date | null {
@@ -86,9 +96,10 @@ function fmtSlash(d: Date | null): string {
   return `${m}/${day}/${d.getUTCFullYear()}`;
 }
 
-// First day of the month following moveIn
+// First day of the month following moveIn (skips an extra month if moveIn already rolled into it)
 function nextPaymentDate(moveIn: Date): Date {
-  return new Date(Date.UTC(moveIn.getUTCFullYear(), moveIn.getUTCMonth() + 1, 1));
+  const extra = rollsToNextMonth(moveIn) ? 1 : 0;
+  return new Date(Date.UTC(moveIn.getUTCFullYear(), moveIn.getUTCMonth() + 1 + extra, 1));
 }
 
 // Last day of the month containing `d`
@@ -96,7 +107,7 @@ function endOfMonth(d: Date): Date {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0));
 }
 
-export default function DepositReceiptModal({ unit, onClose }: DepositReceiptModalProps) {
+export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositReceiptModalProps) {
   const [applicantName, setApplicantName] = useState(unit.future_tenant || "");
   const [moveInDate, setMoveInDate] = useState(
     unit.future_move_in_date ? unit.future_move_in_date.slice(0, 10) : ""
@@ -143,10 +154,12 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
       const pdfDoc = await PDFDocument.load(bytes);
       const form = pdfDoc.getForm();
 
-      function setField(name: string, value: string) {
+      function setField(name: string, value: string, fontSize?: number) {
         if (!value) return;
         try {
-          form.getTextField(name).setText(value);
+          const field = form.getTextField(name);
+          if (fontSize) field.setFontSize(fontSize);
+          field.setText(value);
         } catch {
           // field missing/renamed — skip
         }
@@ -161,7 +174,7 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
       setField("untitled14", moveIn ? fmtLong(moveIn) : "");
       setField("untitled15", monthlyRent ? fmtMoney(monthlyRent) : "");
       setField("untitled29", monthlyRent ? fmtMoney(monthlyRent) : "");
-      setField("untitled24", otherLabels.join(", "));
+      setField("untitled24", otherLabels.join(", "), 6);
       setField("untitled27", nextPay ? fmtSlash(nextPay) : "");
       setField("untitled28", dueThrough ? fmtSlash(dueThrough) : "");
       setField("untitled17", moveIn ? fmtMoney(firstMonthRent) : "");
@@ -269,7 +282,7 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
       >
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "20px" }}>
           <h2 style={{ fontFamily: "var(--font-display)", color: "var(--color-text)", fontSize: "1.2rem", fontWeight: 400, letterSpacing: "0.06em", textTransform: "uppercase", margin: 0 }}>
-            Welcome Letter &amp; Deposit Receipt
+            {onlyDoc === "welcome" ? "Welcome Letter" : onlyDoc === "deposit" ? "Deposit Receipt" : "Welcome Letter & Deposit Receipt"}
           </h2>
           <span style={{ color: "var(--color-text-muted)", fontSize: "0.94rem" }}>Unit {unitCode(unit.building, unit.apt_number)}</span>
         </div>
@@ -314,30 +327,34 @@ export default function DepositReceiptModal({ unit, onClose }: DepositReceiptMod
         {error && <p style={{ color: "#e05c5c", fontSize: "1rem", marginBottom: "12px" }}>{error}</p>}
 
         <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-          <button
-            onClick={doGenerateDeposit}
-            disabled={generatingDeposit}
-            style={{
-              flex: 1, background: "var(--color-accent)", border: "none", borderRadius: "6px",
-              padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
-              fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
-              cursor: generatingDeposit ? "not-allowed" : "pointer", opacity: generatingDeposit ? 0.7 : 1,
-            }}
-          >
-            {generatingDeposit ? "Generating..." : "Deposit Receipt"}
-          </button>
-          <button
-            onClick={doGenerateWelcome}
-            disabled={generatingWelcome}
-            style={{
-              flex: 1, background: "var(--color-accent)", border: "none", borderRadius: "6px",
-              padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
-              fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
-              cursor: generatingWelcome ? "not-allowed" : "pointer", opacity: generatingWelcome ? 0.7 : 1,
-            }}
-          >
-            {generatingWelcome ? "Generating..." : "Welcome Letter"}
-          </button>
+          {onlyDoc !== "welcome" && (
+            <button
+              onClick={doGenerateDeposit}
+              disabled={generatingDeposit}
+              style={{
+                flex: 1, background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
+                fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: generatingDeposit ? "not-allowed" : "pointer", opacity: generatingDeposit ? 0.7 : 1,
+              }}
+            >
+              {generatingDeposit ? "Generating..." : "Deposit Receipt"}
+            </button>
+          )}
+          {onlyDoc !== "deposit" && (
+            <button
+              onClick={doGenerateWelcome}
+              disabled={generatingWelcome}
+              style={{
+                flex: 1, background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
+                fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: generatingWelcome ? "not-allowed" : "pointer", opacity: generatingWelcome ? 0.7 : 1,
+              }}
+            >
+              {generatingWelcome ? "Generating..." : "Welcome Letter"}
+            </button>
+          )}
         </div>
 
         <button

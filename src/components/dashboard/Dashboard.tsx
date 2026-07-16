@@ -11,6 +11,7 @@ import ExportPDF from "./ExportPDF";
 import UnitTable from "./UnitTable";
 import CarportTable from "./CarportTable";
 import PropertyMap, { type BuildingCounts, type BuildingEntries, type CarportAvail } from "./PropertyMap";
+import CreateDocumentModal from "./CreateDocumentModal";
 
 type DashTab = EntryKind | "units" | "renewals" | "carports";
 type ViewMode = "map" | "table";
@@ -230,6 +231,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   const [searchEditUnit, setSearchEditUnit] = useState<Unit | null>(null);
   const [carportBuildingFilter, setCarportBuildingFilter] = useState<string>("");
   const [rosterFilters, setRosterFilters] = useState<Set<string>>(new Set());
+  const [showCreateDoc, setShowCreateDoc] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -393,6 +395,10 @@ export default function Dashboard({ accessCode }: DashboardProps) {
   return (
     <div style={{ minHeight: "100dvh", background: "var(--color-bg)", fontFamily: "var(--font-body)" }}>
 
+      {/* Create document modal */}
+      {showCreateDoc && (
+        <CreateDocumentModal units={units} onClose={() => setShowCreateDoc(false)} />
+      )}
       {/* Search result modal */}
       {searchEditUnit && (
         <EditModal
@@ -466,6 +472,17 @@ export default function Dashboard({ accessCode }: DashboardProps) {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
             <span className="dash-date" style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", whiteSpace: "nowrap" }}>{today}</span>
+            <button
+              onClick={() => setShowCreateDoc(true)}
+              style={{
+                background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                padding: "8px 14px", color: "#0D1A12", fontFamily: "var(--font-body)",
+                fontSize: "0.82rem", fontWeight: 600, letterSpacing: "0.08em",
+                textTransform: "uppercase", cursor: "pointer", whiteSpace: "nowrap",
+              }}
+            >
+              Create Document
+            </button>
             {/* View mode switch */}
             <div style={{ display: "flex", border: "1px solid var(--color-border)", borderRadius: "6px", overflow: "hidden" }}>
               {(["map", "table"] as ViewMode[]).map((mode) => (
