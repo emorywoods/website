@@ -1,16 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, StandardFonts } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import type { Unit } from "@/lib/units";
 import { buildingByCode } from "@/lib/buildings";
 
+type DocType = "welcome" | "deposit" | "policy" | "insurance";
+
 interface DepositReceiptModalProps {
   unit: Unit;
   onClose: () => void;
-  onlyDoc?: "welcome" | "deposit";
+  onlyDoc?: DocType;
 }
+
+const docLabels: Record<DocType, string> = {
+  welcome: "Welcome Letter",
+  deposit: "Deposit Receipt",
+  policy: "Policy Letter",
+  insurance: "Renters Insurance",
+};
+
+const selectStyle: React.CSSProperties = {
+  background: "var(--color-bg)",
+  border: "1px solid var(--color-border)",
+  borderRadius: "6px",
+  padding: "9px 11px",
+  color: "var(--color-text)",
+  fontFamily: "var(--font-body)",
+  fontSize: "1.15rem",
+  outline: "none",
+  width: "100%",
+  boxSizing: "border-box",
+  cursor: "pointer",
+};
 
 const inputStyle: React.CSSProperties = {
   background: "var(--color-bg)",
@@ -108,6 +131,7 @@ function endOfMonth(d: Date): Date {
 }
 
 export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositReceiptModalProps) {
+  const [selectedDoc, setSelectedDoc] = useState<DocType>(onlyDoc ?? "deposit");
   const [applicantName, setApplicantName] = useState(unit.future_tenant || "");
   const [moveInDate, setMoveInDate] = useState(
     unit.future_move_in_date ? unit.future_move_in_date.slice(0, 10) : ""
@@ -119,10 +143,13 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
   const [pet, setPet] = useState(false);
   const [generatingDeposit, setGeneratingDeposit] = useState(false);
   const [generatingWelcome, setGeneratingWelcome] = useState(false);
+  const [generatingPolicy, setGeneratingPolicy] = useState(false);
+  const [generatingInsurance, setGeneratingInsurance] = useState(false);
   const [error, setError] = useState("");
 
   const building = buildingByCode(unit.building);
   const unitNo = unitCode(unit.building, unit.apt_number);
+  const fullAddress = building ? `${building.address} #${unit.apt_number}` : "";
 
   function computeAmounts() {
     const moveIn = parseUTCDate(moveInDate);
@@ -254,6 +281,69 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
     }
   }
 
+  async function doGeneratePolicy() {
+    setGeneratingPolicy(true);
+    setError("");
+    const tab = window.open("", "_blank");
+    try {
+      const { moveIn } = computeAmounts();
+
+      const res = await fetch("/PolicyLetter.pdf");
+      const bytes = await res.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(bytes);
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const page = pdfDoc.getPages()[0];
+
+      page.drawText(moveIn ? fmtSlash(moveIn) : "", { x: 96, y: 623, size: 11, font });
+      page.drawText(applicantName, { x: 109, y: 611.5, size: 11, font });
+      page.drawText(fullAddress, { x: 111, y: 600, size: 11, font });
+
+      const filled = await pdfDoc.save();
+      const blob = new Blob([filled.slice().buffer], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      if (tab) tab.location.href = url;
+      else window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      tab?.close();
+      setError("Failed to generate policy letter.");
+    } finally {
+      setGeneratingPolicy(false);
+    }
+  }
+
+  async function doGenerateInsurance() {
+    setGeneratingInsurance(true);
+    setError("");
+    const tab = window.open("", "_blank");
+    try {
+      const { moveIn } = computeAmounts();
+
+      const res = await fetch("/RentersInsurance.pdf");
+      const bytes = await res.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(bytes);
+      const font = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+      const page = pdfDoc.getPages()[0];
+
+      const dateStr = moveIn ? fmtSlash(moveIn) : "";
+      page.drawText(dateStr, { x: 307, y: 641.5, size: 11, font });
+      page.drawText(applicantName, { x: 307, y: 630, size: 11, font });
+      page.drawText(fullAddress, { x: 307, y: 618.5, size: 11, font });
+
+      const filled = await pdfDoc.save();
+      const blob = new Blob([filled.slice().buffer], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      if (tab) tab.location.href = url;
+      else window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      tab?.close();
+      setError("Failed to generate renters insurance addendum.");
+    } finally {
+      setGeneratingInsurance(false);
+    }
+  }
+
   return (
     <div
       style={{
@@ -282,7 +372,7 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
       >
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "20px" }}>
           <h2 style={{ fontFamily: "var(--font-display)", color: "var(--color-text)", fontSize: "1.2rem", fontWeight: 400, letterSpacing: "0.06em", textTransform: "uppercase", margin: 0 }}>
-            {onlyDoc === "welcome" ? "Welcome Letter" : onlyDoc === "deposit" ? "Deposit Receipt" : "Welcome Letter & Deposit Receipt"}
+            {onlyDoc ? docLabels[onlyDoc] : docLabels[selectedDoc]}
           </h2>
           <span style={{ color: "var(--color-text-muted)", fontSize: "0.94rem" }}>Unit {unitCode(unit.building, unit.apt_number)}</span>
         </div>
@@ -297,42 +387,61 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
           <input type="date" style={inputStyle} value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
-          <div>
-            <label style={labelStyle}>Adults</label>
-            <input type="number" min="0" style={inputStyle} value={adults} onChange={(e) => setAdults(e.target.value)} />
+        {onlyDoc === undefined && (
+          <div style={{ marginBottom: "14px" }}>
+            <label style={labelStyle}>Document Type</label>
+            <select
+              style={selectStyle}
+              value={selectedDoc}
+              onChange={(e) => setSelectedDoc(e.target.value as DocType)}
+            >
+              {(Object.keys(docLabels) as DocType[]).map((d) => (
+                <option key={d} value={d}>{docLabels[d]}</option>
+              ))}
+            </select>
           </div>
-          <div>
-            <label style={labelStyle}>Children</label>
-            <input type="number" min="0" style={inputStyle} value={children} onChange={(e) => setChildren(e.target.value)} />
-          </div>
-        </div>
+        )}
 
-        <div style={{ marginBottom: "18px" }}>
-          <label style={labelStyle}>Security Deposit ($)</label>
-          <input style={inputStyle} placeholder="300" value={securityDeposit} onChange={(e) => setSecurityDeposit(e.target.value)} />
-        </div>
+        {((onlyDoc ?? selectedDoc) === "deposit" || (onlyDoc ?? selectedDoc) === "welcome") && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
+              <div>
+                <label style={labelStyle}>Adults</label>
+                <input type="number" min="0" style={inputStyle} value={adults} onChange={(e) => setAdults(e.target.value)} />
+              </div>
+              <div>
+                <label style={labelStyle}>Children</label>
+                <input type="number" min="0" style={inputStyle} value={children} onChange={(e) => setChildren(e.target.value)} />
+              </div>
+            </div>
 
-        <div style={{ display: "flex", gap: "16px", marginBottom: "20px" }}>
-          <label style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--color-text)", fontSize: "0.97rem", cursor: "pointer" }}>
-            <input type="checkbox" checked={liabilityInsurance} onChange={(e) => setLiabilityInsurance(e.target.checked)} />
-            Liability to Landlord Insurance
-          </label>
-          <label style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--color-text)", fontSize: "0.97rem", cursor: "pointer" }}>
-            <input type="checkbox" checked={pet} onChange={(e) => setPet(e.target.checked)} />
-            Pet
-          </label>
-        </div>
+            <div style={{ marginBottom: "18px" }}>
+              <label style={labelStyle}>Security Deposit ($)</label>
+              <input style={inputStyle} placeholder="300" value={securityDeposit} onChange={(e) => setSecurityDeposit(e.target.value)} />
+            </div>
+
+            <div style={{ display: "flex", gap: "16px", marginBottom: "20px" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--color-text)", fontSize: "0.97rem", cursor: "pointer" }}>
+                <input type="checkbox" checked={liabilityInsurance} onChange={(e) => setLiabilityInsurance(e.target.checked)} />
+                Liability to Landlord Insurance
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--color-text)", fontSize: "0.97rem", cursor: "pointer" }}>
+                <input type="checkbox" checked={pet} onChange={(e) => setPet(e.target.checked)} />
+                Pet
+              </label>
+            </div>
+          </>
+        )}
 
         {error && <p style={{ color: "#e05c5c", fontSize: "1rem", marginBottom: "12px" }}>{error}</p>}
 
-        <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-          {onlyDoc !== "welcome" && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
+          {(onlyDoc ?? selectedDoc) === "deposit" && (
             <button
               onClick={doGenerateDeposit}
               disabled={generatingDeposit}
               style={{
-                flex: 1, background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                flex: "1 1 45%", background: "var(--color-accent)", border: "none", borderRadius: "6px",
                 padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
                 fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
                 cursor: generatingDeposit ? "not-allowed" : "pointer", opacity: generatingDeposit ? 0.7 : 1,
@@ -341,18 +450,46 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
               {generatingDeposit ? "Generating..." : "Deposit Receipt"}
             </button>
           )}
-          {onlyDoc !== "deposit" && (
+          {(onlyDoc ?? selectedDoc) === "welcome" && (
             <button
               onClick={doGenerateWelcome}
               disabled={generatingWelcome}
               style={{
-                flex: 1, background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                flex: "1 1 45%", background: "var(--color-accent)", border: "none", borderRadius: "6px",
                 padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
                 fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
                 cursor: generatingWelcome ? "not-allowed" : "pointer", opacity: generatingWelcome ? 0.7 : 1,
               }}
             >
               {generatingWelcome ? "Generating..." : "Welcome Letter"}
+            </button>
+          )}
+          {(onlyDoc ?? selectedDoc) === "policy" && (
+            <button
+              onClick={doGeneratePolicy}
+              disabled={generatingPolicy}
+              style={{
+                flex: "1 1 45%", background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
+                fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: generatingPolicy ? "not-allowed" : "pointer", opacity: generatingPolicy ? 0.7 : 1,
+              }}
+            >
+              {generatingPolicy ? "Generating..." : "Policy Letter"}
+            </button>
+          )}
+          {(onlyDoc ?? selectedDoc) === "insurance" && (
+            <button
+              onClick={doGenerateInsurance}
+              disabled={generatingInsurance}
+              style={{
+                flex: "1 1 45%", background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
+                fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: generatingInsurance ? "not-allowed" : "pointer", opacity: generatingInsurance ? 0.7 : 1,
+              }}
+            >
+              {generatingInsurance ? "Generating..." : "Renters Insurance"}
             </button>
           )}
         </div>

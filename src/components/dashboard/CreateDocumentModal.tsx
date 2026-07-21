@@ -9,7 +9,7 @@ interface CreateDocumentModalProps {
   onClose: () => void;
 }
 
-type DocType = "welcome" | "deposit";
+type DocType = "welcome" | "deposit" | "policy" | "insurance";
 
 function unitCode(building: string, apt: string): string {
   return building.replace(/\s+/g, "") + apt.replace(/\s+/g, "");
@@ -107,6 +107,8 @@ export default function CreateDocumentModal({ units, onClose }: CreateDocumentMo
             <option value="">Select document…</option>
             <option value="welcome">Welcome Letter</option>
             <option value="deposit">Deposit Receipt</option>
+            <option value="policy">Policy Letter</option>
+            <option value="insurance">Renters Insurance</option>
           </select>
         </div>
 

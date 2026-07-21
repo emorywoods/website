@@ -744,7 +744,7 @@ export function EditModal({ unit, accessCode, onSaved, onCancel }: EditModalProp
             textTransform: "uppercase", cursor: "pointer", marginBottom: "10px",
           }}
         >
-          Create Welcome Letter and Deposit Receipt
+          Create Documents
         </button>
 
         {showReceipt && (
