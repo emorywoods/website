@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { PDFDocument, StandardFonts } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import type { Unit } from "@/lib/units";
 import { buildingByCode } from "@/lib/buildings";
 
-type DocType = "welcome" | "deposit" | "policy" | "insurance";
+type DocType = "welcome" | "deposit" | "policy" | "insurance" | "brochure";
 
 interface DepositReceiptModalProps {
-  unit: Unit;
+  unit?: Unit;
   onClose: () => void;
   onlyDoc?: DocType;
 }
@@ -19,6 +19,7 @@ const docLabels: Record<DocType, string> = {
   deposit: "Deposit Receipt",
   policy: "Policy Letter",
   insurance: "Renters Insurance",
+  brochure: "Brochure Pricing",
 };
 
 const selectStyle: React.CSSProperties = {
@@ -130,35 +131,49 @@ function endOfMonth(d: Date): Date {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0));
 }
 
+const defaultPrices = {
+  studioBase: "890", studioWs: "25",
+  twoClassicBase: "1225", twoClassicWs: "45",
+  twoRenovBase: "1750", twoRenovWs: "60",
+  threeClassicBase: "1400", threeClassicWs: "60",
+  threeRenovBase: "2250", threeRenovWs: "80",
+};
+
+function fmtInt(n: number): string {
+  return Math.round(n).toLocaleString("en-US");
+}
+
 export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositReceiptModalProps) {
   const [selectedDoc, setSelectedDoc] = useState<DocType>(onlyDoc ?? "deposit");
-  const [applicantName, setApplicantName] = useState(unit.future_tenant || "");
+  const [applicantName, setApplicantName] = useState(unit?.future_tenant || "");
   const [moveInDate, setMoveInDate] = useState(
-    unit.future_move_in_date ? unit.future_move_in_date.slice(0, 10) : ""
+    unit?.future_move_in_date ? unit.future_move_in_date.slice(0, 10) : ""
   );
   const [securityDeposit, setSecurityDeposit] = useState("");
-  const [adults, setAdults] = useState(defaultAdults(unit.unit_type));
+  const [adults, setAdults] = useState(defaultAdults(unit?.unit_type ?? ""));
   const [children, setChildren] = useState("0");
   const [liabilityInsurance, setLiabilityInsurance] = useState(false);
   const [pet, setPet] = useState(false);
+  const [prices, setPrices] = useState(defaultPrices);
   const [generatingDeposit, setGeneratingDeposit] = useState(false);
   const [generatingWelcome, setGeneratingWelcome] = useState(false);
   const [generatingPolicy, setGeneratingPolicy] = useState(false);
   const [generatingInsurance, setGeneratingInsurance] = useState(false);
+  const [generatingBrochure, setGeneratingBrochure] = useState(false);
   const [error, setError] = useState("");
 
-  const building = buildingByCode(unit.building);
-  const unitNo = unitCode(unit.building, unit.apt_number);
-  const fullAddress = building ? `${building.address} #${unit.apt_number}` : "";
+  const building = unit ? buildingByCode(unit.building) : null;
+  const unitNo = unit ? unitCode(unit.building, unit.apt_number) : "";
+  const fullAddress = unit && building ? `${building.address} #${unit.apt_number}` : "";
 
   function computeAmounts() {
     const moveIn = parseUTCDate(moveInDate);
     const nextPay = moveIn ? nextPaymentDate(moveIn) : null;
     const dueThrough = nextPay ? endOfMonth(nextPay) : null;
-    const rent = parseMoney(unit.rent);
+    const rent = parseMoney(unit?.rent);
     const deposit = parseMoney(securityDeposit);
     const petFee = pet ? 300 : 0;
-    const ws = waterSewer(unit.unit_type, unit.unit_condition);
+    const ws = unit ? waterSewer(unit.unit_type, unit.unit_condition) : 0;
     const monthlyRent = rent + ws;
     const firstMonthRent = moveIn ? proratedFirstMonth(moveIn, monthlyRent) : 0;
     const balanceDue = firstMonthRent + petFee;
@@ -166,6 +181,7 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
   }
 
   async function doGenerateDeposit() {
+    if (!unit) return;
     setGeneratingDeposit(true);
     setError("");
     const tab = window.open("", "_blank");
@@ -232,6 +248,7 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
   }
 
   async function doGenerateWelcome() {
+    if (!unit) return;
     setGeneratingWelcome(true);
     setError("");
     const tab = window.open("", "_blank");
@@ -344,6 +361,57 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
     }
   }
 
+  async function doGenerateBrochure() {
+    setGeneratingBrochure(true);
+    setError("");
+    const tab = window.open("", "_blank");
+    try {
+      const res = await fetch("/Emory%20Woods%20brochure%20design.pdf");
+      const bytes = await res.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(bytes);
+      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      const page = pdfDoc.getPages()[1];
+      const { height } = page.getSize();
+      const color = rgb(0.078, 0.075, 0.067);
+      const white = rgb(1, 1, 1);
+      const SIZE = 9.5;
+
+      function drawRow(xStart: number, topAnchor: number, rightEdge: number, text: string) {
+        const y = height - topAnchor - SIZE;
+        page.drawRectangle({ x: xStart - 1, y: y - 1.5, width: rightEdge - xStart + 2, height: SIZE + 3, color: white });
+        page.drawText(text, { x: xStart, y, size: SIZE, font, color });
+      }
+
+      const studioBase = fmtInt(parseMoney(prices.studioBase));
+      const twoClassicBase = fmtInt(parseMoney(prices.twoClassicBase));
+      const twoClassicWs = fmtInt(parseMoney(prices.twoClassicWs));
+      const twoRenovBase = fmtInt(parseMoney(prices.twoRenovBase));
+      const twoRenovWs = fmtInt(parseMoney(prices.twoRenovWs));
+      const threeClassicBase = fmtInt(parseMoney(prices.threeClassicBase));
+      const threeClassicWs = fmtInt(parseMoney(prices.threeClassicWs));
+      const threeRenovBase = fmtInt(parseMoney(prices.threeRenovBase));
+      const threeRenovWs = fmtInt(parseMoney(prices.threeRenovWs));
+
+      drawRow(49.9, 525.9, 120, `From $${studioBase} /mo`);
+      drawRow(307.1, 281.8, 470, `$${twoClassicBase} base rent + $${twoClassicWs} water/sewer`);
+      drawRow(307.1, 543.4, 470, `From $${twoRenovBase}/mo + $${twoRenovWs} water/sewer`);
+      drawRow(564.3, 279.6, 728, `$${threeClassicBase} base rent + $${threeClassicWs} water/sewer`);
+      drawRow(564.3, 541.9, 728, `$${threeRenovBase} base rent + $${threeRenovWs} water/sewer`);
+
+      const filled = await pdfDoc.save();
+      const blob = new Blob([filled.slice().buffer], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      if (tab) tab.location.href = url;
+      else window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      tab?.close();
+      setError("Failed to generate brochure.");
+    } finally {
+      setGeneratingBrochure(false);
+    }
+  }
+
   return (
     <div
       style={{
@@ -374,18 +442,60 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
           <h2 style={{ fontFamily: "var(--font-display)", color: "var(--color-text)", fontSize: "1.2rem", fontWeight: 400, letterSpacing: "0.06em", textTransform: "uppercase", margin: 0 }}>
             {onlyDoc ? docLabels[onlyDoc] : docLabels[selectedDoc]}
           </h2>
-          <span style={{ color: "var(--color-text-muted)", fontSize: "0.94rem" }}>Unit {unitCode(unit.building, unit.apt_number)}</span>
+          {unit && <span style={{ color: "var(--color-text-muted)", fontSize: "0.94rem" }}>Unit {unitCode(unit.building, unit.apt_number)}</span>}
         </div>
 
-        <div style={{ marginBottom: "14px" }}>
-          <label style={labelStyle}>Applicant Full Name</label>
-          <input style={inputStyle} placeholder="Full name" value={applicantName} onChange={(e) => setApplicantName(e.target.value)} />
-        </div>
+        {(onlyDoc ?? selectedDoc) !== "brochure" && (
+          <>
+            <div style={{ marginBottom: "14px" }}>
+              <label style={labelStyle}>Applicant Full Name</label>
+              <input style={inputStyle} placeholder="Full name" value={applicantName} onChange={(e) => setApplicantName(e.target.value)} />
+            </div>
 
-        <div style={{ marginBottom: "14px" }}>
-          <label style={labelStyle}>Move-In Date</label>
-          <input type="date" style={inputStyle} value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} />
-        </div>
+            <div style={{ marginBottom: "14px" }}>
+              <label style={labelStyle}>Move-In Date</label>
+              <input type="date" style={inputStyle} value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} />
+            </div>
+          </>
+        )}
+
+        {(onlyDoc ?? selectedDoc) === "brochure" && (
+          <div style={{ marginBottom: "18px" }}>
+            {[
+              { label: "Studio", baseKey: "studioBase", wsKey: "studioWs" },
+              { label: "2-Bedroom Classic", baseKey: "twoClassicBase", wsKey: "twoClassicWs" },
+              { label: "2-Bedroom Renovated", baseKey: "twoRenovBase", wsKey: "twoRenovWs" },
+              { label: "3-Bedroom Classic", baseKey: "threeClassicBase", wsKey: "threeClassicWs" },
+              { label: "3-Bedroom Renovated", baseKey: "threeRenovBase", wsKey: "threeRenovWs" },
+            ].map(({ label, baseKey, wsKey }) => (
+              <div key={baseKey} style={{ marginBottom: "12px" }}>
+                <label style={labelStyle}>{label}</label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                  <div>
+                    <input
+                      type="number"
+                      min="0"
+                      style={inputStyle}
+                      placeholder="Base rent"
+                      value={prices[baseKey as keyof typeof prices]}
+                      onChange={(e) => setPrices((p) => ({ ...p, [baseKey]: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      min="0"
+                      style={inputStyle}
+                      placeholder="Water/sewer"
+                      value={prices[wsKey as keyof typeof prices]}
+                      onChange={(e) => setPrices((p) => ({ ...p, [wsKey]: e.target.value }))}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {onlyDoc === undefined && (
           <div style={{ marginBottom: "14px" }}>
@@ -490,6 +600,20 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
               }}
             >
               {generatingInsurance ? "Generating..." : "Renters Insurance"}
+            </button>
+          )}
+          {(onlyDoc ?? selectedDoc) === "brochure" && (
+            <button
+              onClick={doGenerateBrochure}
+              disabled={generatingBrochure}
+              style={{
+                flex: "1 1 45%", background: "var(--color-accent)", border: "none", borderRadius: "6px",
+                padding: "11px", color: "#0D1A12", fontFamily: "var(--font-body)", fontSize: "1rem",
+                fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+                cursor: generatingBrochure ? "not-allowed" : "pointer", opacity: generatingBrochure ? 0.7 : 1,
+              }}
+            >
+              {generatingBrochure ? "Generating..." : "Generate Brochure"}
             </button>
           )}
         </div>

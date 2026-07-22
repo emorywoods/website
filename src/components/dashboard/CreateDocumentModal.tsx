@@ -9,7 +9,7 @@ interface CreateDocumentModalProps {
   onClose: () => void;
 }
 
-type DocType = "welcome" | "deposit" | "policy" | "insurance";
+type DocType = "welcome" | "deposit" | "policy" | "insurance" | "brochure";
 
 function unitCode(building: string, apt: string): string {
   return building.replace(/\s+/g, "") + apt.replace(/\s+/g, "");
@@ -56,6 +56,10 @@ export default function CreateDocumentModal({ units, onClose }: CreateDocumentMo
   }, [units]);
 
   const selectedUnit = units.find((u) => unitCode(u.building, u.apt_number) === unitKey) ?? null;
+
+  if (docType === "brochure") {
+    return <DepositReceiptModal onlyDoc={docType} onClose={onClose} />;
+  }
 
   if (docType && selectedUnit) {
     return (
@@ -109,6 +113,7 @@ export default function CreateDocumentModal({ units, onClose }: CreateDocumentMo
             <option value="deposit">Deposit Receipt</option>
             <option value="policy">Policy Letter</option>
             <option value="insurance">Renters Insurance</option>
+            <option value="brochure">Brochure</option>
           </select>
         </div>
 
