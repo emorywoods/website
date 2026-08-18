@@ -154,6 +154,11 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
   const [children, setChildren] = useState("0");
   const [liabilityInsurance, setLiabilityInsurance] = useState(false);
   const [pet, setPet] = useState(false);
+  const [petOver25, setPetOver25] = useState(false);
+  const [baseRent, setBaseRent] = useState(() => String(parseMoney(unit?.rent) || ""));
+  const [waterSewerAmt, setWaterSewerAmt] = useState(() =>
+    String(unit ? waterSewer(unit.unit_type, unit.unit_condition) : "")
+  );
   const [prices, setPrices] = useState(defaultPrices);
   const [generatingDeposit, setGeneratingDeposit] = useState(false);
   const [generatingWelcome, setGeneratingWelcome] = useState(false);
@@ -170,11 +175,12 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
     const moveIn = parseUTCDate(moveInDate);
     const nextPay = moveIn ? nextPaymentDate(moveIn) : null;
     const dueThrough = nextPay ? endOfMonth(nextPay) : null;
-    const rent = parseMoney(unit?.rent);
+    const rent = parseMoney(baseRent);
     const deposit = parseMoney(securityDeposit);
     const petFee = pet ? 300 : 0;
-    const ws = unit ? waterSewer(unit.unit_type, unit.unit_condition) : 0;
-    const monthlyRent = rent + ws;
+    const ws = parseMoney(waterSewerAmt);
+    const petMonthly = pet && petOver25 ? 25 : 0;
+    const monthlyRent = rent + ws + petMonthly;
     const firstMonthRent = moveIn ? proratedFirstMonth(moveIn, monthlyRent) : 0;
     const balanceDue = firstMonthRent + petFee;
     return { moveIn, nextPay, dueThrough, deposit, petFee, monthlyRent, firstMonthRent, balanceDue };
@@ -516,6 +522,17 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
           <>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
               <div>
+                <label style={labelStyle}>Base Rent ($)</label>
+                <input type="number" min="0" style={inputStyle} value={baseRent} onChange={(e) => setBaseRent(e.target.value)} />
+              </div>
+              <div>
+                <label style={labelStyle}>Water / Sewer ($)</label>
+                <input type="number" min="0" style={inputStyle} value={waterSewerAmt} onChange={(e) => setWaterSewerAmt(e.target.value)} />
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
+              <div>
                 <label style={labelStyle}>Adults</label>
                 <input type="number" min="0" style={inputStyle} value={adults} onChange={(e) => setAdults(e.target.value)} />
               </div>
@@ -536,9 +553,19 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
                 Liability to Landlord Insurance
               </label>
               <label style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--color-text)", fontSize: "0.97rem", cursor: "pointer" }}>
-                <input type="checkbox" checked={pet} onChange={(e) => setPet(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={pet}
+                  onChange={(e) => { setPet(e.target.checked); if (!e.target.checked) setPetOver25(false); }}
+                />
                 Pet
               </label>
+              {pet && (
+                <label style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--color-text)", fontSize: "0.97rem", cursor: "pointer" }}>
+                  <input type="checkbox" checked={petOver25} onChange={(e) => setPetOver25(e.target.checked)} />
+                  Pet over 25 lbs (+$25/mo)
+                </label>
+              )}
             </div>
           </>
         )}
