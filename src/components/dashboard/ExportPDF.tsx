@@ -164,20 +164,14 @@ export default function ExportPDF({ units }: ExportPDFProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const { vacants, notices } = useMemo(() => {
-    const TYPE_ORDER: Record<string, number> = { Studio: 0, "2BR": 1, "3BR": 2 };
-    function typeRank(t: string) { return TYPE_ORDER[t] ?? 99; }
+    function unitNum(u: Unit) { return parseInt(u.building.replace(/\D/g, ""), 10) || 0; }
 
     const vacants = units
       .filter((u) => u.status === "vacant")
-      .sort((a, b) => {
-        const aHas = !!(a.future_tenant || a.future_move_in_date);
-        const bHas = !!(b.future_tenant || b.future_move_in_date);
-        if (aHas !== bHas) return Number(aHas) - Number(bHas);
-        return typeRank(a.unit_type) - typeRank(b.unit_type);
-      });
+      .sort((a, b) => unitNum(a) - unitNum(b));
     const notices = units
       .filter((u) => u.status === "notice")
-      .sort((a, b) => typeRank(a.unit_type) - typeRank(b.unit_type));
+      .sort((a, b) => unitNum(a) - unitNum(b));
 
     return { vacants, notices };
   }, [units]);
