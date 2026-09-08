@@ -165,13 +165,19 @@ export default function ExportPDF({ units }: ExportPDFProps) {
 
   const { vacants, notices } = useMemo(() => {
     function unitNum(u: Unit) { return parseInt(u.building.replace(/\D/g, ""), 10) || 0; }
+    function unitStreet(u: Unit) { return u.building.replace(/\d/g, ""); }
+    function compareUnit(a: Unit, b: Unit) {
+      const streetCmp = unitStreet(a).localeCompare(unitStreet(b));
+      if (streetCmp !== 0) return streetCmp;
+      return unitNum(a) - unitNum(b);
+    }
 
     const vacants = units
       .filter((u) => u.status === "vacant")
-      .sort((a, b) => unitNum(a) - unitNum(b));
+      .sort(compareUnit);
     const notices = units
       .filter((u) => u.status === "notice")
-      .sort((a, b) => unitNum(a) - unitNum(b));
+      .sort(compareUnit);
 
     return { vacants, notices };
   }, [units]);
