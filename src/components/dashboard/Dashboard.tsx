@@ -12,6 +12,7 @@ import UnitTable from "./UnitTable";
 import CarportTable from "./CarportTable";
 import PropertyMap, { type BuildingCounts, type BuildingEntries, type CarportAvail } from "./PropertyMap";
 import CreateDocumentModal from "./CreateDocumentModal";
+import CustomTableBuilder from "./CustomTableBuilder";
 
 type DashTab = EntryKind | "units" | "renewals" | "carports";
 type ViewMode = "map" | "table";
@@ -517,6 +518,7 @@ export default function Dashboard({ accessCode }: DashboardProps) {
               ))}
             </div>
             <ExportPDF units={units} />
+            <CustomTableBuilder units={units} />
           </div>
         </div>
         {/* Row 2: search + filter */}
