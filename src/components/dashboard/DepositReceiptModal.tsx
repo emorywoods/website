@@ -160,6 +160,8 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
     String(unit ? waterSewer(unit.unit_type, unit.unit_condition) : "")
   );
   const [prices, setPrices] = useState(defaultPrices);
+  const [brochureDeposit, setBrochureDeposit] = useState("");
+  const [brochureAppFee, setBrochureAppFee] = useState("75");
   const [generatingDeposit, setGeneratingDeposit] = useState(false);
   const [generatingWelcome, setGeneratingWelcome] = useState(false);
   const [generatingPolicy, setGeneratingPolicy] = useState(false);
@@ -404,6 +406,14 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
       drawRow(564.3, 279.6, 728, `$${threeClassicBase} base rent + $${threeClassicWs} water/sewer`);
       drawRow(564.3, 541.9, 728, `$${threeRenovBase} base rent + $${threeRenovWs} water/sewer`);
 
+      const regular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const cover = pdfDoc.getPages()[0];
+      const feeText = `Application fee $${fmtInt(parseMoney(brochureAppFee))} · ${
+        brochureDeposit.trim() ? `Deposit ${/^\d+(\.\d+)?$/.test(brochureDeposit.trim()) ? `$${fmtInt(Number(brochureDeposit))}` : brochureDeposit.trim()}` : "Deposit ~1 month rent"
+      }`;
+      cover.drawRectangle({ x: 299, y: height - 569, width: 200, height: 13, color: white });
+      cover.drawText(feeText, { x: 300.1, y: height - 564.04, size: 8.4, font: regular, color: rgb(0.42, 0.404, 0.373) });
+
       const filled = await pdfDoc.save();
       const blob = new Blob([filled.slice().buffer], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
@@ -500,6 +510,16 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
                 </div>
               </div>
             ))}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
+              <div>
+                <label style={labelStyle}>Security Deposit</label>
+                <input style={inputStyle} placeholder="~1 month rent" value={brochureDeposit} onChange={(e) => setBrochureDeposit(e.target.value)} />
+              </div>
+              <div>
+                <label style={labelStyle}>Application Fee ($)</label>
+                <input type="number" min="0" style={inputStyle} placeholder="75" value={brochureAppFee} onChange={(e) => setBrochureAppFee(e.target.value)} />
+              </div>
+            </div>
           </div>
         )}
 
