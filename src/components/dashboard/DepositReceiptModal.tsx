@@ -414,6 +414,20 @@ export default function DepositReceiptModal({ unit, onClose, onlyDoc }: DepositR
       cover.drawRectangle({ x: 299, y: height - 569, width: 200, height: 13, color: white });
       cover.drawText(feeText, { x: 300.1, y: height - 564.04, size: 8.4, font: regular, color: rgb(0.42, 0.404, 0.373) });
 
+      // Website + QR code in gap between site map and "Schedule Your Tour"
+      const muted = rgb(0.42, 0.404, 0.373);
+      const qrRes = await fetch("/qr-code.png");
+      if (!qrRes.ok) throw new Error("QR code image missing");
+      const qr = await pdfDoc.embedPng(await qrRes.arrayBuffer());
+      const QR = 108;
+      const centerX = (299.3 + 513.4) / 2;
+      cover.drawImage(qr, { x: centerX - QR / 2, y: height - 346 - QR, width: QR, height: QR });
+      const centered = (text: string, top: number, size: number, f: typeof font, c: typeof color) =>
+        cover.drawText(text, { x: centerX - f.widthOfTextAtSize(text, size) / 2, y: height - top, size, font: f, color: c });
+      centered("VISIT OUR WEBSITE", 469, 8, font, muted);
+      centered("www.emorywoods.com", 483, 10.2, font, color);
+      centered("Or scan the QR code", 495, 7.6, regular, muted);
+
       const filled = await pdfDoc.save();
       const blob = new Blob([filled.slice().buffer], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);

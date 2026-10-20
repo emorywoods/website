@@ -1,0 +1,56 @@
+Step by step when people move in from application approved to move in
+
+A. Approval
+
+1. Send approval email
+2. open dashboard - search the building - scroll down - click 'Add Future Tenant' - fill the name and scheduled move-in date
+3. click 'save'
+
+B. Initial Documents
+ - Generate Deposit Receipt
+	1. open dashboard - search the building - scroll down - click 'Create Document' - select 'Deposit Receipt' for the 'Document Type'
+	2. Fill out all the information (base rent, water/sewer cost, security deposit, and pet OR liability to landlord insurance). Do not change ADULTS / CHILDREN if not needed. 
+	3. Click 'Deposit Receipt' - Right click - Select 'Open With Preview' - Print
+
+ - Generate Welcome Letter
+	1. open dashboard - search the building - scroll down - click 'Create Document' - select 'Welcome Letter' for the 'Document Type'
+	2. Fill out all the information (base rent, water/sewer cost, security deposit, and pet OR liability to landlord insurance). Do not change ADULTS / CHILDREN if not needed. 
+	3. Click 'Welcome Letter' - Right click - Select 'Open With Preview' - Print
+
+C. Documents Prior to Move-In Check list (PHYSICAL PAPER)
+
+CHECK MOVE-IN PACKET MASTER for example the grey folder
+Checklist
+ - Inspection Move-in form - fill out using type writer, set the deadline to be 3-days after move-in. 
+ - Map (HIGHLIGHT THE LEASING OFFICE AND THEIR APARTMENT) - WRITE 'LAUNDRY CODE 2628' at the top
+ - Emergency after hours - from the papers drawer
+ - INFORMATION PACKETS - masters copy in the file drawer
+ - Policy Letter (GENERATE FROM THE DASHBOARD)
+	a.  open dashboard - search the building/ tenant name - scroll down - click 'Create Document'
+	b. Select 'Policy Letter' for the 'Document Type'
+	c. Double Check name and Move-in Date
+	d. Click 'Policy Letter' - Right click - Select 'Open With Preview' - Print
+ - Renters Insurance (GENERATE FROM THE DASHBOARD) 
+	a.  open dashboard - search the building/ tenant name - scroll down - click 'Create Document'
+	b. Select 'Renters Insurance' for the 'Document Type'
+	c. Double Check name and Move-in Date
+	d. Click 'Renters Insurance' - Right click - Select 'Open With Preview' - Print
+ - Prox Card agreement
+ - Vehicle registration form
+
+
+D. Things to do prior to tenant move-in ( 1 week before)
+1. Email 'Pre move-in email' to tenant check the GOOGLE DOCS (EMAIL TEMPLATE) ON THE COMPUTER - ADJUST IF CLASSIC OR RENOVATED/Studio (utilities only, e.g. Renovated/ Studio - only electric, classic - both electric and gas)
+2. Check if lease has been sent or signed
+
+E. On the D-day of the move-in - when tenant in the leasing office
+Check list before giving keys to tenant:
+1. Lease Signed
+2. Proof of utilities account (electric and Gas if applicable). Note the start date and the account number.
+3. Decision on renters insurance (third-party provider or using AppFolio (mention $13/month if AppFolio). If third-party provider, ask for the declaration page
+4. Move-in rent check/money-order
+
+If all these are met, give 1 (ONE) key only and told them to give back the inspection move-in form to receive the second key.
+
+F. After move-in
+Give the security deposit check and move-in rent check to the manager. If possible, adjust the profile on the tags for Vehicle tag, permit number for vehicle, prox card number.

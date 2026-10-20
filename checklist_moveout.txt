@@ -1,0 +1,21 @@
+Step by step when people move out from notice to security deposit refund
+
+A. Notice
+
+1. When tenants ask to move-out, ask them if they have filled out the move-out notification. If not, give them via email or physical copy from the paper drawer
+2. If you receive a notice to move-out, make sure that the date of move-out is at least 30 days from the notice date
+3. Update on the dashboard regarding the tenant status to 'Notice' and set the move out date
+4. Grab the file from the manager's office for that specific apartment number
+5. Grab a new empty file (for tenant move-out file) to transfer the active tenant to notice tenant and put the apartment file to the vacant apartment file
+6. Type using type writer the name and address (e.g. first line 'Doe, John', second line '2085 Powell Lane #2') and stick that into the file
+
+
+B. The day of the move out
+1. Make sure when you receive the key from the tenant, make sure to receive 2 keys + prox card if given, and write in the move out notification the date and what you receive (e.g. 9/14 - returned 2 keys + prox card)
+2. Tell the manager that they returned the key and ready for inspection
+
+C. After inspection
+1. When the manager finishes the inspection, create a 'Request For Refund of Security Deposit'. Open Desktop in the computer, open 'Emory Woods Documents', open the 'RequestForRefundOfSecurityDeposit' 
+2. Adjust all the necessary information regarding the tenant and the condition of the apartment
+3. Print it , ask the manager to sign the document, and the move-in inspection form
+4. Copy the 'RequestForRefundOfSecurityDeposit' 2 times (so you get 3), and put the original in the tenant move-out file and the white paper from move-in inspection form. Put the yellow inspection form and 2 other copies in one paperclip

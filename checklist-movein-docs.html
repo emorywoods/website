@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Emory Woods Move-In Checklist</title>
+<style>
+  @font-face { font-family: "Gelasio"; src: url("public/fonts/Gelasio-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Gelasio"; src: url("public/fonts/Gelasio-Bold.ttf"); font-weight: 700; }
+
+  :root {
+    --forest: #0D1A12;
+    --forest-2: #1a3a25;
+    --moss: #2A4A35;
+    --gold: #C9A84C;
+    --gold-deep: #8B6914;
+    --cream: #FBF8F1;
+    --cream-2: #F3EDE0;
+    --ink: #1d2420;
+    --muted: #6b6a62;
+    --line: #E4DCCB;
+    --red: #c94a4a;
+    --green: #2f8a55;
+    --blue: #3c78d2;
+    --orange: #d6862c;
+    --purple: #7a52d6;
+    /* app (dark) */
+    --a-bg: #0D1A12;
+    --a-surface: #141F18;
+    --a-border: #2A3D2E;
+    --a-text: #F5EFE0;
+    --a-muted: #A89F8C;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: 8.5in 11in; margin: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: #d9d4c8;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+
+  .page {
+    width: 8.5in; height: 11in;
+    margin: 0 auto 0.3in;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    padding: 0.62in 0.7in 0.8in;
+    break-after: page;
+    page-break-after: always;
+  }
+  .page:last-child { break-after: auto; page-break-after: auto; }
+  @media print { body { background: none; } .page { margin: 0; } }
+
+  /* running header / footer */
+  .runhead {
+    position: absolute; top: 0.3in; left: 0.7in; right: 0.7in;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7.5pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+  }
+  .runhead .chip { background: var(--forest); color: var(--gold); padding: 2px 9px; border-radius: 20px; letter-spacing: 0.14em; }
+  .foot {
+    position: absolute; bottom: 0.38in; left: 0.7in; right: 0.7in;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: #a39d8f;
+    border-top: 1px solid var(--line); padding-top: 7px;
+  }
+  .foot b { color: var(--forest); font-size: 9pt; letter-spacing: 0.05em; }
+
+  /* type */
+  h1, h2, h3, .serif { font-family: "Gelasio", Georgia, serif; }
+  .kicker { font-size: 8pt; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-deep); font-weight: 700; margin-bottom: 4px; }
+  h1.ch { font-size: 27pt; line-height: 1.1; color: var(--forest-2); font-weight: 700; margin-bottom: 6px; }
+  .lede { font-size: 11.5pt; color: #4a4f48; margin-bottom: 16px; max-width: 6.2in; }
+  h2 { font-size: 15pt; color: var(--forest-2); margin: 16px 0 6px; font-weight: 700; }
+  h3 { font-size: 11.5pt; color: var(--forest-2); margin: 10px 0 4px; font-weight: 700; }
+  p { margin-bottom: 7px; }
+  ul.clean { list-style: none; }
+  ul.dots { margin: 4px 0 8px 2px; list-style: none; }
+  ul.dots li { margin-bottom: 3px; padding-left: 14px; position: relative; }
+  ul.dots li::before { content: ""; position: absolute; left: 2px; top: 0.6em; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+  strong { color: #111; }
+  .ui strong { color: inherit; }
+  .ui .pin { margin-right: 3px; }
+  .btnref {
+    display: inline-block; font-size: 8pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0 6px; border-radius: 4px; border: 1px solid #c8bfa9; background: #fff; color: var(--forest-2);
+    line-height: 1.55; white-space: nowrap;
+  }
+  .btnref.gold { background: var(--gold); border-color: var(--gold); color: var(--forest); }
+
+  .chapter-band {
+    margin: -0.62in -0.7in 18px; padding: 0.75in 0.7in 22px;
+    background: #fff; color: var(--ink); position: relative; overflow: hidden; border-bottom: 3px solid var(--gold);
+  }
+  .chapter-band .num { position: absolute; right: 0.5in; top: 0.25in; font-family: "Gelasio", serif; font-size: 110pt; color: rgba(201,168,76,0.22); line-height: 1; font-weight: 700; }
+  .chapter-band .kicker { color: var(--gold-deep); }
+  .chapter-band h1 { font-size: 28pt; color: var(--forest-2); font-weight: 700; line-height: 1.1; }
+  .chapter-band p { color: #4a4f48; font-size: 11pt; max-width: 5.6in; margin: 6px 0 0; }
+
+  /* recipe card */
+  .recipe {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px 12px; margin-bottom: 12px; break-inside: avoid;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+  }
+  .recipe-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .recipe-icon {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--forest); color: var(--gold);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .recipe-title { font-family: "Gelasio", serif; font-weight: 700; font-size: 13pt; color: var(--forest-2); line-height: 1.15; }
+  .recipe-meta { font-size: 8pt; color: var(--muted); letter-spacing: 0.06em; }
+  .recipe-meta span { background: var(--cream-2); border-radius: 10px; padding: 1px 7px; margin-right: 4px; }
+
+  .steps { list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding-left: 28px; margin-bottom: 5px; min-height: 20px; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    width: 19px; height: 19px; border-radius: 50%; background: var(--gold); color: var(--forest);
+    font-size: 8.5pt; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  }
+  .result {
+    margin-top: 7px; padding: 6px 10px; border-radius: 7px; background: rgba(47,138,85,0.09);
+    border: 1px solid rgba(47,138,85,0.28); font-size: 9.5pt; color: #24553a;
+  }
+  .result::before { content: "✓  You'll know it worked: "; font-weight: 700; }
+
+  .tip, .warn, .note {
+    border-radius: 8px; padding: 8px 12px; font-size: 9.5pt; margin: 8px 0; break-inside: avoid;
+  }
+  .tip { background: #FBF2D9; border-left: 4px solid var(--gold); }
+  .tip::before { content: "TIP  "; font-weight: 800; color: var(--gold-deep); letter-spacing: 0.1em; font-size: 8pt; }
+  .warn { background: #FBE7E4; border-left: 4px solid var(--red); }
+  .warn::before { content: "WATCH OUT  "; font-weight: 800; color: var(--red); letter-spacing: 0.1em; font-size: 8pt; }
+  .note { background: #E8EEF8; border-left: 4px solid var(--blue); }
+  .note::before { content: "GOOD TO KNOW  "; font-weight: 800; color: var(--blue); letter-spacing: 0.1em; font-size: 8pt; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .split { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 16px; align-items: start; }
+
+  table.t { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 9.5pt; margin: 6px 0 10px; background: #fff; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+  table.t th { text-align: left; font-size: 7.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); background: var(--cream-2); padding: 6px 9px; border-bottom: 2px solid var(--gold); }
+  table.t td { padding: 6px 9px; border-bottom: 1px solid #F0EADD; vertical-align: top; }
+  table.t tr:last-child td { border-bottom: none; }
+
+  /* ===== App mockups (dark theme replicas) ===== */
+  .ui {
+    background: var(--a-surface); color: var(--a-text); border: 1px solid var(--a-border);
+    border-radius: 12px; padding: 14px; font-size: 8.5pt; position: relative; break-inside: avoid;
+    box-shadow: 0 8px 22px rgba(13,26,18,0.25);
+  }
+  .ui.bg { background: var(--a-bg); }
+  .ui-cap { font-size: 7.5pt; color: var(--muted); text-align: center; margin-top: 6px; font-style: italic; }
+  .ui-title { font-family: "Gelasio", serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10.5pt; color: var(--a-text); }
+  .ui-label { display: block; font-size: 6.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--a-muted); margin-bottom: 3px; }
+  .ui-input {
+    background: var(--a-bg); border: 1px solid var(--a-border); border-radius: 5px; padding: 5px 8px;
+    color: var(--a-text); font-size: 8pt; min-height: 22px;
+  }
+  .ui-input.ph { color: #6f6a5d; }
+  .ui-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    border: 1px solid var(--a-border); border-radius: 5px; padding: 4px 9px;
+    font-size: 6.8pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--a-muted); background: transparent; white-space: nowrap;
+  }
+  .ui-btn.gold { background: var(--gold); border-color: var(--gold); color: var(--forest); font-weight: 700; }
+  .ui-btn.on-gold { background: rgba(201,168,76,0.18); border-color: rgba(201,168,76,0.6); color: var(--gold); font-weight: 700; }
+  .ui-btn.on-green { background: rgba(40,140,80,0.18); border-color: rgba(40,140,80,0.6); color: #3fbf73; font-weight: 700; }
+  .ui-btn.on-gray { background: rgba(42,74,53,0.5); border-color: rgba(80,120,90,0.8); color: var(--a-text); font-weight: 700; }
+  .ui-btn.dash { border-style: dashed; border-color: rgba(201,168,76,0.5); color: var(--gold); width: 100%; }
+  .ui-btn.red { color: #e05c5c; border-color: #e05c5c; }
+  .ui-btn.purple { background: rgba(80,50,140,0.25); border-color: rgba(80,50,140,0.7); color: #a078ff; }
+  .ui-row { display: flex; gap: 6px; align-items: center; }
+  .ui-sep { border-top: 1px solid var(--a-border); margin: 8px 0; }
+  .ui-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 6.5pt; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid; white-space: nowrap; }
+  .bd-occ { background: rgba(42,74,53,0.4); color: var(--a-muted); border-color: var(--a-border); }
+  .bd-vac { background: rgba(201,168,76,0.15); color: var(--gold); border-color: rgba(201,168,76,0.45); }
+  .bd-rent { background: rgba(80,140,220,0.14); color: #6aa0ea; border-color: rgba(80,140,220,0.45); }
+  .bd-not { background: rgba(40,140,80,0.14); color: #3fbf73; border-color: rgba(40,140,80,0.45); }
+  .bd-tour { background: rgba(40,140,80,0.14); color: #3fbf73; border-color: rgba(40,140,80,0.45); }
+  .bd-promo { background: rgba(160,90,30,0.2); color: #d98a40; border-color: rgba(160,90,30,0.55); }
+  .bd-warn { background: rgba(224,154,60,0.12); color: #e09a3c; border-color: rgba(224,154,60,0.45); }
+  .bd-exp { background: rgba(224,92,92,0.12); color: #e05c5c; border-color: rgba(224,92,92,0.45); }
+  .bd-cp-t { background: rgba(80,50,140,0.25); color: #a078ff; border-color: rgba(80,50,140,0.6); }
+  .bd-cp-o { background: rgba(40,100,180,0.18); color: #5096e6; border-color: rgba(40,100,180,0.5); }
+  .bd-cp-s { background: rgba(180,100,30,0.18); color: #dc8c3c; border-color: rgba(180,100,30,0.5); }
+  .bd-cp-e { background: rgba(20,140,120,0.18); color: #28bea0; border-color: rgba(20,140,120,0.5); }
+
+  /* light-page badge (for tables on cream) */
+  .lb { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; border: 1px solid; white-space: nowrap; }
+  .lb.occ { background: #e6ebe5; color: #3f5a47; border-color: #b9c8bb; }
+  .lb.vac { background: #f8edcc; color: #8B6914; border-color: #e0c77d; }
+  .lb.rent { background: #e1ebfa; color: #2d62b5; border-color: #a9c3ec; }
+  .lb.not { background: #dff1e6; color: #22764a; border-color: #9fd2b3; }
+  .lb.promo { background: #f8e3cf; color: #9a5719; border-color: #e3b68a; }
+  .lb.wrn { background: #fbe9d2; color: #a7621a; border-color: #ecc28d; }
+  .lb.exp { background: #f8dcdc; color: #a33333; border-color: #e5a6a6; }
+  .lb.purple { background: #ece4fb; color: #5b36b0; border-color: #c7b5ef; }
+  .lb.blue { background: #e1ebfa; color: #2d62b5; border-color: #a9c3ec; }
+  .lb.shop { background: #f8e6d2; color: #9a5719; border-color: #e3bb8f; }
+  .lb.teal { background: #dbf2ed; color: #18705f; border-color: #9fd6ca; }
+  .lb.gray { background: #ecebe6; color: #5d5c55; border-color: #cfccc1; }
+
+  /* callout pins */
+  .pin {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%; background: #ff5a36; color: #fff;
+    font-size: 7.5pt; font-weight: 800; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+    font-family: "Segoe UI", Arial, sans-serif; vertical-align: middle; line-height: 1;
+  }
+  .pin.abs { position: absolute; }
+  .legend { list-style: none; font-size: 9.5pt; }
+  .legend li { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .legend li .pin { margin-top: 2px; }
+
+  /* cover */
+  .cover { background: #fff; color: var(--ink); padding: 0; }
+  .cover-inner { position: absolute; inset: 0; padding: 0.9in 0.85in; display: flex; flex-direction: column; }
+  .cover .ring { position: absolute; border: 1px solid rgba(201,168,76,0.35); border-radius: 50%; }
+  .cover h1 { font-family: "Gelasio", serif; font-size: 46pt; line-height: 1.02; font-weight: 700; color: var(--forest-2); margin: 18px 0 12px; }
+  .cover h1 em { color: var(--gold-deep); font-style: normal; }
+  .cover .sub { font-size: 13pt; color: #4a4f48; max-width: 5in; }
+  .cover .tag { display: inline-block; border: 1px solid var(--gold); color: var(--gold-deep); padding: 4px 12px; border-radius: 30px; font-size: 8pt; letter-spacing: 0.2em; text-transform: uppercase; }
+  .cover-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: auto; }
+  .cover-card { border: 1px solid var(--gold); border-radius: 12px; padding: 12px; background: #fff; }
+  .cover-card .n { font-family: "Gelasio", serif; color: var(--gold-deep); font-size: 20pt; line-height: 1; }
+  .cover-card .l { font-size: 8.5pt; color: #4a4f48; margin-top: 4px; }
+
+  /* toc */
+  .toc { list-style: none; }
+  .toc li { display: grid; grid-template-columns: 34px 1fr auto; align-items: baseline; gap: 8px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+  .toc .n { font-family: "Gelasio", serif; color: var(--gold-deep); font-weight: 700; font-size: 13pt; }
+  .toc .t { font-weight: 700; color: var(--forest-2); }
+  .toc .d { display: block; font-weight: 400; color: var(--muted); font-size: 8.5pt; }
+  .toc .p { font-family: "Gelasio", serif; color: var(--forest-2); }
+
+  .bigq { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .bigq div { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 9.5pt; }
+  .bigq div b { display: block; color: var(--forest-2); font-family: "Gelasio", serif; font-size: 10.5pt; }
+  .bigq div span { color: var(--gold-deep); font-weight: 700; }
+
+  .formula {
+    background: var(--forest); color: var(--cream); border-radius: 10px; padding: 10px 14px; font-size: 9.5pt; margin: 6px 0 8px;
+  }
+  .formula code { font-family: Consolas, monospace; color: var(--gold); font-size: 9.5pt; }
+  .calc { width: 100%; border-collapse: collapse; font-size: 9.5pt; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+  .calc td { padding: 4px 9px; border-bottom: 1px solid #F0EADD; }
+  .calc td:last-child { text-align: right; font-weight: 600; }
+  .calc tr.total td { background: var(--cream-2); font-weight: 800; color: var(--forest-2); }
+
+  .cheat { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .cheat .c { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; break-inside: avoid; }
+  .cheat .c h4 { font-family: "Gelasio", serif; font-size: 10.5pt; color: var(--forest-2); margin-bottom: 3px; }
+  .cheat .c p { font-size: 8.8pt; margin: 0; color: #3b403a; line-height: 1.45; }
+  .arrow { color: var(--gold-deep); font-weight: 800; }
+
+  .faq dt { font-family: "Gelasio", serif; font-weight: 700; color: var(--forest-2); font-size: 10.5pt; margin-top: 8px; }
+  .faq dd { font-size: 9.5pt; color: #3b403a; margin: 2px 0 0; }
+  body { counter-reset: pg; }
+  .page { counter-increment: pg; }
+  .foot b::after { content: counter(pg); }
+  .gloss { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .gloss .g { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 7px 8px 8px; break-inside: avoid; }
+  .gloss .gp { height: 58px; background: var(--a-bg); border-radius: 7px; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; overflow: hidden; }
+  .gloss b { font-family: "Gelasio", serif; color: var(--forest-2); font-size: 10pt; display: block; line-height: 1.2; }
+  .gloss p { font-size: 8.3pt; line-height: 1.38; color: #3b403a; margin: 2px 0 0; }
+
+  /* ===== checklist additions ===== */
+  .ticks { list-style: none; }
+  .ticks li { position: relative; padding: 6px 0 6px 28px; border-bottom: 1px dashed var(--line); }
+  .ticks li:last-child { border-bottom: none; }
+  .ticks li::before {
+    content: ""; position: absolute; left: 2px; top: 8px; width: 15px; height: 15px;
+    border: 1.6px solid var(--forest-2); border-radius: 3px; background: #fff;
+  }
+  .ticks li .sub { display: block; font-size: 8.8pt; color: var(--muted); margin-top: 1px; }
+  .stage {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 7px; background: var(--forest); color: var(--gold);
+    font-family: "Gelasio", serif; font-weight: 700; font-size: 12pt; flex-shrink: 0;
+  }
+  .paper { display: inline-block; font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #5d5c55; background: #ecebe6; border: 1px solid #cfccc1; border-radius: 4px; padding: 0 6px; margin-left: 4px; vertical-align: middle; }
+  .paper.dash { color: var(--forest); background: var(--gold); border-color: var(--gold); }
+  .gate {
+    border: 2px solid var(--forest-2); border-radius: 14px; padding: 14px 18px 12px; background: #fff; break-inside: avoid;
+  }
+  .gate-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .gate .ticks li { font-size: 11pt; padding: 9px 0 9px 32px; }
+  .gate .ticks li::before { width: 18px; height: 18px; top: 10px; border-width: 2px; }
+  .keyband {
+    margin-top: 12px; background: var(--forest); color: var(--cream); border-radius: 12px; padding: 12px 16px;
+    display: flex; gap: 14px; align-items: center; break-inside: avoid;
+  }
+  .keyband .big { font-family: "Gelasio", serif; font-size: 30pt; color: var(--gold); line-height: 1; }
+  .keyband b { color: var(--gold); }
+  .fill { display: inline-block; border-bottom: 1px solid #9a948a; min-width: 1.6in; height: 14px; vertical-align: bottom; }
+  .sheet-sec { break-inside: avoid; margin-bottom: 8px; }
+  .sheet-sec h4 { font-family: "Gelasio", serif; font-size: 10.5pt; color: var(--forest-2); display: flex; align-items: center; gap: 7px; margin-bottom: 2px; border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+  .sheet-sec h4 .stage { width: 18px; height: 18px; font-size: 9pt; border-radius: 5px; }
+  .sheet-sec .ticks li { font-size: 9pt; padding: 3px 0 3px 22px; }
+  .sheet-sec .ticks li::before { width: 12px; height: 12px; top: 5px; }
+  .sheet-id { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 10px 18px; font-size: 10pt; margin-bottom: 16px; }
+  .sheet-id > div { display: flex; align-items: flex-end; gap: 6px; white-space: nowrap; }
+  .sheet-id .fill { flex: 1; min-width: 0; }
+  .sheet .sheet-sec { margin-bottom: 14px; }
+  .sheet .sheet-sec h4 { font-size: 12pt; padding-bottom: 3px; margin-bottom: 4px; }
+  .sheet .sheet-sec h4 .stage { width: 22px; height: 22px; font-size: 11pt; }
+  .sheet .sheet-sec .ticks li { font-size: 10pt; padding: 6px 0 6px 26px; }
+  .sheet .sheet-sec .ticks li::before { width: 14px; height: 14px; top: 8px; }
+</style></head>
+<body>
+
+<!-- ============================================================ COVER -->
+<section class="page cover">
+  <div class="ring" style="width:7in;height:7in;right:-2.6in;top:-2.2in;"></div>
+  <div class="ring" style="width:5in;height:5in;right:-1.6in;top:-1.2in;"></div>
+  <div class="ring" style="width:3in;height:3in;right:-0.6in;top:-0.2in;border-color:rgba(201,168,76,0.3)"></div>
+  <div class="cover-inner">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="public/LogoBlack.png" alt="" style="height:46px;width:auto;">
+    </div>
+    <div style="margin-top:1.3in;">
+      <span class="tag">Leasing Office · Move-In Checklist</span>
+      <h1>From approval<br>to <em>keys in hand.</em></h1>
+      <p class="sub">Every step between <strong style="color:var(--forest-2)">"application approved"</strong> and the tenant walking out with a key — what to do in the dashboard, what to print, what goes in the folder, and what to check before handing over keys.</p>
+    </div>
+    <div class="cover-cards">
+      <div class="cover-card"><div class="n">6</div><div class="l">Stages, A to F — approval to after move-in.</div></div>
+      <div class="cover-card"><div class="n">4</div><div class="l">Must-haves before any key leaves the office.</div></div>
+      <div class="cover-card"><div class="n">1 key</div><div class="l">On move-in day. Second key when the inspection form comes back.</div></div>
+    </div>
+    <div style="margin-top:22px;font-size:8pt;letter-spacing:0.18em;text-transform:uppercase;color:#6b6a62;display:flex;justify-content:space-between;">
+      <span>Emory Woods Apartments</span><span>Edition · October 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ OVERVIEW -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Move-In Checklist</span><span class="chip">Start here</span></div>
+  <div class="kicker">The whole journey on one page</div>
+  <h1 class="ch" style="font-size:24pt;">Six stages, in order</h1>
+  <p class="lede">Work top to bottom. Each stage has its own page with numbered steps. The last page is a stand-alone tick-sheet — print just that page for each new tenant and keep it in their folder.</p>
+
+  <svg viewBox="0 0 700 150" width="100%" style="display:block;margin:4px 0 14px;">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8B6914"/></marker></defs>
+    <g font-family="Segoe UI, Arial" text-anchor="middle">
+      <rect x="2" y="20" width="102" height="82" rx="12" fill="#0D1A12"/><text x="53" y="48" fill="#C9A84C" font-size="16" font-weight="800" font-family="Gelasio, Georgia, serif">A</text><text x="53" y="68" fill="#F5EFE0" font-size="9.5">Approval</text><text x="53" y="83" fill="#A89F8C" font-size="8">email + dashboard</text>
+      <rect x="120" y="20" width="102" height="82" rx="12" fill="#fff" stroke="#E4DCCB"/><text x="171" y="48" fill="#8B6914" font-size="16" font-weight="800" font-family="Gelasio, Georgia, serif">B</text><text x="171" y="68" fill="#1d2420" font-size="9.5">Initial docs</text><text x="171" y="83" fill="#6b6a62" font-size="8">receipt + welcome</text>
+      <rect x="238" y="20" width="102" height="82" rx="12" fill="#fff" stroke="#E4DCCB"/><text x="289" y="48" fill="#8B6914" font-size="16" font-weight="800" font-family="Gelasio, Georgia, serif">C</text><text x="289" y="68" fill="#1d2420" font-size="9.5">Move-in packet</text><text x="289" y="83" fill="#6b6a62" font-size="8">physical folder</text>
+      <rect x="356" y="20" width="102" height="82" rx="12" fill="#fff" stroke="#E4DCCB"/><text x="407" y="48" fill="#8B6914" font-size="16" font-weight="800" font-family="Gelasio, Georgia, serif">D</text><text x="407" y="68" fill="#1d2420" font-size="9.5">1 week before</text><text x="407" y="83" fill="#6b6a62" font-size="8">email + lease</text>
+      <rect x="474" y="20" width="102" height="82" rx="12" fill="#C9A84C"/><text x="525" y="48" fill="#0D1A12" font-size="16" font-weight="800" font-family="Gelasio, Georgia, serif">E</text><text x="525" y="68" fill="#0D1A12" font-size="9.5" font-weight="700">Move-in day</text><text x="525" y="83" fill="#0D1A12" font-size="8">check → 1 key</text>
+      <rect x="592" y="20" width="106" height="82" rx="12" fill="#0D1A12"/><text x="645" y="48" fill="#C9A84C" font-size="16" font-weight="800" font-family="Gelasio, Georgia, serif">F</text><text x="645" y="68" fill="#F5EFE0" font-size="9.5">After move-in</text><text x="645" y="83" fill="#A89F8C" font-size="8">checks + profile</text>
+      <path d="M104 61H116" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/><path d="M222 61H234" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/><path d="M340 61H352" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/><path d="M458 61H470" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/><path d="M576 61H588" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/>
+      <text x="350" y="130" fill="#6b6a62" font-size="10">Gold box = the day the tenant is in the leasing office. Nothing there happens until A–D are done.</text>
+    </g>
+  </svg>
+
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:22px;">
+    <div>
+      <h2 style="margin-top:0;">Contents</h2>
+      <ul class="toc">
+        <li><span class="n">A</span><span class="t">Approval<span class="d">Approval email, add Future Tenant</span></span><span class="p">3</span></li>
+        <li><span class="n">B</span><span class="t">Initial documents<span class="d">Deposit Receipt, Welcome Letter</span></span><span class="p">3</span></li>
+        <li><span class="n">C</span><span class="t">Move-in packet<span class="d">Physical paper for the folder</span></span><span class="p">4</span></li>
+        <li><span class="n">D</span><span class="t">One week before<span class="d">Pre move-in email, lease check</span></span><span class="p">5</span></li>
+        <li><span class="n">E</span><span class="t">Move-in day<span class="d">Four checks before keys</span></span><span class="p">5</span></li>
+        <li><span class="n">F</span><span class="t">After move-in<span class="d">Checks to manager, tenant profile</span></span><span class="p">5</span></li>
+        <li><span class="n">✓</span><span class="t">Tick-sheet<span class="d">One per tenant — stand-alone page, print and file</span></span><span class="p">6</span></li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="margin-top:0;">How to read this guide</h2>
+      <div class="bigq">
+        <div><b><span class="btnref gold">Button</span></b>Words in a box are dashboard buttons — written exactly as on screen.</div>
+        <div><b><span class="paper" style="margin:0;">Paper</span> <span class="paper dash">Dashboard</span></b>Where a packet item comes from: a drawer, or generated.</div>
+        <div><b>☐ Tick boxes</b>Things to have or check. Tick them on the tick-sheet.</div>
+        <div><b>Colored boxes</b>Gold = handy tip. Red = be careful. Blue = good to know.</div>
+      </div>
+      <div class="note" style="margin-top:10px;">Dashboard address: <strong>emorywoods.vercel.app/jr-dashboard</strong>. For screen-by-screen help, see the <em>Dashboard Guide</em>.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Overview &amp; contents</span><b></b></div>
+</section>
+
+<!-- ============================================================ A + B -->
+<section class="page">
+  <div class="chapter-band" style="padding-bottom:16px;">
+    <div class="num">A·B</div>
+    <div class="kicker">Stages A &amp; B · Same day as approval</div>
+    <h1>Approval &amp; initial documents</h1>
+    <p>Tell the applicant, put them in the dashboard, then make the two money documents.</p>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="stage">A</div>
+      <div><div class="recipe-title">Approval</div><div class="recipe-meta"><span>⏱ 3 min</span><span>Application approved</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1.1fr 0.9fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li>Send the <strong>approval email</strong> to the applicant.</li>
+          <li>Open the dashboard → search the building → click the apartment.</li>
+          <li>Scroll down → click <span class="btnref">+ Add Future Tenant</span>.</li>
+          <li>Fill <strong>Tenant Name</strong> and <strong>Scheduled Move-In</strong> date.</li>
+          <li>Click <span class="btnref gold">Save Unit</span>.</li>
+        </ol>
+        <div class="result">apartment card shows a blue <strong>Future:</strong> strip with name and move-in date.</div>
+      </div>
+      <div>
+        <div class="ui">
+          <div class="ui-btn dash" style="margin-bottom:8px;">+ Add Future Tenant <span class="pin" style="margin-left:4px;">3</span></div>
+          <div class="ui-row" style="justify-content:space-between;margin-bottom:5px;"><span style="color:var(--gold);font-size:7pt;letter-spacing:0.1em;text-transform:uppercase;">Future Tenant</span><span style="color:var(--a-muted);font-size:7pt;">✕ Remove</span></div>
+          <div class="ui-row" style="gap:6px;"><div style="flex:1;"><span class="ui-label">Tenant Name <span class="pin" style="width:12px;height:12px;font-size:6pt;">4</span></span><div class="ui-input">Sam Rivera</div></div><div style="flex:1;"><span class="ui-label">Scheduled Move-In</span><div class="ui-input">11/01/2026</div></div></div>
+          <div class="ui-row" style="justify-content:flex-end;margin-top:9px;gap:5px;"><span class="ui-btn gold">Save Unit</span><span class="pin">5</span></div>
+        </div>
+        <div class="ui-cap">Future Tenant section of the apartment box</div>
+      </div>
+    </div>
+    <div class="tip">Do this first. Every document after this fills in the tenant's name and move-in date for you.</div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="stage">B</div>
+      <div><div class="recipe-title">Initial documents — Deposit Receipt &amp; Welcome Letter</div><div class="recipe-meta"><span>⏱ 5 min</span><span>Same steps for both</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1.1fr 0.9fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li>Open the dashboard → search the building → scroll down → click <span class="btnref gold">Create Document</span>.</li>
+          <li><strong>Document Type</strong> → choose <em>Deposit Receipt</em> (then repeat with <em>Welcome Letter</em>).</li>
+          <li>Fill out everything: <strong>base rent</strong>, <strong>water/sewer</strong>, <strong>security deposit</strong>, and <strong>pet</strong> <em>or</em> <strong>liability to landlord insurance</strong>.</li>
+          <li>Leave <strong>Adults / Children</strong> alone unless they need changing.</li>
+          <li>Click <span class="btnref gold">Deposit Receipt</span> (or <span class="btnref gold">Welcome Letter</span>).</li>
+          <li>Right-click the file → <strong>Open With Preview</strong> → <strong>Print</strong>.</li>
+        </ol>
+      </div>
+      <div>
+        <div class="ui">
+          <div class="ui-title" style="margin-bottom:9px;">Create Document</div>
+          <span class="ui-label">Document Type <span class="pin" style="width:12px;height:12px;font-size:6pt;">2</span></span><div class="ui-input" style="margin-bottom:7px;">Deposit Receipt ▾</div>
+          <div class="ui-row" style="gap:6px;margin-bottom:6px;"><div style="flex:1;"><span class="ui-label">Base Rent</span><div class="ui-input">$1,750</div></div><div style="flex:1;"><span class="ui-label">Water / Sewer</span><div class="ui-input">$60</div></div></div>
+          <div class="ui-row" style="gap:6px;margin-bottom:6px;"><div style="flex:1;"><span class="ui-label">Security Deposit <span class="pin" style="width:12px;height:12px;font-size:6pt;">3</span></span><div class="ui-input">$1,750</div></div><div style="flex:1;"><span class="ui-label">Adults / Children <span class="pin" style="width:12px;height:12px;font-size:6pt;">4</span></span><div class="ui-input">2 · 0</div></div></div>
+          <div class="ui-row" style="justify-content:flex-end;gap:5px;"><span class="ui-btn gold">Deposit Receipt</span><span class="pin">5</span></div>
+        </div>
+        <div class="ui-cap">Deposit Receipt form (example numbers)</div>
+      </div>
+    </div>
+    <div class="tip">Use the same numbers on both documents so the amounts match.</div>
+  </div>
+  <div class="foot"><span>A Approval · B Initial documents</span><b></b></div>
+</section>
+
+<!-- ============================================================ C -->
+<section class="page">
+  <div class="chapter-band" style="padding-bottom:16px;">
+    <div class="num">C</div>
+    <div class="kicker">Stage C · Before move-in · Physical paper</div>
+    <h1>The move-in packet</h1>
+    <p>Build the tenant's folder. Compare with the <strong>Move-In Packet Master</strong> — the grey folder — so nothing is missing.</p>
+  </div>
+
+  <div class="split" style="grid-template-columns:1.05fr 0.95fr;gap:18px;">
+    <div>
+      <h2 style="margin-top:0;">What goes in the folder</h2>
+      <ul class="ticks">
+        <li><strong>Inspection Move-In form</strong> <span class="paper">Paper</span><span class="sub">Fill out on the typewriter. Deadline = <strong>3 days after move-in</strong>.</span></li>
+        <li><strong>Map</strong> <span class="paper">Paper</span><span class="sub">Highlight the <strong>leasing office</strong> and <strong>their apartment</strong>. Write <strong>LAUNDRY CODE 2628</strong> at the top.</span></li>
+        <li><strong>Emergency after hours</strong> <span class="paper">Paper</span><span class="sub">From the papers drawer.</span></li>
+        <li><strong>Information packets</strong> <span class="paper">Paper</span><span class="sub">Master copy in the file drawer.</span></li>
+        <li><strong>Policy Letter</strong> <span class="paper dash">Dashboard</span><span class="sub">Generate — steps on the right.</span></li>
+        <li><strong>Renters Insurance</strong> <span class="paper dash">Dashboard</span><span class="sub">Generate — steps on the right.</span></li>
+        <li><strong>Prox Card agreement</strong> <span class="paper">Paper</span></li>
+        <li><strong>Vehicle registration form</strong> <span class="paper">Paper</span></li>
+      </ul>
+      <div class="warn">Inspection form deadline is <strong>3 days after move-in</strong> — not 3 days from today. The second key depends on this form.</div>
+    </div>
+    <div>
+      <h2 style="margin-top:0;">Generate from the dashboard</h2>
+      <div class="recipe">
+        <div class="recipe-head">
+          <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div><div class="recipe-title">Policy Letter</div><div class="recipe-meta"><span>⏱ 30 sec</span></div></div>
+        </div>
+        <ol class="steps">
+          <li>Search building or tenant name → scroll down → <span class="btnref gold">Create Document</span>.</li>
+          <li><strong>Document Type</strong> → <em>Policy Letter</em>.</li>
+          <li>Double-check <strong>name</strong> and <strong>Move-In Date</strong>.</li>
+          <li>Click <span class="btnref gold">Policy Letter</span> → right-click → <strong>Open With Preview</strong> → <strong>Print</strong>.</li>
+        </ol>
+      </div>
+      <div class="recipe">
+        <div class="recipe-head">
+          <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="recipe-title">Renters Insurance</div><div class="recipe-meta"><span>⏱ 30 sec</span></div></div>
+        </div>
+        <ol class="steps">
+          <li>Search building or tenant name → scroll down → <span class="btnref gold">Create Document</span>.</li>
+          <li><strong>Document Type</strong> → <em>Renters Insurance</em>.</li>
+          <li>Double-check <strong>name</strong> and <strong>Move-In Date</strong>.</li>
+          <li>Click <span class="btnref gold">Renters Insurance</span> → right-click → <strong>Open With Preview</strong> → <strong>Print</strong>.</li>
+        </ol>
+      </div>
+      <div class="tip">Wrong name or date on the form? Fix the apartment's Future Tenant first, then start the document again.</div>
+    </div>
+  </div>
+  <div class="foot"><span>C Move-in packet</span><b></b></div>
+</section>
+
+<!-- ============================================================ D + E -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Move-In Checklist</span><span class="chip">D · E · F</span></div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="stage">D</div>
+      <div><div class="recipe-title">One week before move-in</div><div class="recipe-meta"><span>⏱ 10 min</span><span>7 days out</span></div></div>
+    </div>
+    <ol class="steps">
+      <li>Email the <strong>Pre Move-In email</strong> to the tenant. Template: <strong>Google Docs → Email Template</strong> on the office computer.</li>
+      <li>Adjust the utilities line for the apartment type (table below).</li>
+      <li>Check the <strong>lease</strong> — has it been sent? Has it been signed?</li>
+    </ol>
+    <table class="t" style="margin-top:8px;">
+      <thead><tr><th style="width:2.2in;">Apartment type</th><th>Utilities the tenant sets up</th></tr></thead>
+      <tbody>
+        <tr><td><span class="lb rent">Renovated</span> <span class="lb gray">Studio</span></td><td><strong>Electric only</strong></td></tr>
+        <tr><td><span class="lb vac">Classic</span></td><td><strong>Electric + Gas</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="warn">Lease not sent yet? Send it now — on move-in day a signed lease is check #1.</div>
+  </div>
+
+  <div class="gate" style="margin-top:10px;">
+    <div class="gate-head">
+      <div class="stage" style="background:var(--gold);color:var(--forest);">E</div>
+      <div><div class="kicker" style="margin:0;">Move-in day · Tenant in the leasing office</div><div class="recipe-title" style="font-size:16pt;">Four checks before any key</div></div>
+    </div>
+    <ul class="ticks">
+      <li><strong>1 · Lease signed</strong></li>
+      <li><strong>2 · Proof of utilities account</strong> — electric, plus gas if Classic.<span class="sub">Write down the <strong>start date</strong> and <strong>account number</strong>.</span></li>
+      <li><strong>3 · Renters insurance decision</strong><span class="sub">Third-party provider → ask for the <strong>declaration page</strong>. &nbsp;AppFolio → tell them it is <strong>$13/month</strong>.</span></li>
+      <li><strong>4 · Move-in rent</strong> — check or money order.</li>
+    </ul>
+    <div class="keyband">
+      <div class="big">1</div>
+      <div>All four ticked → give <b>ONE key only</b>. Tell the tenant: bring back the completed <b>Inspection Move-In form</b> to receive the <b>second key</b>.</div>
+    </div>
+  </div>
+  <div class="warn" style="margin:10px 0 12px;">Any of the four missing → no key yet. Explain what's missing and when they can come back.</div>
+
+  <div class="recipe" style="margin-bottom:0;">
+    <div class="recipe-head">
+      <div class="stage">F</div>
+      <div><div class="recipe-title">After move-in</div><div class="recipe-meta"><span>⏱ 5 min</span><span>Same day</span></div></div>
+    </div>
+    <ol class="steps">
+      <li>Give the <strong>security deposit check</strong> and <strong>move-in rent check</strong> to the manager.</li>
+      <li>If possible, update the tenant's profile tags: <strong>vehicle tag</strong>, <strong>vehicle permit number</strong>, <strong>prox card number</strong>.</li>
+    </ol>
+  </div>
+  <div class="foot"><span>D One week before · E Move-in day · F After move-in</span><b></b></div>
+</section>
+
+<!-- ============================================================ TICK SHEET (stand-alone) -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Move-In Checklist</span><span class="chip">Tick-sheet · print this page</span></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:0 0 12px;border-bottom:3px solid var(--forest-2);padding-bottom:8px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="public/LogoBlack.png" alt="" style="height:38px;width:auto;">
+      <div><div class="kicker" style="margin:0;">Print one per tenant · keep in folder</div><h2 style="margin:0;font-size:20pt;">Move-in tick-sheet</h2></div>
+    </div>
+  </div>
+  <div class="sheet-id">
+    <div>Tenant <span class="fill"></span></div>
+    <div>Unit <span class="fill"></span></div>
+    <div>Move-in date <span class="fill"></span></div>
+    <div>Apt type &nbsp;☐ Classic ☐ Renovated ☐ Studio</div>
+  </div>
+
+  <div class="grid2 sheet" style="gap:6px 20px;">
+    <div>
+      <div class="sheet-sec"><h4><span class="stage">A</span>Approval</h4>
+        <ul class="ticks"><li>Approval email sent</li><li>Future Tenant added + saved</li></ul></div>
+      <div class="sheet-sec"><h4><span class="stage">B</span>Initial documents</h4>
+        <ul class="ticks"><li>Deposit Receipt printed</li><li>Welcome Letter printed</li></ul></div>
+      <div class="sheet-sec"><h4><span class="stage">C</span>Move-in packet</h4>
+        <ul class="ticks">
+          <li>Inspection form — typed, deadline +3 days</li>
+          <li>Map — office + apt highlighted, code 2628</li>
+          <li>Emergency after hours</li>
+          <li>Information packets</li>
+          <li>Policy Letter</li>
+          <li>Renters Insurance</li>
+          <li>Prox Card agreement</li>
+          <li>Vehicle registration form</li>
+        </ul></div>
+    </div>
+    <div>
+      <div class="sheet-sec"><h4><span class="stage">D</span>One week before</h4>
+        <ul class="ticks"><li>Pre Move-In email sent (utilities adjusted)</li><li>Lease sent / signed</li></ul></div>
+      <div class="sheet-sec"><h4><span class="stage" style="background:var(--gold);color:var(--forest);">E</span>Move-in day</h4>
+        <ul class="ticks">
+          <li>Lease signed</li>
+          <li>Electric acct # <span class="fill" style="min-width:1.1in;height:11px;"></span></li>
+          <li>Gas acct # (Classic) <span class="fill" style="min-width:0.85in;height:11px;"></span></li>
+          <li>Utilities start date <span class="fill" style="min-width:0.9in;height:11px;"></span></li>
+          <li>Insurance: ☐ Third-party (dec page) ☐ AppFolio</li>
+          <li>Move-in rent — check / money order</li>
+          <li>Key #1 given</li>
+          <li>Inspection form back → Key #2 given</li>
+        </ul></div>
+      <div class="sheet-sec"><h4><span class="stage">F</span>After move-in</h4>
+        <ul class="ticks"><li>Deposit + rent checks to manager</li><li>Profile: vehicle tag, permit #, prox card #</li></ul></div>
+    </div>
+  </div>
+  <div class="sheet-sec" style="margin-top:14px;"><h4>Notes</h4>
+    <div style="height:0.3in;border-bottom:1px solid #cfc8b8;"></div>
+    <div style="height:0.3in;border-bottom:1px solid #cfc8b8;"></div>
+    <div style="height:0.3in;border-bottom:1px solid #cfc8b8;"></div>
+  </div>
+  <div class="foot"><span>Tick-sheet · Done by <span class="fill" style="min-width:1.4in;height:10px;"></span> &nbsp;Date <span class="fill" style="min-width:0.9in;height:10px;"></span></span><b></b></div>
+</section>
+
+</body>
+</html>

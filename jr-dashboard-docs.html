@@ -1,434 +1,1671 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Emory Woods Leasing Dashboard — User Guide</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Georgia, serif;
-      color: #222;
-      font-size: 12px;
-      line-height: 1.7;
-      padding: 32px 44px;
-      max-width: 860px;
-      margin: 0 auto;
-    }
+<meta charset="utf-8" />
+<title>Emory Woods Dashboard Guide</title>
+<style>
+  @font-face { font-family: "Gelasio"; src: url("public/fonts/Gelasio-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Gelasio"; src: url("public/fonts/Gelasio-Bold.ttf"); font-weight: 700; }
 
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: #1a3a25;
-      margin-bottom: 4px;
-      font-family: Arial, sans-serif;
-    }
-    .subtitle {
-      color: #888;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-family: Arial, sans-serif;
-      margin-bottom: 20px;
-    }
+  :root {
+    --forest: #0D1A12;
+    --forest-2: #1a3a25;
+    --moss: #2A4A35;
+    --gold: #C9A84C;
+    --gold-deep: #8B6914;
+    --cream: #FBF8F1;
+    --cream-2: #F3EDE0;
+    --ink: #1d2420;
+    --muted: #6b6a62;
+    --line: #E4DCCB;
+    --red: #c94a4a;
+    --green: #2f8a55;
+    --blue: #3c78d2;
+    --orange: #d6862c;
+    --purple: #7a52d6;
+    /* app (dark) */
+    --a-bg: #0D1A12;
+    --a-surface: #141F18;
+    --a-border: #2A3D2E;
+    --a-text: #F5EFE0;
+    --a-muted: #A89F8C;
+  }
 
-    h2 {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #1a3a25;
-      margin-top: 30px;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #c9a84c;
-      padding-bottom: 4px;
-      font-family: Arial, sans-serif;
-    }
-    h3 {
-      font-size: 11.5px;
-      font-weight: 700;
-      color: #333;
-      margin-top: 18px;
-      margin-bottom: 5px;
-      font-family: Arial, sans-serif;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: 8.5in 11in; margin: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: #d9d4c8;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
 
-    p { margin-bottom: 8px; }
-    ul, ol { margin: 5px 0 10px 20px; }
-    li { margin-bottom: 4px; }
+  .page {
+    width: 8.5in; height: 11in;
+    margin: 0 auto 0.3in;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    padding: 0.62in 0.7in 0.8in;
+    break-after: page;
+    page-break-after: always;
+  }
+  .page:last-child { break-after: auto; page-break-after: auto; }
+  @media print { body { background: none; } .page { margin: 0; } }
 
-    .tip {
-      background: #f9f6ef;
-      border-left: 3px solid #c9a84c;
-      padding: 9px 13px;
-      margin: 10px 0 14px 0;
-      font-size: 11px;
-      color: #555;
-      border-radius: 0 4px 4px 0;
-    }
-    .tip strong { color: #8a6a00; }
+  /* running header / footer */
+  .runhead {
+    position: absolute; top: 0.3in; left: 0.7in; right: 0.7in;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7.5pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+  }
+  .runhead .chip { background: var(--forest); color: var(--gold); padding: 2px 9px; border-radius: 20px; letter-spacing: 0.14em; }
+  .foot {
+    position: absolute; bottom: 0.38in; left: 0.7in; right: 0.7in;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 7.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: #a39d8f;
+    border-top: 1px solid var(--line); padding-top: 7px;
+  }
+  .foot b { color: var(--forest); font-size: 9pt; letter-spacing: 0.05em; }
 
-    .badge {
-      display: inline-block;
-      padding: 1px 8px;
-      border-radius: 3px;
-      font-size: 9.5px;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-right: 3px;
-      font-family: Arial, sans-serif;
-    }
-    .b-gold   { background: rgba(201,168,76,0.18);  color: #7a5c00; border: 1px solid rgba(201,168,76,0.55); }
-    .b-green  { background: rgba(40,140,80,0.14);   color: #1a6a3a; border: 1px solid rgba(40,140,80,0.45); }
-    .b-blue   { background: rgba(80,140,220,0.14);  color: #1a4a8a; border: 1px solid rgba(80,140,220,0.45); }
-    .b-purple { background: rgba(80,50,140,0.16);   color: #4a1a8a; border: 1px solid rgba(80,50,140,0.45); }
-    .b-red    { background: rgba(224,92,92,0.14);   color: #8a1a1a; border: 1px solid rgba(224,92,92,0.45); }
-    .b-gray   { background: rgba(42,74,53,0.22);    color: #2a4a35; border: 1px solid rgba(42,74,53,0.4);  }
-    .b-orange { background: rgba(224,154,60,0.18);  color: #7a4a00; border: 1px solid rgba(224,154,60,0.5);}
+  /* type */
+  h1, h2, h3, .serif { font-family: "Gelasio", Georgia, serif; }
+  .kicker { font-size: 8pt; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-deep); font-weight: 700; margin-bottom: 4px; }
+  h1.ch { font-size: 27pt; line-height: 1.1; color: var(--forest-2); font-weight: 700; margin-bottom: 6px; }
+  .lede { font-size: 11.5pt; color: #4a4f48; margin-bottom: 16px; max-width: 6.2in; }
+  h2 { font-size: 15pt; color: var(--forest-2); margin: 16px 0 6px; font-weight: 700; }
+  h3 { font-size: 11.5pt; color: var(--forest-2); margin: 10px 0 4px; font-weight: 700; }
+  p { margin-bottom: 7px; }
+  ul.clean { list-style: none; }
+  ul.dots { margin: 4px 0 8px 2px; list-style: none; }
+  ul.dots li { margin-bottom: 3px; padding-left: 14px; position: relative; }
+  ul.dots li::before { content: ""; position: absolute; left: 2px; top: 0.6em; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+  strong { color: #111; }
+  .ui strong { color: inherit; }
+  .ui .pin { margin-right: 3px; }
+  .btnref {
+    display: inline-block; font-size: 8pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0 6px; border-radius: 4px; border: 1px solid #c8bfa9; background: #fff; color: var(--forest-2);
+    line-height: 1.55; white-space: nowrap;
+  }
+  .btnref.gold { background: var(--gold); border-color: var(--gold); color: var(--forest); }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 8px 0 14px 0;
-      font-size: 11px;
-    }
-    thead tr { background: #f5f0e8; }
-    th {
-      text-align: left;
-      padding: 5px 8px;
-      font-size: 9.5px;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: #555;
-      border-bottom: 2px solid #c9a84c;
-      border-right: 1px solid #e0d8c8;
-      white-space: nowrap;
-      font-family: Arial, sans-serif;
-    }
-    th:last-child { border-right: none; }
-    td {
-      padding: 5px 8px;
-      border-bottom: 1px solid #eee;
-      border-right: 1px solid #f0ebe0;
-      vertical-align: top;
-    }
-    td:last-child { border-right: none; }
-    tr:last-child td { border-bottom: none; }
-    tr:nth-child(even) td { background: #fafaf7; }
+  .chapter-band {
+    margin: -0.62in -0.7in 18px; padding: 0.75in 0.7in 22px;
+    background: #fff; color: var(--ink); position: relative; overflow: hidden; border-bottom: 3px solid var(--gold);
+  }
+  .chapter-band .num { position: absolute; right: 0.5in; top: 0.25in; font-family: "Gelasio", serif; font-size: 110pt; color: rgba(201,168,76,0.22); line-height: 1; font-weight: 700; }
+  .chapter-band .kicker { color: var(--gold-deep); }
+  .chapter-band h1 { font-size: 28pt; color: var(--forest-2); font-weight: 700; line-height: 1.1; }
+  .chapter-band p { color: #4a4f48; font-size: 11pt; max-width: 5.6in; margin: 6px 0 0; }
 
-    .step {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 7px;
-      align-items: baseline;
-    }
-    .step-num {
-      min-width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #c9a84c;
-      color: #fff;
-      font-size: 9px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-      font-family: Arial, sans-serif;
-    }
+  /* recipe card */
+  .recipe {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px 12px; margin-bottom: 12px; break-inside: avoid;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+  }
+  .recipe-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .recipe-icon {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--forest); color: var(--gold);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .recipe-title { font-family: "Gelasio", serif; font-weight: 700; font-size: 13pt; color: var(--forest-2); line-height: 1.15; }
+  .recipe-meta { font-size: 8pt; color: var(--muted); letter-spacing: 0.06em; }
+  .recipe-meta span { background: var(--cream-2); border-radius: 10px; padding: 1px 7px; margin-right: 4px; }
 
-    hr { border: none; border-top: 1px solid #e8e0d0; margin: 20px 0; }
+  .steps { list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding-left: 28px; margin-bottom: 5px; min-height: 20px; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    width: 19px; height: 19px; border-radius: 50%; background: var(--gold); color: var(--forest);
+    font-size: 8.5pt; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  }
+  .result {
+    margin-top: 7px; padding: 6px 10px; border-radius: 7px; background: rgba(47,138,85,0.09);
+    border: 1px solid rgba(47,138,85,0.28); font-size: 9.5pt; color: #24553a;
+  }
+  .result::before { content: "✓  You'll know it worked: "; font-weight: 700; }
 
-    .page-break { page-break-before: always; }
+  .tip, .warn, .note {
+    border-radius: 8px; padding: 8px 12px; font-size: 9.5pt; margin: 8px 0; break-inside: avoid;
+  }
+  .tip { background: #FBF2D9; border-left: 4px solid var(--gold); }
+  .tip::before { content: "TIP  "; font-weight: 800; color: var(--gold-deep); letter-spacing: 0.1em; font-size: 8pt; }
+  .warn { background: #FBE7E4; border-left: 4px solid var(--red); }
+  .warn::before { content: "WATCH OUT  "; font-weight: 800; color: var(--red); letter-spacing: 0.1em; font-size: 8pt; }
+  .note { background: #E8EEF8; border-left: 4px solid var(--blue); }
+  .note::before { content: "GOOD TO KNOW  "; font-weight: 800; color: var(--blue); letter-spacing: 0.1em; font-size: 8pt; }
 
-    footer {
-      margin-top: 30px;
-      padding-top: 10px;
-      border-top: 1px solid #ddd;
-      font-size: 9px;
-      color: #bbb;
-      letter-spacing: 0.05em;
-      text-align: right;
-      font-family: Arial, sans-serif;
-    }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .split { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 16px; align-items: start; }
 
-    @page { margin: 1.5cm 2cm; }
-    @media print { body { padding: 0; max-width: none; } }
-  </style>
-</head>
+  table.t { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 9.5pt; margin: 6px 0 10px; background: #fff; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+  table.t th { text-align: left; font-size: 7.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); background: var(--cream-2); padding: 6px 9px; border-bottom: 2px solid var(--gold); }
+  table.t td { padding: 6px 9px; border-bottom: 1px solid #F0EADD; vertical-align: top; }
+  table.t tr:last-child td { border-bottom: none; }
+
+  /* ===== App mockups (dark theme replicas) ===== */
+  .ui {
+    background: var(--a-surface); color: var(--a-text); border: 1px solid var(--a-border);
+    border-radius: 12px; padding: 14px; font-size: 8.5pt; position: relative; break-inside: avoid;
+    box-shadow: 0 8px 22px rgba(13,26,18,0.25);
+  }
+  .ui.bg { background: var(--a-bg); }
+  .ui-cap { font-size: 7.5pt; color: var(--muted); text-align: center; margin-top: 6px; font-style: italic; }
+  .ui-title { font-family: "Gelasio", serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10.5pt; color: var(--a-text); }
+  .ui-label { display: block; font-size: 6.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--a-muted); margin-bottom: 3px; }
+  .ui-input {
+    background: var(--a-bg); border: 1px solid var(--a-border); border-radius: 5px; padding: 5px 8px;
+    color: var(--a-text); font-size: 8pt; min-height: 22px;
+  }
+  .ui-input.ph { color: #6f6a5d; }
+  .ui-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    border: 1px solid var(--a-border); border-radius: 5px; padding: 4px 9px;
+    font-size: 6.8pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--a-muted); background: transparent; white-space: nowrap;
+  }
+  .ui-btn.gold { background: var(--gold); border-color: var(--gold); color: var(--forest); font-weight: 700; }
+  .ui-btn.on-gold { background: rgba(201,168,76,0.18); border-color: rgba(201,168,76,0.6); color: var(--gold); font-weight: 700; }
+  .ui-btn.on-green { background: rgba(40,140,80,0.18); border-color: rgba(40,140,80,0.6); color: #3fbf73; font-weight: 700; }
+  .ui-btn.on-gray { background: rgba(42,74,53,0.5); border-color: rgba(80,120,90,0.8); color: var(--a-text); font-weight: 700; }
+  .ui-btn.dash { border-style: dashed; border-color: rgba(201,168,76,0.5); color: var(--gold); width: 100%; }
+  .ui-btn.red { color: #e05c5c; border-color: #e05c5c; }
+  .ui-btn.purple { background: rgba(80,50,140,0.25); border-color: rgba(80,50,140,0.7); color: #a078ff; }
+  .ui-row { display: flex; gap: 6px; align-items: center; }
+  .ui-sep { border-top: 1px solid var(--a-border); margin: 8px 0; }
+  .ui-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 6.5pt; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid; white-space: nowrap; }
+  .bd-occ { background: rgba(42,74,53,0.4); color: var(--a-muted); border-color: var(--a-border); }
+  .bd-vac { background: rgba(201,168,76,0.15); color: var(--gold); border-color: rgba(201,168,76,0.45); }
+  .bd-rent { background: rgba(80,140,220,0.14); color: #6aa0ea; border-color: rgba(80,140,220,0.45); }
+  .bd-not { background: rgba(40,140,80,0.14); color: #3fbf73; border-color: rgba(40,140,80,0.45); }
+  .bd-tour { background: rgba(40,140,80,0.14); color: #3fbf73; border-color: rgba(40,140,80,0.45); }
+  .bd-promo { background: rgba(160,90,30,0.2); color: #d98a40; border-color: rgba(160,90,30,0.55); }
+  .bd-warn { background: rgba(224,154,60,0.12); color: #e09a3c; border-color: rgba(224,154,60,0.45); }
+  .bd-exp { background: rgba(224,92,92,0.12); color: #e05c5c; border-color: rgba(224,92,92,0.45); }
+  .bd-cp-t { background: rgba(80,50,140,0.25); color: #a078ff; border-color: rgba(80,50,140,0.6); }
+  .bd-cp-o { background: rgba(40,100,180,0.18); color: #5096e6; border-color: rgba(40,100,180,0.5); }
+  .bd-cp-s { background: rgba(180,100,30,0.18); color: #dc8c3c; border-color: rgba(180,100,30,0.5); }
+  .bd-cp-e { background: rgba(20,140,120,0.18); color: #28bea0; border-color: rgba(20,140,120,0.5); }
+
+  /* light-page badge (for tables on cream) */
+  .lb { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; border: 1px solid; white-space: nowrap; }
+  .lb.occ { background: #e6ebe5; color: #3f5a47; border-color: #b9c8bb; }
+  .lb.vac { background: #f8edcc; color: #8B6914; border-color: #e0c77d; }
+  .lb.rent { background: #e1ebfa; color: #2d62b5; border-color: #a9c3ec; }
+  .lb.not { background: #dff1e6; color: #22764a; border-color: #9fd2b3; }
+  .lb.promo { background: #f8e3cf; color: #9a5719; border-color: #e3b68a; }
+  .lb.wrn { background: #fbe9d2; color: #a7621a; border-color: #ecc28d; }
+  .lb.exp { background: #f8dcdc; color: #a33333; border-color: #e5a6a6; }
+  .lb.purple { background: #ece4fb; color: #5b36b0; border-color: #c7b5ef; }
+  .lb.blue { background: #e1ebfa; color: #2d62b5; border-color: #a9c3ec; }
+  .lb.shop { background: #f8e6d2; color: #9a5719; border-color: #e3bb8f; }
+  .lb.teal { background: #dbf2ed; color: #18705f; border-color: #9fd6ca; }
+  .lb.gray { background: #ecebe6; color: #5d5c55; border-color: #cfccc1; }
+
+  /* callout pins */
+  .pin {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%; background: #ff5a36; color: #fff;
+    font-size: 7.5pt; font-weight: 800; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+    font-family: "Segoe UI", Arial, sans-serif; vertical-align: middle; line-height: 1;
+  }
+  .pin.abs { position: absolute; }
+  .legend { list-style: none; font-size: 9.5pt; }
+  .legend li { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .legend li .pin { margin-top: 2px; }
+
+  /* cover */
+  .cover { background: #fff; color: var(--ink); padding: 0; }
+  .cover-inner { position: absolute; inset: 0; padding: 0.9in 0.85in; display: flex; flex-direction: column; }
+  .cover .ring { position: absolute; border: 1px solid rgba(201,168,76,0.35); border-radius: 50%; }
+  .cover h1 { font-family: "Gelasio", serif; font-size: 46pt; line-height: 1.02; font-weight: 700; color: var(--forest-2); margin: 18px 0 12px; }
+  .cover h1 em { color: var(--gold-deep); font-style: normal; }
+  .cover .sub { font-size: 13pt; color: #4a4f48; max-width: 5in; }
+  .cover .tag { display: inline-block; border: 1px solid var(--gold); color: var(--gold-deep); padding: 4px 12px; border-radius: 30px; font-size: 8pt; letter-spacing: 0.2em; text-transform: uppercase; }
+  .cover-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: auto; }
+  .cover-card { border: 1px solid var(--gold); border-radius: 12px; padding: 12px; background: #fff; }
+  .cover-card .n { font-family: "Gelasio", serif; color: var(--gold-deep); font-size: 20pt; line-height: 1; }
+  .cover-card .l { font-size: 8.5pt; color: #4a4f48; margin-top: 4px; }
+
+  /* toc */
+  .toc { list-style: none; }
+  .toc li { display: grid; grid-template-columns: 34px 1fr auto; align-items: baseline; gap: 8px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+  .toc .n { font-family: "Gelasio", serif; color: var(--gold-deep); font-weight: 700; font-size: 13pt; }
+  .toc .t { font-weight: 700; color: var(--forest-2); }
+  .toc .d { display: block; font-weight: 400; color: var(--muted); font-size: 8.5pt; }
+  .toc .p { font-family: "Gelasio", serif; color: var(--forest-2); }
+
+  .bigq { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .bigq div { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 9.5pt; }
+  .bigq div b { display: block; color: var(--forest-2); font-family: "Gelasio", serif; font-size: 10.5pt; }
+  .bigq div span { color: var(--gold-deep); font-weight: 700; }
+
+  .formula {
+    background: var(--forest); color: var(--cream); border-radius: 10px; padding: 10px 14px; font-size: 9.5pt; margin: 6px 0 8px;
+  }
+  .formula code { font-family: Consolas, monospace; color: var(--gold); font-size: 9.5pt; }
+  .calc { width: 100%; border-collapse: collapse; font-size: 9.5pt; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+  .calc td { padding: 4px 9px; border-bottom: 1px solid #F0EADD; }
+  .calc td:last-child { text-align: right; font-weight: 600; }
+  .calc tr.total td { background: var(--cream-2); font-weight: 800; color: var(--forest-2); }
+
+  .cheat { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .cheat .c { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; break-inside: avoid; }
+  .cheat .c h4 { font-family: "Gelasio", serif; font-size: 10.5pt; color: var(--forest-2); margin-bottom: 3px; }
+  .cheat .c p { font-size: 8.8pt; margin: 0; color: #3b403a; line-height: 1.45; }
+  .arrow { color: var(--gold-deep); font-weight: 800; }
+
+  .faq dt { font-family: "Gelasio", serif; font-weight: 700; color: var(--forest-2); font-size: 10.5pt; margin-top: 8px; }
+  .faq dd { font-size: 9.5pt; color: #3b403a; margin: 2px 0 0; }
+  body { counter-reset: pg; }
+  .page { counter-increment: pg; }
+  .foot b::after { content: counter(pg); }
+  .gloss { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .gloss .g { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 7px 8px 8px; break-inside: avoid; }
+  .gloss .gp { height: 58px; background: var(--a-bg); border-radius: 7px; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; overflow: hidden; }
+  .gloss b { font-family: "Gelasio", serif; color: var(--forest-2); font-size: 10pt; display: block; line-height: 1.2; }
+  .gloss p { font-size: 8.3pt; line-height: 1.38; color: #3b403a; margin: 2px 0 0; }
+</style></head>
 <body>
 
-  <h1>Emory Woods — Leasing Dashboard</h1>
-  <p class="subtitle">User Guide &nbsp;·&nbsp; July 2025</p>
+<!-- ============================================================ COVER -->
+<section class="page cover">
+  <div class="ring" style="width:7in;height:7in;right:-2.6in;top:-2.2in;"></div>
+  <div class="ring" style="width:5in;height:5in;right:-1.6in;top:-1.2in;"></div>
+  <div class="ring" style="width:3in;height:3in;right:-0.6in;top:-0.2in;border-color:rgba(201,168,76,0.3)"></div>
+  <div class="cover-inner">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="public/LogoBlack.png" alt="" style="height:46px;width:auto;">
+    </div>
+    <div style="margin-top:1.3in;">
+      <span class="tag">Leasing Dashboard · User Guide</span>
+      <h1>Run Emory Woods<br>from <em>one screen.</em></h1>
+      <p class="sub">A friendly, step-by-step handbook for the <strong style="color:var(--forest-2)">emorywoods.vercel.app/jr-dashboard</strong> — tenants, move-ins, move-outs, documents, brochures, carports and reports. No experience needed.</p>
+    </div>
+    <div class="cover-cards">
+      <div class="cover-card"><div class="n">5 min</div><div class="l">Quick start — enough to do your first move-in.</div></div>
+      <div class="cover-card"><div class="n">14</div><div class="l">Step-by-step cards for everyday jobs.</div></div>
+      <div class="cover-card"><div class="n">1 page</div><div class="l">Cheat sheet at the back. Print it, pin it up.</div></div>
+    </div>
+    <div style="margin-top:22px;font-size:8pt;letter-spacing:0.18em;text-transform:uppercase;color:#6b6a62;display:flex;justify-content:space-between;">
+      <span>Emory Woods Apartments</span><span>Edition · October 2026</span>
+    </div>
+  </div>
+</section>
 
-  <p>This guide explains how to use the Leasing Dashboard at <strong>/jr-dashboard</strong>. It covers logging in, finding units, editing unit details, managing carports, and exporting a printable report. No technical knowledge is needed.</p>
+<!-- ============================================================ CONTENTS + QUICK START -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">Start here</span></div>
+  <div class="split" style="grid-template-columns: 1fr 1fr; gap: 22px;">
+    <div>
+      <div class="kicker">Inside this guide</div>
+      <h1 class="ch" style="font-size:22pt;">Contents</h1>
+      <ul class="toc">
+        <li><span class="n">✦</span><span class="t">Words you'll see<span class="d">Plain-English meanings, with pictures</span></span><span class="p">3</span></li>
+        <li><span class="n">01</span><span class="t">Getting in<span class="d">The web address and the access code</span></span><span class="p">4</span></li>
+        <li><span class="n">02</span><span class="t">A tour of the screen<span class="d">What every part of the screen is for</span></span><span class="p">4</span></li>
+        <li><span class="n">03</span><span class="t">Finding a unit<span class="d">The search box</span></span><span class="p">7</span></li>
+        <li><span class="n">04</span><span class="t">Tenants: in, out &amp; everything between<span class="d">New tenant, moving in, leaving, moving out</span></span><span class="p">8</span></li>
+        <li><span class="n">05</span><span class="t">Getting a unit ready &amp; renewals<span class="d">Repairs, locks, tours, promos, lease ends</span></span><span class="p">12</span></li>
+        <li><span class="n">06</span><span class="t">Creating documents<span class="d">Deposit receipt, letters, insurance — and how to print or save them</span></span><span class="p">13</span></li>
+        <li><span class="n">07</span><span class="t">The brochure<span class="d">New prices, fresh brochure</span></span><span class="p">17</span></li>
+        <li><span class="n">08</span><span class="t">Carports<span class="d">Who parks where</span></span><span class="p">18</span></li>
+        <li><span class="n">09</span><span class="t">Reports &amp; lists<span class="d">The weekly report, your own lists, the big list view</span></span><span class="p">19</span></li>
+        <li><span class="n">10</span><span class="t">Colors, questions &amp; cheat sheet<span class="d">What every color means; quick fixes</span></span><span class="p">22</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="kicker">Quick start</div>
+      <h1 class="ch" style="font-size:22pt;">Your first 5 minutes</h1>
+      <p style="color:#4a4f48;">Brand new? Do these five things in order. You can't break anything — nothing changes until you press a <em>Save</em> button.</p>
+      <div class="recipe" style="margin-top:8px;">
+        <ol class="steps">
+          <li><strong>Open the dashboard</strong> — type <strong>emorywoods.vercel.app/jr-dashboard</strong> into the bar at the very top of your internet browser, type the access code, press <span class="btnref gold">Enter</span>.</li>
+          <li><strong>Click a building</strong> on the map. The list on the right now shows only that building.</li>
+          <li><strong>Click any apartment</strong> in the list. A box opens with its details. Look around, then press <span class="btnref">Cancel</span>.</li>
+          <li><strong>Type a tenant's last name</strong> in the search box at the top. Click their name in the results.</li>
+          <li><strong>Click</strong> <span class="btnref gold">Create Document</span>, choose <em>Brochure</em>, then click <span class="btnref gold">Generate Brochure</span>. The brochure opens, ready to print.</li>
+        </ol>
+      </div>
+      <h3 style="margin-top:14px;">How to read this guide</h3>
+      <div class="bigq">
+        <div><b>Step cards</b>One job, numbered steps, start to finish.</div>
+        <div><b><span class="pin">1</span> Red dots</b>Point at the exact spot in the pictures.</div>
+        <div><b><span class="btnref">Button</span></b>Words in a box are buttons — written exactly as you'll see them.</div>
+        <div><b>Colored boxes</b>Gold = handy tip. Red = be careful. Blue = good to know.</div>
+      </div>
+      <div class="note" style="margin-top:10px;">When you save, the change is instant for everyone who uses the dashboard.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Contents &amp; quick start</span><b></b></div>
+</section>
 
-  <!-- ═══════════════════════════ -->
-  <h2>1. Logging In</h2>
+<!-- ============================================================ GLOSSARY -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">Words you'll see</span></div>
+  <div class="kicker">Not a computer person? Start here</div>
+  <h1 class="ch" style="font-size:22pt;">Words you'll see</h1>
+  <p class="lede" style="margin-bottom:10px;">Every "computer word" used in this guide, in plain English. Flip back here any time.</p>
+  <div class="gloss">
+    <div class="g"><div class="gp"><span class="ui-btn gold" style="padding:5px 12px;">Save Unit</span></div><b>Button</b><p>A box with words on it. Point at it with the mouse and press the left mouse button once ("click").</p></div>
+    <div class="g"><div class="gp"><div class="ui-input" style="width:120px;">Sam Rivera<span style="border-left:1.5px solid var(--gold);margin-left:1px;"></span></div></div><b>Box (to type in)</b><p>An empty space for words or numbers. Click inside it, then type.</p></div>
+    <div class="g"><div class="gp" style="flex-direction:column;gap:2px;"><div class="ui-input" style="width:110px;">2BR ▾</div><div style="width:110px;background:var(--a-bg);border:1px solid var(--a-border);border-radius:4px;font-size:7pt;color:var(--a-text);"><div style="padding:1px 6px;">Studio</div><div style="padding:1px 6px;background:rgba(201,168,76,0.25);">2BR</div></div></div><b>Drop-down list</b><p>A box with a little arrow ▾. Click it, a list opens, click your choice.</p></div>
+    <div class="g"><div class="gp" style="color:var(--a-text);font-size:8.5pt;gap:12px;"><span>☐ Pet</span><span>☑ Pet</span></div><b>Tick box</b><p>A small square. Click it to put a tick in it (yes). Click again to remove the tick (no).</p></div>
+    <div class="g"><div class="gp"><svg width="92" height="46" viewBox="0 0 92 46"><rect x="1" y="1" width="90" height="44" rx="4" fill="#0D1A12" stroke="#2A3D2E"/><text x="46" y="11" fill="#A89F8C" font-size="6.5" text-anchor="middle" font-family="Segoe UI">October 2026</text><g font-size="6" fill="#F5EFE0" font-family="Segoe UI" text-anchor="middle"><text x="12" y="22">5</text><text x="24" y="22">6</text><text x="36" y="22">7</text><text x="48" y="22">8</text><text x="60" y="22">9</text><text x="72" y="22">10</text><text x="84" y="22">11</text><text x="12" y="33">12</text><text x="24" y="33">13</text><circle cx="36" cy="31" r="5" fill="#C9A84C"/><text x="36" y="33" fill="#0D1A12">14</text><text x="48" y="33">15</text><text x="60" y="33">16</text><text x="72" y="33">17</text><text x="84" y="33">18</text></g></svg></div><b>Date box</b><p>Click it and a small calendar appears. Click the day you want.</p></div>
+    <div class="g"><div class="gp" style="gap:10px;font-size:7pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--a-muted);"><span style="color:var(--gold);font-weight:700;border-bottom:1.5px solid var(--gold);padding-bottom:2px;">Vacant</span><span>Notices</span></div><b>Tab</b><p>Labels in a row, like the tabs on paper folders. Click one to open it. The open one is gold and underlined.</p></div>
+    <div class="g"><div class="gp" style="gap:5px;"><span class="ui-badge bd-vac" style="border-radius:10px;">✓ Ready for Tour</span></div><b>Filter</b><p>Hides everything except what you asked for — like a sieve. Nothing is deleted; turn the filter off and it all comes back.</p></div>
+    <div class="g"><div class="gp" style="gap:5px;"><span class="ui-badge bd-vac">Vacant</span><span class="ui-badge bd-not">Notice</span></div><b>Label (badge)</b><p>A small colored word on an apartment that tells you something about it at a glance.</p></div>
+    <div class="g"><div class="gp" style="gap:4px;"><span class="ui-btn on-gray">Occupied</span><span class="ui-btn">Vacant</span></div><b>Status</b><p>Where an apartment stands: someone lives there (Occupied), it's empty (Vacant) or the tenant is leaving (Notice).</p></div>
+    <div class="g"><div class="gp" style="background:#3b4a40;"><div style="background:var(--a-surface);border:1px solid var(--a-border);border-radius:5px;width:86px;height:42px;padding:4px 6px;font-size:6.5pt;color:var(--a-text);box-shadow:0 4px 10px rgba(0,0,0,0.4);">UNIT 04<div style="margin-top:12px;display:flex;gap:3px;"><span style="flex:1;border:1px solid var(--a-border);border-radius:2px;height:7px;"></span><span style="flex:2;background:var(--gold);border-radius:2px;height:7px;"></span></div></div></div><b>Window (pop-up box)</b><p>A box that opens on top of the screen. Close it with <em>Cancel</em>, <em>Close</em> or ✕.</p></div>
+    <div class="g"><div class="gp" style="align-items:flex-end;padding-bottom:0;"><div style="display:flex;gap:2px;"><span style="background:#e8e2d4;color:#555;font-size:6.5pt;padding:4px 8px;border-radius:5px 5px 0 0;">Dashboard</span><span style="background:#fff;color:#111;font-size:6.5pt;padding:4px 8px;border-radius:5px 5px 0 0;font-weight:700;">Receipt.pdf</span></div></div><b>New tab</b><p>A second page that opens at the top of your internet browser. Click the first tab to go back to the dashboard.</p></div>
+    <div class="g"><div class="gp"><svg width="40" height="46" viewBox="0 0 40 46"><path d="M4 2h22l10 10v32H4z" fill="#fff"/><path d="M26 2v10h10" fill="#e3ddd0"/><rect x="4" y="26" width="32" height="11" fill="#c94a4a"/><text x="20" y="34.5" fill="#fff" font-size="7.5" font-weight="800" text-anchor="middle" font-family="Segoe UI">PDF</text></svg></div><b>PDF</b><p>A document file that looks the same on every computer. You can print it, save it or email it.</p></div>
+    <div class="g"><div class="gp"><span style="display:inline-block;border:1.5px solid #888;border-radius:4px;padding:4px 7px;color:var(--a-text);font-size:8pt;background:#1d2a22;">Esc</span></div><b>Esc key</b><p>Top-left key on your keyboard. Press it to close a box or clear a search.</p></div>
+    <div class="g"><div class="gp" style="font-size:7.5pt;color:var(--a-text);gap:4px;"><span style="background:var(--gold);width:28px;height:12px;border-radius:2px;"></span><span style="background:#2A3D2E;width:58px;height:12px;border-radius:2px;"></span></div><b>Partial-month rent</b><p>In the first month the tenant only pays for the days they actually live there.</p></div>
+    <div class="g"><div class="gp" style="font-size:7pt;color:var(--a-text);gap:6px;"><span>Oct 24 2026</span><span style="color:var(--gold);">→</span><span>Oct 31 2027</span></div><b>Lease From / Lease To</b><p>The day the lease starts and the day it ends.</p></div>
+    <div class="g"><div class="gp" style="font-size:8pt;color:var(--a-muted);gap:6px;"><span style="font-size:14pt;color:var(--gold);">⇵</span> mouse wheel</div><b>Scroll</b><p>Move further down a page or box: roll the mouse wheel, or drag your finger on a laptop pad or phone.</p></div>
+  </div>
+  <div class="foot"><span>Words you'll see</span><b></b></div>
+</section>
 
-  <p>When you open the dashboard, you will see a login screen asking for an <strong>Access Code</strong>. Type the code you were given and press <strong>Enter</strong> or click the Enter button.</p>
+<!-- ============================================================ 01 + 02 top bar -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">01</div>
+    <div class="kicker">Chapter 01 &amp; 02</div>
+    <h1>Getting in &amp; finding your way</h1>
+    <p>One web address, one password, one screen. Here's what everything on it does.</p>
+  </div>
 
-  <div class="tip"><strong>Staying logged in:</strong> The dashboard remembers your login in the browser. You will not need to enter the code again unless someone changes it or you use a different browser/device.</div>
+  <div class="split">
+    <div>
+      <h2 style="margin-top:0;">Opening the dashboard</h2>
+      <ol class="steps">
+        <li>Open your internet browser (Chrome, Edge or Safari).</li>
+        <li>Click the long bar at the very top, type <strong>emorywoods.vercel.app/jr-dashboard</strong> and press the Enter key.</li>
+        <li>Type the <strong>access code</strong> (password) you were given into the box.</li>
+        <li>Click <span class="btnref gold">Enter</span>.</li>
+      </ol>
+      <p style="font-size:9.5pt;">A spinning circle says <em>Loading</em> for a few seconds. Then the dashboard appears.</p>
+      <div class="tip">Save it as a bookmark (press <strong>Ctrl + D</strong>) so you don't have to type the address again. The computer also remembers the code.</div>
+      <div class="warn">"Incorrect access code" and the box shakes? Check Caps Lock is off and type it again.</div>
+    </div>
+    <div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:9px 9px 0 0;padding:6px 8px;display:flex;align-items:center;gap:6px;">
+        <span style="color:#bbb;font-size:9pt;">← →</span>
+        <div style="flex:1;background:#f1efe9;border-radius:12px;padding:3px 10px;font-size:8pt;color:#222;">emorywoods.vercel.app/jr-dashboard</div><span class="pin">2</span>
+      </div>
+      <div class="ui bg" style="text-align:center;padding:18px 26px;border-radius:0 0 12px 12px;">
+        <div style="width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="#C9A84C" stroke-width="1.5"/></svg>
+        </div>
+        <div class="ui-title" style="font-size:13pt;">Emory Woods</div>
+        <div style="font-size:6.5pt;letter-spacing:0.14em;color:var(--a-muted);text-transform:uppercase;margin-bottom:14px;">Leasing Dashboard</div>
+        <div class="ui-row" style="gap:6px;"><div class="ui-input ph" style="flex:1;text-align:left;">••••••••</div><span class="pin">3</span></div>
+        <div class="ui-row" style="gap:6px;margin-top:7px;"><div class="ui-btn gold" style="flex:1;padding:6px;">Enter</div><span class="pin">4</span></div>
+      </div>
+      <div class="ui-cap">What you'll see when you open the address</div>
+    </div>
+  </div>
 
-  <!-- ═══════════════════════════ -->
-  <h2>2. The Dashboard Layout</h2>
-
-  <p>After logging in, you will see two main areas:</p>
-  <ul>
-    <li><strong>Top bar</strong> — search box, unit type filter, and the Map / Table toggle and Export PDF button.</li>
-    <li><strong>Main area</strong> — either the property map (default) or the full unit table, depending on the toggle.</li>
-  </ul>
-
-  <h3>Map View vs. Table View</h3>
-  <p>Use the <strong>Map / Table</strong> toggle buttons in the top-right corner to switch between views.</p>
-
-  <table>
-    <thead><tr><th>View</th><th>Best for</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Map</strong></td><td>Seeing the property visually, clicking a building to drill into its units, switching between Vacant / Notices / All Units / Renewals / Carports.</td></tr>
-      <tr><td><strong>Table</strong></td><td>Seeing all units (or all carports) in a spreadsheet with sort and filter on every column.</td></tr>
-    </tbody>
-  </table>
-
-  <!-- ═══════════════════════════ -->
-  <h2>3. Map View — Navigating Buildings</h2>
-
-  <p>The map shows colored pins for each building. Each pin displays how many <span class="badge b-gold">Vacant</span> units and pending <span class="badge b-green">Notices</span> the building has.</p>
-
-  <div class="step"><div class="step-num">1</div><div>Click a building pin to select it. A gold bar appears on the right panel showing the building address.</div></div>
-  <div class="step"><div class="step-num">2</div><div>The right panel now shows only units from that building, filtered by the active tab.</div></div>
-  <div class="step"><div class="step-num">3</div><div>Click <strong>✕ Clear</strong> in the gold bar to go back to viewing all buildings.</div></div>
-
-  <h3>The Tabs (right panel)</h3>
-  <p>There are two main sections — <strong>Apartments</strong> and <strong>Carports</strong> — with a toggle at the top of the panel. Under Apartments, there are four tabs:</p>
-
-  <table>
-    <thead><tr><th>Tab</th><th>Shows</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Vacant</strong></td><td>Units currently empty (no tenant).</td></tr>
-      <tr><td><strong>Notices</strong></td><td>Units where the current tenant has given notice to move out.</td></tr>
-      <tr><td><strong>All Units</strong></td><td>Every unit in the selected building (or all buildings).</td></tr>
-      <tr><td><strong>Renewals</strong></td><td>Occupied units whose 12-month lease is expiring within 30 days.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Filter Chips</h3>
-  <p>Below the tabs are small filter buttons. Click one to narrow the list to only units that have that flag set:</p>
-  <ul>
-    <li><strong>Needs Maint.</strong> — has maintenance items listed.</li>
-    <li><strong>13-Mo Promo</strong> — marked as eligible for the 13-month promotion.</li>
-    <li><strong>Ready for Tour</strong> — unit is ready to show to prospects.</li>
-    <li><strong>Locks Changed</strong> — lock has been changed.</li>
-    <li><strong>Maint. Done</strong> — all maintenance is marked complete.</li>
-  </ul>
-  <p>Multiple chips can be active at once. Click <strong>✕ Clear</strong> to remove all chips.</p>
-
-  <!-- ═══════════════════════════ -->
-  <h2 class="page-break">4. Editing a Unit</h2>
-
-  <p>Click any unit card in the panel (or any row in Table View) to open the <strong>Edit Unit</strong> form.</p>
-
-  <h3>Status</h3>
-  <p>Select the unit's current situation using the three buttons at the top of the form:</p>
-  <table>
-    <thead><tr><th>Status</th><th>When to use</th></tr></thead>
-    <tbody>
-      <tr><td><span class="badge b-gray">Occupied</span></td><td>A tenant currently lives there and has not given notice.</td></tr>
-      <tr><td><span class="badge b-gold">Vacant</span></td><td>The unit is empty.</td></tr>
-      <tr><td><span class="badge b-green">Notice</span></td><td>The current tenant has given notice they are leaving.</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Tenant Information</h3>
-  <ul>
-    <li><strong>Tenant Name</strong> — full name of the current resident.</li>
-    <li><strong>Contact</strong> — phone number or email.</li>
-  </ul>
-
-  <h3>Unit Details</h3>
-  <ul>
-    <li><strong>Unit Type</strong> — Studio, 2BR, or 3BR.</li>
-    <li><strong>Condition</strong> — Classic or Renovated.</li>
-    <li><strong>Rent</strong> — the rent amount (e.g. $1,850). Type freely.</li>
-    <li><strong>Lease Type</strong> — Month-to-Month or 12-Month Lease.</li>
-  </ul>
-
-  <h3>Dates</h3>
-  <table>
-    <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Last Lease Renewal / Move-In</strong></td><td>The date the current tenant moved in, or the date their most recent 12-month lease started.</td></tr>
-      <tr><td><strong>Notice Date</strong></td><td>The date the tenant told you they are leaving (only relevant for Notice status).</td></tr>
-      <tr><td><strong>Lease To / Move-Out</strong></td><td>The date the lease ends or the tenant plans to move out. For 12-month leases, this fills in automatically from the move-in date.</td></tr>
-    </tbody>
-  </table>
-
-  <div class="tip"><strong>12-Month Lease auto-calculation:</strong> When you set Lease Type to "12-Month" and enter the Move-In date, the Lease To date is automatically set to the last day of that same month one year later. You can override it manually if needed.</div>
-
-  <h3>Maintenance</h3>
-  <p>Click the maintenance tags to mark what the unit needs: <strong>Paint</strong>, <strong>Maintenance</strong>, <strong>Cleaning</strong>, <strong>Flooring</strong>. Multiple items can be selected at once.</p>
-  <p>When all work is done, click <strong>Mark Done</strong>. The tags will show with a strikethrough to indicate completion.</p>
-
-  <p>Additional toggles in this section:</p>
-  <ul>
-    <li><strong>Locks Changed</strong> — toggle on when the unit's locks have been rekeyed.</li>
-    <li><strong>Ready for Tour</strong> — toggle on when the unit is presentable for prospects. (Only shown for Vacant or Notice units.)</li>
-    <li><strong>13-Month Promo</strong> — toggle on to flag this unit as eligible for the 13-month lease promotion.</li>
-  </ul>
-
-  <h3>Notes</h3>
-  <p>A free-text area for anything else you want to record about the unit.</p>
-
-  <!-- ═══════════════════════════ -->
-  <h2>5. Special Unit Actions</h2>
-
-  <h3>Adding a Future Tenant (Vacant or Notice units)</h3>
-  <p>When a unit is Vacant or Notice, you can record who is moving in next <em>before</em> they actually arrive.</p>
-
-  <div class="step"><div class="step-num">1</div><div>Scroll to the bottom of the edit form and click <strong>+ Add Future Tenant</strong>.</div></div>
-  <div class="step"><div class="step-num">2</div><div>Enter the future tenant's name and their scheduled move-in date.</div></div>
-  <div class="step"><div class="step-num">3</div><div>Save. The unit will now show a <span class="badge b-blue">Vacant (Rented)</span> badge on the card, and a blue "Future:" label with their name and move-in date.</div></div>
-
-  <h3>Marking a Tenant as Moved In</h3>
-  <p>Once the future tenant has actually moved in:</p>
-
-  <div class="step"><div class="step-num">1</div><div>Open the unit's edit form.</div></div>
-  <div class="step"><div class="step-num">2</div><div>In the Future Tenant section, click <strong>Moved In?</strong>.</div></div>
-  <div class="step"><div class="step-num">3</div><div>The form will automatically set the status to Occupied, copy the future tenant's name to Tenant Name, set their move-in date, set the lease to 12-month, and clear all maintenance flags.</div></div>
-  <div class="step"><div class="step-num">4</div><div>Click <strong>Save Unit</strong>.</div></div>
-
-  <h3>Marking a Tenant as Moved Out (Notice → Vacant)</h3>
-  <p>When a tenant with Notice status has physically left:</p>
-
-  <div class="step"><div class="step-num">1</div><div>Open the unit's edit form.</div></div>
-  <div class="step"><div class="step-num">2</div><div>Next to the Move-Out date field, click the <strong>Move Out</strong> button.</div></div>
-  <div class="step"><div class="step-num">3</div><div>The form sets the unit to Vacant, saves the previous tenant's name and move-out date as a historical record, and clears all current tenant fields.</div></div>
-  <div class="step"><div class="step-num">4</div><div>Click <strong>Save Unit</strong>.</div></div>
-
-  <!-- ═══════════════════════════ -->
-  <h2 class="page-break">6. Searching for a Unit</h2>
-
-  <p>The search bar at the top works across all units at once, regardless of which building or tab is selected.</p>
-
-  <p>You can search by:</p>
-  <ul>
-    <li>Unit number (e.g. <strong>01</strong> or <strong>12</strong>)</li>
-    <li>Tenant name (e.g. <strong>Johnson</strong>)</li>
-    <li>Building code (e.g. <strong>2194 ND</strong>)</li>
-    <li>Street address (e.g. <strong>Webster Drive</strong>)</li>
-    <li>Notes text</li>
-    <li>Combined building + unit shorthand (e.g. <strong>2194nd01</strong>)</li>
-  </ul>
-
-  <p>Results appear as a list overlay. Click any result to immediately open the edit form for that unit. Press <strong>Escape</strong> or click <strong>✕</strong> to close the search.</p>
-
-  <div class="tip"><strong>Type filter:</strong> Next to the search bar, there is a dropdown to filter by unit type (All Types / Studio / 2BR / 3BR). This applies to both search results and the main panel.</div>
-
-  <!-- ═══════════════════════════ -->
-  <h2>7. Table View</h2>
-
-  <p>Switch to Table View using the <strong>Table</strong> button in the top-right. This shows all units in a spreadsheet format.</p>
-
-  <p>At the top of the table there are two tabs:</p>
-  <ul>
-    <li><strong>Units</strong> — all apartment units.</li>
-    <li><strong>Carports</strong> — all carport spaces.</li>
-  </ul>
-
-  <h3>Sorting</h3>
-  <p>Click any column header to sort by that column. Click again to reverse the sort direction.</p>
-
-  <h3>Filtering</h3>
-  <p>Below each column header is a filter box. Type in it to narrow the rows to only those matching your input. For Yes/No columns (like Maintenance, Lock, Tour), a dropdown lets you filter to only rows where the flag is checked or unchecked.</p>
-
-  <p>To clear all filters, click the <strong>Clear all</strong> button that appears when any filter is active.</p>
-
-  <h3>Clicking a row</h3>
-  <p>Clicking any unit row opens the same Edit Unit form described in Section 4.</p>
-
-  <!-- ═══════════════════════════ -->
-  <h2>8. Carports</h2>
-
-  <h3>Viewing Carport Spaces</h3>
-  <p>In Map View, click the <strong>Carports</strong> section toggle (above the tabs) to switch the right panel to carports. You can also click a carport marker on the map directly.</p>
-
-  <p>In Table View, select the <strong>Carports</strong> tab at the top of the table. The summary bar shows: <em>X available · Y tenant · Z office · W shop · N total</em>.</p>
-
-  <h3>Carport Status Types</h3>
-  <table>
-    <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
-    <tbody>
-      <tr><td>Available</td><td>Space is unoccupied and available to lease.</td></tr>
-      <tr><td><span class="badge b-purple">Tenant</span></td><td>Rented to a current Emory Woods apartment tenant. The tenant's name and unit are linked automatically.</td></tr>
-      <tr><td><span class="badge b-blue">Office</span></td><td>Reserved for the leasing office.</td></tr>
-      <tr><td>Shop</td><td>Reserved for the maintenance shop.</td></tr>
-      <tr><td>External</td><td>Rented to someone who is not an Emory Woods tenant (e.g. a neighbor).</td></tr>
-    </tbody>
-  </table>
-
-  <h3>Assigning a Carport Space</h3>
-  <div class="step"><div class="step-num">1</div><div>Click any row in the Carports table (or click a carport pin on the map). A modal opens showing all spaces for that carport area.</div></div>
-  <div class="step"><div class="step-num">2</div><div>Find the space you want and click <strong>Assign</strong> (or <strong>Edit</strong> if it already has an assignment).</div></div>
-  <div class="step"><div class="step-num">3</div><div>Select the assignment type: Tenant, Office, Shop, or External.</div></div>
-  <div class="step"><div class="step-num">4</div><div>
-    Fill in the fields that appear:
-    <ul>
-      <li><strong>Tenant</strong> — pick the unit from the dropdown. Tenant name and address fill in automatically. Add a rental date and rate.</li>
-      <li><strong>External</strong> — enter the person's name and phone, plus rental date and rate.</li>
-      <li><strong>Office / Shop</strong> — only a notes field appears.</li>
+  <h2>The top of the screen</h2>
+  <p>This strip is always at the top, wherever you are.</p>
+  <div class="ui bg" style="padding:10px 12px;">
+    <div class="ui-row" style="justify-content:space-between;">
+      <div class="ui-row" style="gap:8px;"><span class="serif" style="color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;font-size:9pt;">Emory Woods</span></div>
+      <div class="ui-row" style="gap:5px;">
+        <span class="pin">1</span><span class="ui-btn gold">Create Document</span>
+        <span class="pin">2</span><span style="display:inline-flex;border:1px solid var(--a-border);border-radius:5px;overflow:hidden;"><span class="ui-btn" style="border:none;background:rgba(201,168,76,0.15);color:var(--gold);border-radius:0;">Map</span><span class="ui-btn" style="border:none;border-left:1px solid var(--a-border);border-radius:0;">Table</span></span>
+        <span class="pin">3</span><span class="ui-btn">⤓ Vacant/ Notices Report</span>
+        <span class="pin">4</span><span class="ui-btn">▦ Table</span>
+      </div>
+    </div>
+    <div class="ui-row" style="margin-top:8px;gap:6px;">
+      <span class="pin">5</span><div class="ui-input ph" style="flex:1;">⌕ Search unit, tenant, address…</div>
+      <span class="pin">6</span><div class="ui-input" style="width:80px;color:var(--a-muted);">All Types ▾</div>
+    </div>
+  </div>
+  <div class="grid2" style="gap:4px 18px;margin-top:10px;">
+    <ul class="legend">
+      <li><span class="pin">1</span><span><strong>Create Document</strong> — make receipts, letters, insurance forms and the brochure. <em>Ch. 06–07</em></span></li>
+      <li><span class="pin">2</span><span><strong>Map / Table</strong> — see the map, or one long list of every apartment. <em>Ch. 09</em></span></li>
+      <li><span class="pin">3</span><span><strong>Vacant/ Notices Report</strong> — the weekly one-page report to print. <em>Ch. 09</em></span></li>
     </ul>
-  </div></div>
-  <div class="step"><div class="step-num">5</div><div>Click <strong>Save</strong>.</div></div>
+    <ul class="legend">
+      <li><span class="pin">4</span><span><strong>▦ Table</strong> — make your own printable list or checklist. <em>Ch. 09</em></span></li>
+      <li><span class="pin">5</span><span><strong>Search box</strong> — type a name or unit number to find it. <em>Ch. 03</em></span></li>
+      <li><span class="pin">6</span><span><strong>All Types</strong> — show only Studios, 2-bedrooms or 3-bedrooms.</span></li>
+    </ul>
+  </div>
+  <div class="foot"><span>01 Getting in · 02 Tour</span><b></b></div>
+</section>
 
-  <h3>Removing a Carport Assignment</h3>
-  <p>In the carport modal, click <strong>Unassign</strong> next to the space. This clears all tenant info and marks the space as Available again.</p>
+<!-- ============================================================ 02 map + panel -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">02 · Tour</span></div>
+  <h2 style="margin-top:0;">The middle of the screen: map on the left, list on the right</h2>
+  <p>Below the top strip the screen splits in two. The <strong>map</strong> shows the buildings; the <strong>list</strong> shows the apartments.</p>
+  <div class="ui bg" style="padding:0;overflow:hidden;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;height:2.7in;">
+      <div style="position:relative;border-right:1px solid var(--a-border);background:
+          radial-gradient(circle at 30% 40%, rgba(255,255,255,0.05) 0 30%, transparent 31%),
+          linear-gradient(135deg,#1a2a20,#0f1c14);">
+        <span class="pin abs" style="left:10px;top:10px;">7</span>
+        <div style="position:absolute;left:26%;top:28%;background:var(--gold);color:var(--forest);font-size:8pt;font-weight:800;padding:3px 8px;border-radius:12px;">2 · 1</div>
+        <div style="position:absolute;left:58%;top:48%;background:var(--gold);color:var(--forest);font-size:8pt;font-weight:800;padding:3px 8px;border-radius:12px;">1 · 0</div>
+        <div style="position:absolute;left:42%;top:72%;background:#5a3fa0;color:#fff;font-size:8pt;font-weight:800;padding:3px 8px;border-radius:12px;">P</div>
+        <span class="pin abs" style="left:calc(42% + 26px);top:72%;">8</span>
+        <div style="position:absolute;left:14%;top:60%;background:#2A4A35;color:var(--a-text);font-size:8pt;font-weight:800;padding:3px 8px;border-radius:12px;">0 · 0</div>
+      </div>
+      <div style="padding:10px 12px;">
+        <div class="ui-row" style="border-bottom:1px solid var(--a-border);padding-bottom:6px;justify-content:space-around;"><span class="pin">9</span><span style="color:var(--gold);font-size:7.5pt;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;">Apartments</span><span style="color:var(--a-muted);font-size:7.5pt;letter-spacing:0.1em;text-transform:uppercase;">Carports <span class="ui-badge bd-cp-t">12 avail</span></span></div>
+        <div class="ui-row" style="gap:9px;font-size:7pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--a-muted);padding:7px 0;border-bottom:1px solid var(--a-border);"><span class="pin">10</span><span style="color:var(--gold);font-weight:700;border-bottom:1.5px solid var(--gold);">Vacant 6</span><span>Notices 4</span><span>All Units 96</span><span>Renewals 3</span></div>
+        <div class="ui-row" style="gap:4px;padding:7px 0;flex-wrap:wrap;"><span class="pin">11</span><span class="ui-badge bd-occ" style="border-radius:10px;">Needs Maint.</span><span class="ui-badge bd-vac" style="border-radius:10px;">✓ Ready for Tour</span><span class="ui-badge bd-occ" style="border-radius:10px;">13-Mo Promo</span></div>
+        <div style="border:1px solid var(--a-border);border-radius:6px;padding:7px 9px;background:var(--a-bg);margin-bottom:6px;"><span class="pin" style="width:14px;height:14px;font-size:6.5pt;">12</span> <span style="color:var(--gold);font-weight:700;">Unit 04</span> <span class="ui-badge bd-vac">Vacant</span><div style="color:var(--a-muted);margin-top:3px;">2BR · Renovated · $1,750</div></div>
+        <div style="border:1px solid var(--a-border);border-radius:6px;padding:7px 9px;background:var(--a-bg);"><span style="color:var(--gold);font-weight:700;">Unit 09</span> <span class="ui-badge bd-vac">Vacant</span><div style="color:var(--a-muted);margin-top:3px;">Studio · Classic · $890</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="ui-cap">Map on the left, list on the right (on a phone the list sits under the map)</div>
 
-  <!-- ═══════════════════════════ -->
-  <h2>9. Lease Renewal Alerts</h2>
+  <div class="grid2" style="gap:6px 18px;margin-top:12px;">
+    <ul class="legend">
+      <li><span class="pin">7</span><span><strong>Building bubbles</strong> — one per building. The numbers mean <em>empty apartments · tenants leaving</em>. Click a bubble to see only that building.</span></li>
+      <li><span class="pin">8</span><span><strong>Purple "P" bubbles</strong> — carports (parking). Click one to see its spaces.</span></li>
+      <li><span class="pin">9</span><span><strong>Apartments / Carports</strong> — choose what the list shows: homes or parking.</span></li>
+    </ul>
+    <ul class="legend">
+      <li><span class="pin">10</span><span><strong>Tabs</strong> — which group of apartments to show. The number is how many.</span></li>
+      <li><span class="pin">11</span><span><strong>Filter buttons</strong> — narrow the list down even more (next page).</span></li>
+      <li><span class="pin">12</span><span><strong>Apartment card</strong> — one per apartment. Click it to see and change its details.</span></li>
+    </ul>
+  </div>
 
-  <p>The dashboard automatically watches for 12-month leases that are expiring soon. When a lease is within <strong>30 days</strong> of its end date, the unit will:</p>
-  <ul>
-    <li>Show an <span class="badge b-orange">Lease ends in Xd</span> badge on its card.</li>
-    <li>Show a warning banner inside the edit form.</li>
-    <li>Appear in the <strong>Renewals</strong> tab.</li>
-  </ul>
-  <p>If the lease has already expired, the badge turns <span class="badge b-red">red</span> and says "Lease expired."</p>
-
-  <div class="tip"><strong>How the lease end date is calculated:</strong> If no Move-Out date is set manually, the dashboard calculates it as the last day of the same month, one year after the Move-In date. For example, a move-in of October 24, 2024 gives a lease end of October 31, 2025.</div>
-
-  <!-- ═══════════════════════════ -->
-  <h2>10. Exporting a PDF Report</h2>
-
-  <p>Click the <strong>Export PDF</strong> button in the top-right corner. A new browser tab opens with a printable report showing:</p>
-  <ul>
-    <li><strong>Left side:</strong> all Vacant units with their type, condition, rent, any future tenant, and maintenance flags.</li>
-    <li><strong>Right side:</strong> all Move-Out Notices with move-out date, current tenant, and maintenance flags.</li>
-  </ul>
-
-  <p>The browser's print dialog will open automatically. Select <strong>Save as PDF</strong> as the destination to save a PDF file, or choose a printer to print directly.</p>
-
-  <div class="tip"><strong>Landscape format:</strong> The report is designed for landscape (horizontal) paper orientation. This should be set automatically, but if not, switch to landscape in the print dialog before printing.</div>
-
-  <!-- ═══════════════════════════ -->
-  <h2>11. Unit Status Quick Reference</h2>
-
-  <table>
-    <thead><tr><th>Badge</th><th>Meaning</th></tr></thead>
+  <h2>The four tabs</h2>
+  <table class="t">
+    <thead><tr><th style="width:1.1in;">Tab</th><th>Shows you…</th><th style="width:2.2in;">Handy when…</th></tr></thead>
     <tbody>
-      <tr><td><span class="badge b-gray">Occupied</span></td><td>Tenant is currently living there.</td></tr>
-      <tr><td><span class="badge b-gold">Vacant</span></td><td>Unit is empty, no one scheduled to move in.</td></tr>
-      <tr><td><span class="badge b-blue">Vacant (Rented)</span></td><td>Unit is empty, but a future tenant is recorded with a scheduled move-in date.</td></tr>
-      <tr><td><span class="badge b-green">Notice</span></td><td>Current tenant has given notice they are leaving.</td></tr>
-      <tr><td><span class="badge b-green">Ready for Tour</span></td><td>Unit is clean and ready to show to prospects.</td></tr>
-      <tr><td><span class="badge b-orange">13-Month Promo</span></td><td>Unit is eligible for the 13-month lease promotion.</td></tr>
-      <tr><td><span class="badge b-orange">Lease ends in Xd</span></td><td>12-month lease expiring within 30 days. Xd = days remaining.</td></tr>
-      <tr><td><span class="badge b-red">Lease expired</span></td><td>12-month lease has already passed its end date.</td></tr>
+      <tr><td><strong>Vacant</strong></td><td>Empty apartments.</td><td>Planning tours or repairs.</td></tr>
+      <tr><td><strong>Notices</strong></td><td>Apartments where the tenant has said they're leaving.</td><td>Finding the next tenant.</td></tr>
+      <tr><td><strong>All Units</strong></td><td>Every apartment.</td><td>Looking something up.</td></tr>
+      <tr><td><strong>Renewals</strong></td><td>Year-long leases that end within <strong>30 days</strong> (or already ended).</td><td>Reminding tenants to renew.</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>02 A tour of the screen</span><b></b></div>
+</section>
+
+<!-- ============================================================ 02 filters -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">02 · Tour</span></div>
+  <h2 style="margin-top:0;">Filter buttons — narrowing down the list</h2>
+  <p>The small rounded buttons under the tabs hide every apartment that doesn't match. Nothing is deleted.</p>
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <ol class="steps">
+        <li>Click a filter button. It turns gold with a ✓ — it's <strong>on</strong>.</li>
+        <li>Turn on a second one to narrow down further: an apartment must match <em>both</em>.</li>
+        <li>Click a gold button again to turn it off — or click <span class="btnref">✕ Clear</span> to turn them all off.</li>
+      </ol>
+      <div class="warn">"Where did all my apartments go?" A filter button is probably still on. Look for gold buttons and click <span class="btnref">✕ Clear</span>.</div>
+    </div>
+    <div>
+      <div class="ui" style="padding:10px;">
+        <div style="font-size:7pt;color:var(--a-muted);margin-bottom:5px;">BEFORE · nothing on · 6 apartments</div>
+        <div class="ui-row" style="gap:4px;flex-wrap:wrap;margin-bottom:10px;"><span class="ui-badge bd-occ" style="border-radius:10px;">Needs Maint.</span><span class="ui-badge bd-occ" style="border-radius:10px;">Ready for Tour</span><span class="ui-badge bd-occ" style="border-radius:10px;">13-Mo Promo</span></div>
+        <div style="font-size:7pt;color:var(--gold);margin-bottom:5px;">AFTER · "Ready for Tour" on · 2 apartments</div>
+        <div class="ui-row" style="gap:4px;flex-wrap:wrap;"><span class="ui-badge bd-occ" style="border-radius:10px;">Needs Maint.</span><span class="ui-badge bd-vac" style="border-radius:10px;font-weight:700;">✓ Ready for Tour</span><span class="ui-badge bd-occ" style="border-radius:10px;">13-Mo Promo</span><span class="ui-badge bd-occ" style="border-radius:10px;">✕ Clear</span></div>
+      </div>
+      <div class="ui-cap">A filter button turned on</div>
+    </div>
+  </div>
+  <div class="grid3" style="grid-template-columns:repeat(5,1fr);gap:6px;font-size:9pt;margin-top:8px;">
+    <div class="recipe" style="padding:8px;margin:0;"><span class="lb gray">Needs Maint.</span><br>Needs repairs or work.</div>
+    <div class="recipe" style="padding:8px;margin:0;"><span class="lb promo">13-Mo Promo</span><br>Gets the 13-month deal.</div>
+    <div class="recipe" style="padding:8px;margin:0;"><span class="lb not">Ready for Tour</span><br>Clean, ready to show.</div>
+    <div class="recipe" style="padding:8px;margin:0;"><span class="lb exp">Locks Changed</span><br>New locks done.</div>
+    <div class="recipe" style="padding:8px;margin:0;"><span class="lb occ">Maint. Done</span><br>All repairs finished.</div>
+  </div>
+
+  <h2>Seeing just one building</h2>
+  <div class="grid2">
+    <div>
+      <ol class="steps">
+        <li>Click a building bubble on the map. A gold strip appears at the top of the list with the building's address.</li>
+        <li>The list and the tab numbers now show only that building.</li>
+        <li>To see every building again, click <span class="btnref">✕ Clear</span> on the gold strip.</li>
+      </ol>
+    </div>
+    <div>
+      <div class="ui" style="padding:8px 10px;">
+        <div class="ui-row" style="justify-content:space-between;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);border-radius:5px;padding:5px 8px;">
+          <span style="color:var(--gold);font-size:7.5pt;">Filtered: 2194 North Druid Hills Rd</span><span class="ui-btn on-gold" style="font-weight:400;">✕ Clear</span>
+        </div>
+      </div>
+      <div class="ui-cap">The gold strip when one building is picked</div>
+    </div>
+  </div>
+  <div class="note">On a phone the map sits on top and the list is underneath. Everything else works the same.</div>
+  <div class="foot"><span>02 A tour of the screen</span><b></b></div>
+</section>
+
+<!-- ============================================================ 03 SEARCH -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">03</div>
+    <div class="kicker">Chapter 03</div>
+    <h1>Finding a unit in seconds</h1>
+    <p>The search bar looks across every building at once — no need to click the map first.</p>
+  </div>
+
+  <div class="split">
+    <div>
+      <h2 style="margin-top:0;">What you can type</h2>
+      <table class="t">
+        <thead><tr><th>Search by</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Unit number</td><td><code>04</code></td></tr>
+          <tr><td>Tenant name (current or future)</td><td><code>Johnson</code></td></tr>
+          <tr><td>Building code</td><td><code>2194 ND</code></td></tr>
+          <tr><td>Street address</td><td><code>Webster</code></td></tr>
+          <tr><td>Anything in Notes</td><td><code>dishwasher</code></td></tr>
+          <tr><td>Building + unit, no spaces</td><td><code>2194nd04</code> or <code>2194nd4</code></td></tr>
+        </tbody>
+      </table>
+      <div class="tip">The building + unit shortcut (<code>2194nd04</code>) is the fastest way to land on one exact apartment — it's the same code used on documents and reports.</div>
+    </div>
+    <div>
+      <h2 style="margin-top:0;">Using results</h2>
+      <ol class="steps">
+        <li>Start typing — results fill the screen as you go.</li>
+        <li>Each result shows unit, address, status, tenant, type and rent. Future tenants show in blue.</li>
+        <li>Click a result to open that apartment's details box.</li>
+        <li>Press the <strong>Esc</strong> key (top-left of the keyboard) or click <span class="btnref">✕</span> in the search box to close results.</li>
+      </ol>
+      <div class="ui bg" style="margin-top:8px;">
+        <div class="ui-input" style="margin-bottom:6px;">⌕ johnson</div>
+        <div style="color:var(--a-muted);font-size:7pt;margin-bottom:5px;">1 result for "johnson"</div>
+        <div style="border:1px solid rgba(201,168,76,0.4);border-radius:6px;padding:7px 9px;background:var(--a-surface);">
+          <div class="ui-row" style="justify-content:space-between;"><span><span style="color:var(--gold);font-weight:700;">Unit 04</span> <span style="color:var(--a-muted);">2194 North Druid Hills Rd</span></span><span class="ui-badge bd-not">notice</span></div>
+          <div style="color:var(--a-muted);margin-top:3px;"><strong style="color:var(--a-text)">Pat Johnson</strong> · 2BR · Classic · $1,225</div>
+          <div style="color:#6aa0ea;margin-top:2px;"><strong>Future:</strong> Sam Rivera <span style="color:var(--a-muted)">· moves in 11/1/2026</span></div>
+        </div>
+      </div>
+      <div class="ui-cap">A search result (sample data)</div>
+    </div>
+  </div>
+  <div class="note">The <strong>All Types</strong> drop-down next to search also filters results. If a unit "won't show up", check it isn't set to Studio/2BR/3BR.</div>
+  <div class="foot"><span>03 Finding a unit</span><b></b></div>
+</section>
+
+<!-- ============================================================ 04 TENANTS: lifecycle + form -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">04</div>
+    <div class="kicker">Chapter 04</div>
+    <h1>Tenants: in, out &amp; in between</h1>
+    <p>Every unit follows the same simple loop. Learn the loop and every task below makes sense.</p>
+  </div>
+
+  <h2 style="margin-top:0;">The tenant loop</h2>
+  <svg viewBox="0 0 700 150" width="100%" style="display:block;margin-bottom:6px;">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8B6914"/></marker></defs>
+    <g font-family="Segoe UI, Arial" font-size="12" text-anchor="middle">
+      <rect x="10" y="40" width="130" height="56" rx="12" fill="#f8edcc" stroke="#e0c77d"/>
+      <text x="75" y="64" font-weight="800" fill="#8B6914">VACANT</text><text x="75" y="82" font-size="10" fill="#6b6a62">empty unit</text>
+      <rect x="190" y="40" width="140" height="56" rx="12" fill="#e1ebfa" stroke="#a9c3ec"/>
+      <text x="260" y="64" font-weight="800" fill="#2d62b5">FUTURE TENANT</text><text x="260" y="82" font-size="10" fill="#6b6a62">lease signed, not in yet</text>
+      <rect x="380" y="40" width="130" height="56" rx="12" fill="#e6ebe5" stroke="#b9c8bb"/>
+      <text x="445" y="64" font-weight="800" fill="#3f5a47">OCCUPIED</text><text x="445" y="82" font-size="10" fill="#6b6a62">tenant living there</text>
+      <rect x="560" y="40" width="130" height="56" rx="12" fill="#dff1e6" stroke="#9fd2b3"/>
+      <text x="625" y="64" font-weight="800" fill="#22764a">NOTICE</text><text x="625" y="82" font-size="10" fill="#6b6a62">tenant leaving</text>
+      <path d="M140 68 H186" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/>
+      <path d="M330 68 H376" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/>
+      <path d="M510 68 H556" stroke="#8B6914" stroke-width="2" marker-end="url(#ah)"/>
+      <path d="M625 96 V128 H75 V100" stroke="#8B6914" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+      <text x="163" y="30" font-size="10" fill="#1a3a25" font-weight="700">Add Future Tenant</text>
+      <text x="353" y="30" font-size="10" fill="#1a3a25" font-weight="700">Moved In?</text>
+      <text x="533" y="30" font-size="10" fill="#1a3a25" font-weight="700">Status: Notice</text>
+      <text x="350" y="144" font-size="10" fill="#1a3a25" font-weight="700">Move Out  →  back to Vacant (old tenant saved as "Past Tenant")</text>
+    </g>
+  </svg>
+
+  <h2 style="margin-top:4px;">Meet the apartment details box</h2>
+  <p>Click any apartment in the list (or in search results) and this box opens. Every tenant job happens here.</p>
+  <div class="split" style="grid-template-columns:1.15fr 0.85fr;">
+    <div class="ui">
+      <div class="ui-row" style="justify-content:space-between;margin-bottom:8px;"><span class="ui-title">Unit 04</span><span style="color:var(--a-muted);">2194 ND</span></div>
+      <div class="ui-row" style="margin-bottom:3px;"><span class="ui-label" style="margin:0;">Status</span><span class="pin">1</span></div>
+      <div class="ui-row" style="margin-bottom:7px;"><span class="ui-btn on-gray" style="flex:1;">Occupied</span><span class="ui-btn" style="flex:1;">Vacant</span><span class="ui-btn" style="flex:1;">Notice</span></div>
+      <div class="ui-row" style="gap:6px;margin-bottom:6px;"><div style="flex:1;"><span class="ui-label">Tenant Name <span class="pin" style="width:12px;height:12px;font-size:6pt;">2</span></span><div class="ui-input">Pat Johnson</div></div><div style="flex:1;"><span class="ui-label">Contact</span><div class="ui-input">(404) 555-0100</div></div></div>
+      <div class="ui-row" style="gap:6px;margin-bottom:6px;"><div style="flex:1;"><span class="ui-label">Unit Type <span class="pin" style="width:12px;height:12px;font-size:6pt;">3</span></span><div class="ui-input">2BR ▾</div></div><div style="flex:1;"><span class="ui-label">Condition</span><div class="ui-input">Classic ▾</div></div><div style="flex:1;"><span class="ui-label">Rent</span><div class="ui-input">$1,225</div></div></div>
+      <span class="ui-label">Lease Type</span><div class="ui-input" style="margin-bottom:6px;">12-Month Lease ▾</div>
+      <div class="ui-row" style="gap:6px;margin-bottom:6px;"><div style="flex:1;"><span class="ui-label">Lease From <span class="pin" style="width:12px;height:12px;font-size:6pt;">4</span></span><div class="ui-input">10/24/2026</div></div><div style="flex:1;"><span class="ui-label">Notice Date</span><div class="ui-input ph">mm/dd/yyyy</div></div><div style="flex:1;"><span class="ui-label">Lease To</span><div class="ui-input">10/31/2027</div></div></div>
+      <div class="ui-row" style="justify-content:space-between;"><span class="ui-label" style="margin:0;">Maintenance Needed <span class="pin" style="width:12px;height:12px;font-size:6pt;">5</span></span><span class="ui-btn">✓ Mark Done</span></div>
+      <div class="ui-row" style="margin:4px 0 6px;"><span class="ui-btn">Paint</span><span class="ui-btn">Maintenance</span><span class="ui-btn">Cleaning</span><span class="ui-btn">Flooring</span></div>
+      <span class="ui-label">Notes <span class="pin" style="width:12px;height:12px;font-size:6pt;">6</span></span><div class="ui-input ph" style="margin-bottom:7px;">Additional notes...</div>
+      <div class="ui-row"><span class="ui-btn" style="flex:1;color:var(--gold);border-color:rgba(201,168,76,0.5);">Create Documents</span><span class="pin">7</span></div>
+      <div class="ui-row" style="margin-top:6px;"><span class="ui-btn" style="flex:1;">Cancel</span><span class="ui-btn gold" style="flex:2;">Save Unit</span><span class="pin">8</span></div>
+    </div>
+    <div>
+      <ul class="legend">
+        <li><span class="pin">1</span><span><strong>Status</strong> — Occupied, Vacant or Notice.</span></li>
+        <li><span class="pin">2</span><span><strong>Tenant</strong> — current resident's name and phone/email.</span></li>
+        <li><span class="pin">3</span><span><strong>Unit details</strong> — type, Classic/Renovated, rent (type it any way, e.g. <em>$1,225</em>).</span></li>
+        <li><span class="pin">4</span><span><strong>Dates</strong> — their names change with the status. For an occupied 12-month lease they read <em>Last Lease Renewal / Lease From</em> and <em>Lease To</em>; otherwise <em>Move-In</em> and <em>Move-Out</em>.</span></li>
+        <li><span class="pin">5</span><span><strong>Get-ready buttons</strong> — repairs, locks, tours, promo. <em>Chapter 05.</em></span></li>
+        <li><span class="pin">6</span><span><strong>Notes</strong> — anything else. Searchable!</span></li>
+        <li><span class="pin">7</span><span><strong>Create Documents</strong> — paperwork for this unit. <em>Chapter 06.</em></span></li>
+        <li><span class="pin">8</span><span><strong>Save Unit</strong> — nothing is stored until you press this.</span></li>
+      </ul>
+      <div class="warn">Clicking outside the window or pressing <span class="btnref">Cancel</span> throws away your changes.</div>
+    </div>
+  </div>
+  <div class="foot"><span>04 Tenants</span><b></b></div>
+</section>
+
+<!-- ============================================================ 04 recipes A -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">04 · Tenants</span></div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M19 8v6M16 11h6"/></svg></div>
+      <div><div class="recipe-title">Add a new tenant (lease signed, moving in later)</div><div class="recipe-meta"><span>⏱ 1 min</span><span>Unit must be Vacant or Notice</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1.1fr 0.9fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li>Find the unit (map → <em>Vacant</em> tab, or search) and click it.</li>
+          <li>Scroll down and click <span class="btnref">+ Add Future Tenant</span>.</li>
+          <li>Type the new tenant's <strong>Tenant Name</strong>.</li>
+          <li>Pick the <strong>Scheduled Move-In</strong> date.</li>
+          <li>Press <span class="btnref gold">Save Unit</span>.</li>
+        </ol>
+        <div class="result">the apartment card shows a blue <strong>Future:</strong> strip with the name and move-in date. The unit also appears at the top of the <em>Create Document</em> apartment list under <em>Future Tenant</em>.</div>
+      </div>
+      <div>
+        <div class="ui">
+          <div class="ui-btn dash" style="margin-bottom:8px;">+ Add Future Tenant <span class="pin" style="margin-left:4px;">2</span></div>
+          <div class="ui-row" style="justify-content:space-between;margin-bottom:5px;"><span style="color:var(--gold);font-size:7pt;letter-spacing:0.1em;text-transform:uppercase;">Future Tenant</span><span class="ui-row" style="gap:4px;"><span class="ui-btn on-gold" style="font-weight:400;">Moved In?</span><span style="color:var(--a-muted);font-size:7pt;">✕ Remove</span></span></div>
+          <div class="ui-row" style="gap:6px;"><div style="flex:1;"><span class="ui-label">Tenant Name <span class="pin" style="width:12px;height:12px;font-size:6pt;">3</span></span><div class="ui-input">Sam Rivera</div></div><div style="flex:1;"><span class="ui-label">Scheduled Move-In <span class="pin" style="width:12px;height:12px;font-size:6pt;">4</span></span><div class="ui-input">11/01/2026</div></div></div>
+        </div>
+        <div class="ui-cap">Future Tenant section of the details box</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div><div class="recipe-title">The new tenant has moved in</div><div class="recipe-meta"><span>⏱ 30 sec</span><span>Needs a Future Tenant name</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1.1fr 0.9fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li>Open the unit.</li>
+          <li>In the Future Tenant section click <span class="btnref">Moved In?</span></li>
+          <li>Check the filled-in fields (see right) — adjust anything that's different.</li>
+          <li>Press <span class="btnref gold">Save Unit</span>.</li>
+        </ol>
+        <div class="result">the label reads <span class="lb occ">Occupied</span> and the card shows <em>Lease From … → …</em></div>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">"Moved In?" does all this for you</h3>
+        <ul class="dots" style="font-size:9.5pt;">
+          <li>Status → <strong>Occupied</strong></li>
+          <li>Future tenant's name → <strong>Tenant Name</strong></li>
+          <li>Scheduled move-in → <strong>Lease From</strong></li>
+          <li>Lease Type → <strong>12-Month Lease</strong></li>
+          <li><strong>Lease To</strong> = last day of the same month, one year later <em>(Oct 24 2026 → Oct 31 2027)</em></li>
+          <li>Switches off the repair, lock and tour buttons and removes the old past-tenant box</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn">The button is greyed out until the Future Tenant <strong>name</strong> is filled in. If the new tenant is month-to-month, change <em>Lease Type</em> before saving.</div>
+  </div>
+  <div class="foot"><span>04 Tenants · Recipes</span><b></b></div>
+</section>
+
+<!-- ============================================================ 04 recipes B -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">04 · Tenants</span></div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+      <div><div class="recipe-title">Record a tenant who already lives there</div><div class="recipe-meta"><span>⏱ 1 min</span><span>For catching up records</span></div></div>
+    </div>
+    <ol class="steps">
+      <li>Open the unit and click <span class="btnref">Occupied</span> under Status.</li>
+      <li>Fill in <strong>Tenant Name</strong> and <strong>Contact</strong>.</li>
+      <li>Check <strong>Unit Type</strong>, <strong>Condition</strong> and <strong>Rent</strong>.</li>
+      <li>Choose <strong>Lease Type</strong>: <em>Month-to-Month</em> or <em>12-Month Lease</em>.</li>
+      <li>Enter the <strong>Lease From</strong> date (their move-in or latest renewal). For 12-month leases <strong>Lease To</strong> fills itself in.</li>
+      <li>Press <span class="btnref gold">Save Unit</span>.</li>
+    </ol>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg></div>
+      <div><div class="recipe-title">A tenant gives notice</div><div class="recipe-meta"><span>⏱ 30 sec</span></div></div>
+    </div>
+    <ol class="steps">
+      <li>Open the unit and click <span class="btnref">Notice</span> under Status.</li>
+      <li>Enter the <strong>Notice Date</strong> (the day they told you).</li>
+      <li>Enter the <strong>Move-Out</strong> date they plan to leave.</li>
+      <li>Press <span class="btnref gold">Save Unit</span>.</li>
+    </ol>
+    <div class="result">the unit moves to the <em>Notices</em> tab and onto the Notices side of the leasing report.</div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+      <div><div class="recipe-title">Move a tenant out</div><div class="recipe-meta"><span>⏱ 30 sec</span><span>Unit must be on Notice</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1.15fr 0.85fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li>Open the unit (it's in the <em>Notices</em> tab).</li>
+          <li>Next to the <strong>Move-Out</strong> label, click <span class="btnref">Move Out</span>.</li>
+          <li>Press <span class="btnref gold">Save Unit</span>.</li>
+        </ol>
+        <p style="font-size:9.5pt;margin-top:4px;"><strong>What happens:</strong> status becomes <span class="lb vac">Vacant</span>; tenant name, contact, lease type and dates are cleared; the old tenant is kept in a grey <em>Past Tenant</em> box with their move-out date (taken from Move-Out, else Notice Date, else today).</p>
+      </div>
+      <div>
+        <div class="ui">
+          <div class="ui-row" style="justify-content:space-between;margin-bottom:3px;"><span class="ui-label" style="margin:0;">Move-Out</span><span class="ui-row" style="gap:4px;"><span class="ui-btn on-green" style="font-weight:400;">⇥ Move Out</span><span class="pin">2</span></span></div>
+          <div class="ui-input">11/30/2026</div>
+          <div class="ui-sep"></div>
+          <span class="ui-label">Past Tenant</span>
+          <div style="border:1px solid var(--a-border);border-radius:5px;padding:5px 8px;background:rgba(100,100,100,0.08);"><span class="ui-label" style="display:inline;">Name</span> Pat Johnson<br><span class="ui-label" style="display:inline;">Moved out</span> <span style="color:var(--a-muted)">Nov 30, 2026</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="warn">No <span class="btnref">Move Out</span> button? The status must be <strong>Notice</strong> and the Tenant Name must be filled in.</div>
+  </div>
+
+  <div class="grid2">
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:11.5pt;margin-bottom:4px;">Cancel a future tenant</div>
+      <ol class="steps" style="font-size:9.5pt;">
+        <li>Open the unit.</li>
+        <li>Click <span class="btnref">✕ Remove</span> in the Future Tenant section.</li>
+        <li><span class="btnref gold">Save Unit</span>.</li>
+      </ol>
+    </div>
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:11.5pt;margin-bottom:4px;">Change rent, type or notes</div>
+      <ol class="steps" style="font-size:9.5pt;">
+        <li>Open the unit.</li>
+        <li>Edit <strong>Rent</strong>, <strong>Unit Type</strong>, <strong>Condition</strong> or <strong>Notes</strong>.</li>
+        <li><span class="btnref gold">Save Unit</span>.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="foot"><span>04 Tenants · Recipes</span><b></b></div>
+</section>
+
+<!-- ============================================================ 04 reading a card -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">04 · Tenants</span></div>
+  <h2 style="margin-top:0;">Reading an apartment card</h2>
+  <p>Each card in the list is a mini-summary. Learn to scan one and you rarely need to open it.</p>
+  <div class="split" style="grid-template-columns:1.1fr 0.9fr;">
+    <div class="ui bg">
+      <div style="border:1px solid var(--a-border);border-radius:7px;padding:9px 11px;background:var(--a-bg);">
+        <div class="ui-row" style="justify-content:space-between;flex-wrap:wrap;">
+          <div class="ui-row" style="gap:5px;flex-wrap:wrap;"><span class="pin">1</span><span style="color:var(--gold);font-weight:700;font-size:10pt;">Unit 07</span><span class="pin">2</span><span class="ui-badge bd-vac">Vacant</span><span class="ui-badge bd-tour">⌂ Ready for Tour</span><span class="ui-badge bd-promo">13-Month Promo</span></div>
+        </div>
+        <div style="color:var(--a-muted);margin:3px 0 4px 21px;"><span class="pin" style="width:13px;height:13px;font-size:6.5pt;">3</span> 3BR · Renovated · $2,250</div>
+        <div style="color:var(--a-muted);line-height:1.7;">
+          <div style="font-style:italic;opacity:0.7;"><span class="pin" style="width:13px;height:13px;font-size:6.5pt;">4</span> No tenant info — click to edit</div>
+          <div><span class="pin" style="width:13px;height:13px;font-size:6.5pt;">5</span> <strong style="color:var(--a-text)">Maintenance:</strong> <span style="text-decoration:line-through;opacity:0.6;">Paint, Cleaning</span> <span class="ui-badge bd-not">Done</span></div>
+          <div style="color:#e05c5c;">🔒 Locks Changed</div>
+          <div><strong style="color:var(--a-text)">Notes:</strong> New blinds ordered</div>
+          <div style="display:inline-block;margin-top:3px;padding:3px 7px;border:1px solid rgba(80,140,220,0.3);background:rgba(80,140,220,0.08);border-radius:4px;"><span class="pin" style="width:13px;height:13px;font-size:6.5pt;">6</span> <span style="color:#6aa0ea;text-transform:uppercase;letter-spacing:0.06em;">Future:</span> Sam Rivera <span>· moves in Nov 1, 2026</span></div><br>
+          <div style="display:inline-block;margin-top:3px;padding:3px 7px;border:1px solid var(--a-border);background:rgba(100,100,100,0.08);border-radius:4px;"><span class="pin" style="width:13px;height:13px;font-size:6.5pt;">7</span> Past: Pat Johnson · moved out Sep 30, 2026</div>
+        </div>
+      </div>
+      <div class="ui-cap" style="color:#8a8578;">Sample card — click anywhere on it to edit</div>
+    </div>
+    <ul class="legend">
+      <li><span class="pin">1</span><span><strong>Unit number</strong> (with building code when viewing all buildings).</span></li>
+      <li><span class="pin">2</span><span><strong>Badges</strong> — first the status, then extra labels. Full list on page 22.</span></li>
+      <li><span class="pin">3</span><span><strong>Type · condition · rent.</strong></span></li>
+      <li><span class="pin">4</span><span><strong>Tenant</strong> — name and contact, or a reminder that it's empty.</span></li>
+      <li><span class="pin">5</span><span><strong>Repairs</strong> — crossed-out items + <em>Done</em> mean finished.</span></li>
+      <li><span class="pin">6</span><span><strong>Future tenant</strong> (blue strip).</span></li>
+      <li><span class="pin">7</span><span><strong>Past tenant</strong> — who left and when.</span></li>
+    </ul>
+  </div>
+
+  <h2>Two labels that look alike</h2>
+  <div class="grid2">
+    <div class="recipe" style="margin:0;"><span class="lb vac">Vacant</span> <span class="lb rent">Vacant (Rented)</span>
+      <p style="margin-top:6px;font-size:9.5pt;"><strong>Vacant (Rented)</strong> appears when a Vacant unit has a <em>Move-In</em> date filled in on the form. Use the Future Tenant section for upcoming tenants — the blue <em>Future:</em> strip is what documents and reports read.</p>
+    </div>
+    <div class="recipe" style="margin:0;"><span class="lb occ">Occupied</span> <span class="lb not">Notice</span>
+      <p style="margin-top:6px;font-size:9.5pt;"><strong>Notice</strong> is still occupied — someone lives there — but they're leaving. Notice units don't get renewal alerts.</p>
+    </div>
+  </div>
+
+  <h2>Common mix-ups</h2>
+  <table class="t">
+    <thead><tr><th>If you…</th><th>…then do this</th></tr></thead>
+    <tbody>
+      <tr><td>Clicked <strong>Moved In?</strong> by mistake</td><td>Press <span class="btnref">Cancel</span> — nothing was saved yet.</td></tr>
+      <tr><td>Saved a Move Out on the wrong unit</td><td>Open it, click <span class="btnref">Occupied</span>, re-enter tenant name, lease type and dates, save. (Switching to Occupied clears the Past Tenant box.)</td></tr>
+      <tr><td>Typed something wrong</td><td>Fix it before pressing <span class="btnref gold">Save Unit</span> — or press <span class="btnref">Cancel</span> to start again.</td></tr>
+      <tr><td>An apartment is missing from a tab</td><td>Check the building filter bar, the filter buttons and the All Types list.</td></tr>
+    </tbody>
+  </table>
+  <div class="tip">A <em>Notice</em> unit can also get a Future Tenant — line up the next person before the current one leaves.</div>
+  <div class="note">Units themselves are fixed — you can't add or delete an apartment from the dashboard. "Adding" or "removing" a tenant always means editing an existing unit.</div>
+  <div class="foot"><span>04 Tenants · Reading a card</span><b></b></div>
+</section>
+
+<!-- ============================================================ 05 TURNOVER + RENEWALS -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">05</div>
+    <div class="kicker">Chapter 05</div>
+    <h1>Unit ready &amp; renewals</h1>
+    <p>Track a unit from "just emptied" to "ready to show" — and never miss a lease ending.</p>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg></div>
+      <div><div class="recipe-title">The get-ready checklist</div><div class="recipe-meta"><span>In the apartment's details box</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1fr 1fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li>Click each job the unit needs: <span class="btnref">Paint</span> <span class="btnref">Maintenance</span> <span class="btnref">Cleaning</span> <span class="btnref">Flooring</span> (click again to un-tick).</li>
+          <li>When the locks are changed, click <span class="btnref">Locks Changed</span>.</li>
+          <li>When all jobs are finished, click <span class="btnref">✓ Mark Done</span> — items get crossed out.</li>
+          <li>When it's show-ready, click <span class="btnref">Mark Ready for Tour</span> <em>(Vacant/Notice only)</em>.</li>
+          <li>Optional: <span class="btnref">Mark 13-Month Promo</span> if the unit qualifies.</li>
+          <li><span class="btnref gold">Save Unit</span>.</li>
+        </ol>
+      </div>
+      <div>
+        <div class="ui">
+          <div class="ui-row" style="justify-content:space-between;"><span class="ui-label" style="margin:0;">Maintenance Needed</span><span class="ui-btn on-green" style="font-weight:400;">✓ Done</span></div>
+          <div class="ui-row" style="margin:6px 0;"><span class="ui-btn on-green" style="text-decoration:line-through;font-weight:400;">Paint</span><span class="ui-btn">Maintenance</span><span class="ui-btn on-green" style="text-decoration:line-through;font-weight:400;">Cleaning</span><span class="ui-btn">Flooring</span></div>
+          <div class="ui-row" style="flex-wrap:wrap;"><span class="ui-btn red" style="background:rgba(224,92,92,0.1);">🔒 Locks Changed</span><span class="ui-btn on-green" style="font-weight:400;">⌂ Ready for Tour</span><span class="ui-btn" style="background:rgba(160,90,30,0.2);border-color:rgba(160,90,30,0.6);color:#d98a40;">◈ 13-Month Promo Eligible</span></div>
+        </div>
+        <div class="ui-cap">A unit that's fully ready — every button switched on</div>
+        <div class="tip">Use the <strong>Needs Maint.</strong> filter button on the Vacant tab for a to-do list, and <strong>Ready for Tour</strong> for what you can show today.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Renewal alerts — how they work</h2>
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <p>For <strong>Occupied</strong> units on a <strong>12-Month Lease</strong>, the dashboard watches the <em>Lease To</em> date (or works it out from <em>Lease From</em>).</p>
+      <table class="t">
+        <thead><tr><th>When</th><th>You'll see</th></tr></thead>
+        <tbody>
+          <tr><td>More than 30 days left</td><td>Nothing — all good.</td></tr>
+          <tr><td>30 days or less</td><td><span class="lb wrn">Lease ends in 12d</span> + listed in <strong>Renewals</strong></td></tr>
+          <tr><td>Date has passed</td><td><span class="lb exp">Lease expired</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:9pt;color:var(--muted);">Month-to-month and Notice units never show renewal alerts.</p>
+    </div>
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:12pt;margin-bottom:6px;">Renew a lease</div>
+      <ol class="steps">
+        <li>Open <strong>Renewals</strong> and click the unit. A banner shows the end date.</li>
+        <li>Change <strong>Last Lease Renewal / Lease From</strong> to the new lease start.</li>
+        <li>Check <strong>Lease To</strong> moved one year on. If not, type it in.</li>
+        <li>Update <strong>Rent</strong> if it changed → <span class="btnref gold">Save Unit</span>.</li>
+      </ol>
+      <div class="result">the unit leaves the Renewals tab.</div>
+    </div>
+  </div>
+  <div class="foot"><span>05 Getting ready &amp; renewals</span><b></b></div>
+</section>
+
+<!-- ============================================================ 06 DOCUMENTS overview -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">06</div>
+    <div class="kicker">Chapter 06</div>
+    <h1>Creating documents</h1>
+    <p>Fill a short form; the dashboard fills the official PDF and opens it in a new tab — ready to print, save or email.</p>
+  </div>
+
+  <h2 style="margin-top:0;">Which document do I need?</h2>
+  <table class="t">
+    <thead><tr><th style="width:1.45in;">Document</th><th>When</th><th style="width:2.4in;">Needs</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Deposit Receipt</strong></td><td>Deposit paid / quoting move-in costs.</td><td>Apartment, name, dates, rent, deposit, pet</td></tr>
+      <tr><td><strong>Welcome Letter</strong></td><td>Before move-in; shows what's due.</td><td>Apartment, move-in date, rent, pet</td></tr>
+      <tr><td><strong>Policy Letter</strong></td><td>Part of the move-in pack.</td><td>Apartment, name, move-in date</td></tr>
+      <tr><td><strong>Renters Insurance</strong></td><td>Insurance addendum for the lease.</td><td>Apartment, name, move-in date</td></tr>
+      <tr><td><strong>Brochure</strong></td><td>Handing prospects current prices.</td><td>Prices only — no apartment. <em>Chapter 07.</em></td></tr>
     </tbody>
   </table>
 
-  <footer>Emory Woods Leasing Dashboard — User Guide &nbsp;·&nbsp; July 2025</footer>
+  <h2>Two ways in</h2>
+  <div class="grid2">
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:12pt;">A · From the top bar</div>
+      <ol class="steps" style="margin-top:6px;">
+        <li>Click <span class="btnref gold">Create Document</span>.</li>
+        <li>Pick a <strong>Document Type</strong>.</li>
+        <li>Pick the <strong>Apartment</strong> — future tenants are listed first. The form opens.</li>
+      </ol>
+    </div>
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:12pt;">B · From a unit</div>
+      <ol class="steps" style="margin-top:6px;">
+        <li>Open the apartment's details box.</li>
+        <li>Click <span class="btnref">Create Documents</span> above Save.</li>
+        <li>Choose from the <strong>Document Type</strong> list inside the form.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="split" style="margin-top:12px;grid-template-columns:0.9fr 1.1fr;">
+    <div>
+      <div class="ui">
+        <div class="ui-title" style="margin-bottom:10px;">Create Document</div>
+        <span class="ui-label">Document Type <span class="pin" style="width:12px;height:12px;font-size:6pt;">2</span></span><div class="ui-input" style="margin-bottom:7px;">Deposit Receipt ▾</div>
+        <span class="ui-label">Apartment <span class="pin" style="width:12px;height:12px;font-size:6pt;">3</span></span>
+        <div style="border:1px solid var(--a-border);border-radius:5px;background:var(--a-bg);font-size:7.5pt;">
+          <div style="padding:3px 8px;color:var(--a-muted);font-style:italic;">Future Tenant</div>
+          <div style="padding:3px 14px;background:rgba(201,168,76,0.18);">2194ND07 — Sam Rivera</div>
+          <div style="padding:3px 8px;color:var(--a-muted);font-style:italic;">All Apartments</div>
+          <div style="padding:3px 14px;">2194ND01</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-top:0;">Auto-filled for you</h3>
+      <p style="font-size:9.5pt;">When the apartment has a future tenant, the form starts with:</p>
+      <ul class="dots" style="font-size:9.5pt;">
+        <li><strong>Applicant Full Name</strong> ← future tenant</li>
+        <li><strong>Move-In Date</strong> ← scheduled move-in</li>
+        <li><strong>Base Rent</strong> ← unit's rent</li>
+        <li><strong>Water / Sewer</strong> ← Studio $25 · 2BR $45 Classic / $60 Renovated · 3BR $60 Classic / $80 Renovated</li>
+        <li><strong>Adults</strong> ← 1 Studio · 2 for 2BR · 3 for 3BR</li>
+      </ul>
+      <p style="font-size:9.5pt;margin:0;">Every box can be changed before you generate. Changes here <em>don't</em> touch the unit record.</p>
+    </div>
+  </div>
+  <div class="warn">Documents open in a <strong>new tab</strong>. Nothing opened? See page 16.</div>
+  <div class="foot"><span>06 Documents</span><b></b></div>
+</section>
+
+<!-- ============================================================ 06 DEPOSIT RECEIPT -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">06 · Documents</span></div>
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+      <div><div class="recipe-title">Make a Deposit Receipt</div><div class="recipe-meta"><span>⏱ 2 min</span><span>Opens a filled PDF</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1fr 1fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li><span class="btnref gold">Create Document</span> → <em>Deposit Receipt</em> → pick the apartment.</li>
+          <li>Check <strong>Applicant Full Name</strong> and <strong>Move-In Date</strong>.</li>
+          <li>Check <strong>Base Rent</strong> and <strong>Water / Sewer</strong>.</li>
+          <li>Set <strong>Adults</strong> and <strong>Children</strong>.</li>
+          <li>Type the <strong>Security Deposit</strong> amount.</li>
+          <li>Tick <em>Liability to Landlord Insurance</em> and/or <em>Pet</em> if they apply. With Pet, tick <em>Pet over 25 lbs</em> if it is.</li>
+          <li>Click <span class="btnref gold">Deposit Receipt</span>.</li>
+        </ol>
+        <div class="result">a new tab opens with the completed receipt. Print or download it from there.</div>
+      </div>
+      <div>
+        <div class="ui">
+          <div class="ui-row" style="justify-content:space-between;margin-bottom:8px;"><span class="ui-title">Deposit Receipt</span><span style="color:var(--a-muted);">Unit 2194ND07</span></div>
+          <span class="ui-label">Applicant Full Name</span><div class="ui-input" style="margin-bottom:5px;">Sam Rivera</div>
+          <span class="ui-label">Move-In Date</span><div class="ui-input" style="margin-bottom:5px;">10/20/2026</div>
+          <div class="ui-row" style="gap:6px;margin-bottom:5px;"><div style="flex:1;"><span class="ui-label">Base Rent ($)</span><div class="ui-input">890</div></div><div style="flex:1;"><span class="ui-label">Water / Sewer ($)</span><div class="ui-input">25</div></div></div>
+          <div class="ui-row" style="gap:6px;margin-bottom:5px;"><div style="flex:1;"><span class="ui-label">Adults</span><div class="ui-input">1</div></div><div style="flex:1;"><span class="ui-label">Children</span><div class="ui-input">0</div></div></div>
+          <span class="ui-label">Security Deposit ($)</span><div class="ui-input" style="margin-bottom:6px;">300</div>
+          <div style="font-size:7.5pt;color:var(--a-text);margin-bottom:7px;">☐ Liability to Landlord Insurance &nbsp; ☐ Pet</div>
+          <div class="ui-btn gold" style="width:100%;padding:6px;">Deposit Receipt</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:10px;">How the money is worked out — you don't have to do it</h2>
+  <div class="split" style="grid-template-columns:1fr 1.15fr;gap:14px;align-items:center;">
+    <div>
+      <svg viewBox="0 0 210 150" width="100%" style="display:block;">
+        <rect x="0" y="0" width="210" height="150" rx="10" fill="#fff" stroke="#E4DCCB"/>
+        <text x="105" y="16" text-anchor="middle" font-family="Gelasio, Georgia" font-weight="700" font-size="10" fill="#1a3a25">October 2026</text>
+        <g font-family="Segoe UI, Arial" font-size="6.5" fill="#6b6a62" text-anchor="middle">
+          <text x="19" y="29">Sun</text><text x="47" y="29">Mon</text><text x="75" y="29">Tue</text><text x="103" y="29">Wed</text><text x="131" y="29">Thu</text><text x="159" y="29">Fri</text><text x="187" y="29">Sat</text>
+        </g>
+        <g font-family="Segoe UI, Arial" font-size="8" text-anchor="middle"><text x="131" y="46.5" fill="#9a958a">1</text><text x="159" y="46.5" fill="#9a958a">2</text><text x="187" y="46.5" fill="#9a958a">3</text><text x="19" y="66.5" fill="#9a958a">4</text><text x="47" y="66.5" fill="#9a958a">5</text><text x="75" y="66.5" fill="#9a958a">6</text><text x="103" y="66.5" fill="#9a958a">7</text><text x="131" y="66.5" fill="#9a958a">8</text><text x="159" y="66.5" fill="#9a958a">9</text><text x="187" y="66.5" fill="#9a958a">10</text><text x="19" y="86.5" fill="#9a958a">11</text><text x="47" y="86.5" fill="#9a958a">12</text><text x="75" y="86.5" fill="#9a958a">13</text><text x="103" y="86.5" fill="#9a958a">14</text><text x="131" y="86.5" fill="#9a958a">15</text><text x="159" y="86.5" fill="#9a958a">16</text><text x="187" y="86.5" fill="#9a958a">17</text><text x="19" y="106.5" fill="#9a958a">18</text><text x="47" y="106.5" fill="#9a958a">19</text><rect x="64" y="96" width="22" height="15" rx="4" fill="#C9A84C"/><text x="75" y="106.5" fill="#0D1A12" font-weight="700">20</text><rect x="92" y="96" width="22" height="15" rx="4" fill="#C9A84C"/><text x="103" y="106.5" fill="#0D1A12" font-weight="700">21</text><rect x="120" y="96" width="22" height="15" rx="4" fill="#C9A84C"/><text x="131" y="106.5" fill="#0D1A12" font-weight="700">22</text><rect x="148" y="96" width="22" height="15" rx="4" fill="#C9A84C"/><text x="159" y="106.5" fill="#0D1A12" font-weight="700">23</text><rect x="176" y="96" width="22" height="15" rx="4" fill="#C9A84C"/><text x="187" y="106.5" fill="#0D1A12" font-weight="700">24</text><rect x="8" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="19" y="126.5" fill="#0D1A12" font-weight="700">25</text><rect x="36" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="47" y="126.5" fill="#0D1A12" font-weight="700">26</text><rect x="64" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="75" y="126.5" fill="#0D1A12" font-weight="700">27</text><rect x="92" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="103" y="126.5" fill="#0D1A12" font-weight="700">28</text><rect x="120" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="131" y="126.5" fill="#0D1A12" font-weight="700">29</text><rect x="148" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="159" y="126.5" fill="#0D1A12" font-weight="700">30</text><rect x="176" y="116" width="22" height="15" rx="4" fill="#C9A84C"/><text x="187" y="126.5" fill="#0D1A12" font-weight="700">31</text></g>
+      </svg>
+      <div class="ui-cap" style="color:#6b6a62;">Move-in Oct 20 → tenant pays for the <strong style="color:#8B6914">12 gold days</strong> out of 31</div>
+    </div>
+    <div>
+      <ol class="steps" style="font-size:9.5pt;">
+        <li><strong>Monthly bill</strong> = rent + water/sewer (plus $25 for a pet over 25 lbs).</li>
+        <li><strong>First month</strong> — the tenant only pays for the days they live there, counting move-in day.</li>
+        <li><strong>Pet?</strong> A one-time $300 pet fee is added.</li>
+        <li><strong>Moving in on one of the last 3 days of a month?</strong> Next month's full rent is added too, so they don't pay twice in a few days.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:8px;">
+    <div>
+      <h3 style="margin-top:0;">Example 1 · Studio, moving in Oct 20</h3>
+      <table class="calc">
+        <tr><td>Monthly bill ($890 rent + $25 water)</td><td>$915.00</td></tr>
+        <tr><td>Days lived in October</td><td>12 of 31</td></tr>
+        <tr class="total"><td>Due at move-in</td><td>$354.19</td></tr>
+        <tr><td>First full payment</td><td>Nov 1</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 style="margin-top:0;">Example 2 · Same studio, moving in Oct 29</h3>
+      <table class="calc">
+        <tr><td>3 days of October</td><td>$88.55</td></tr>
+        <tr><td>+ all of November (last-3-days rule)</td><td>$915.00</td></tr>
+        <tr class="total"><td>Due at move-in</td><td>$1,003.55</td></tr>
+        <tr><td>First full payment</td><td>Dec 1</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="note">The security deposit is shown separately on the receipt. It is not part of "Due at move-in".</div>
+  <div class="foot"><span>06 Documents · Deposit receipt</span><b></b></div>
+</section>
+
+<!-- ============================================================ 06 other docs -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">06 · Documents</span></div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg></div>
+      <div><div class="recipe-title">Welcome Letter</div><div class="recipe-meta"><span>⏱ 1 min</span><span>Studio letter picked automatically</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1.2fr 0.8fr;gap:14px;">
+      <div>
+        <ol class="steps">
+          <li><span class="btnref gold">Create Document</span> → <em>Welcome Letter</em> → pick the apartment.</li>
+          <li>Check <strong>Move-In Date</strong>, <strong>Base Rent</strong>, <strong>Water / Sewer</strong> and the Pet boxes.</li>
+          <li>Click <span class="btnref gold">Welcome Letter</span>.</li>
+        </ol>
+      </div>
+      <div>
+        <p style="font-size:9.5pt;"><strong>Prints:</strong> street address, apartment #, move-in date, and the amount due at move-in — the same <em>balance due</em> as the deposit receipt.</p>
+      </div>
+    </div>
+    <div class="tip">Make the Deposit Receipt and Welcome Letter with the same numbers so the amounts match.</div>
+  </div>
+
+  <div class="grid2">
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-head">
+        <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div><div class="recipe-title">Policy Letter</div><div class="recipe-meta"><span>⏱ 30 sec</span></div></div>
+      </div>
+      <ol class="steps">
+        <li><em>Policy Letter</em> → apartment.</li>
+        <li>Check <strong>Applicant Full Name</strong> and <strong>Move-In Date</strong>.</li>
+        <li>Click <span class="btnref gold">Policy Letter</span>.</li>
+      </ol>
+      <p style="font-size:9pt;color:var(--muted);">Prints date, name and full address (street + #apt).</p>
+    </div>
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-head">
+        <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="recipe-title">Renters Insurance</div><div class="recipe-meta"><span>⏱ 30 sec</span></div></div>
+      </div>
+      <ol class="steps">
+        <li><em>Renters Insurance</em> → apartment.</li>
+        <li>Check <strong>Applicant Full Name</strong> and <strong>Move-In Date</strong>.</li>
+        <li>Click <span class="btnref gold">Renters Insurance</span>.</li>
+      </ol>
+      <p style="font-size:9pt;color:var(--muted);">Prints date, name and full address.</p>
+    </div>
+  </div>
+
+  <h2>The move-in paperwork run</h2>
+  <svg viewBox="0 0 700 120" width="100%" style="display:block;">
+    <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8B6914"/></marker></defs>
+    <g font-family="Segoe UI, Arial" text-anchor="middle">
+      <rect x="5" y="25" width="120" height="66" rx="12" fill="#0D1A12"/><text x="65" y="52" fill="#C9A84C" font-size="11" font-weight="800">1 · ADD</text><text x="65" y="70" fill="#F5EFE0" font-size="9.5">Future Tenant</text>
+      <rect x="148" y="25" width="120" height="66" rx="12" fill="#fff" stroke="#E4DCCB"/><text x="208" y="52" fill="#8B6914" font-size="11" font-weight="800">2 · RECEIPT</text><text x="208" y="70" fill="#1d2420" font-size="9.5">Deposit Receipt</text>
+      <rect x="291" y="25" width="120" height="66" rx="12" fill="#fff" stroke="#E4DCCB"/><text x="351" y="52" fill="#8B6914" font-size="11" font-weight="800">3 · LETTERS</text><text x="351" y="70" fill="#1d2420" font-size="9.5">Welcome + Policy</text>
+      <rect x="434" y="25" width="120" height="66" rx="12" fill="#fff" stroke="#E4DCCB"/><text x="494" y="52" fill="#8B6914" font-size="11" font-weight="800">4 · INSURANCE</text><text x="494" y="70" fill="#1d2420" font-size="9.5">Renters Insurance</text>
+      <rect x="577" y="25" width="118" height="66" rx="12" fill="#0D1A12"/><text x="636" y="52" fill="#C9A84C" font-size="11" font-weight="800">5 · MOVE IN</text><text x="636" y="70" fill="#F5EFE0" font-size="9.5">"Moved In?" + Save</text>
+      <path d="M125 58H144" stroke="#8B6914" stroke-width="2" marker-end="url(#ah2)"/><path d="M268 58H287" stroke="#8B6914" stroke-width="2" marker-end="url(#ah2)"/><path d="M411 58H430" stroke="#8B6914" stroke-width="2" marker-end="url(#ah2)"/><path d="M554 58H573" stroke="#8B6914" stroke-width="2" marker-end="url(#ah2)"/>
+      <text x="350" y="112" fill="#6b6a62" font-size="10">Doing step 1 first means steps 2–4 fill in the name and move-in date for you.</text>
+    </g>
+  </svg>
+
+  <div class="warn">The dashboard doesn't keep a copy of documents. Save it if you'll need it again — or just make it again from the dashboard.</div>
+  <div class="note" style="margin-top:14px;">Next page: what to do when the document opens — printing it, saving it, emailing it, and what to do if it <em>doesn't</em> open.</div>
+  <div class="foot"><span>06 Documents · Letters &amp; insurance</span><b></b></div>
+</section>
+
+<!-- ============================================================ 06 GETTING DOCUMENT OUT -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">06 · Documents</span></div>
+  <h1 class="ch" style="font-size:20pt;">Printing, saving &amp; emailing a document</h1>
+  <p class="lede" style="margin-bottom:10px;">Every document opens in a <strong>new tab</strong> at the top of your browser. Here's what to do next.</p>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg></div>
+      <div><div class="recipe-title">Nothing opened? Your browser blocked it</div><div class="recipe-meta"><span>One-time fix</span></div></div>
+    </div>
+    <div class="split" style="grid-template-columns:1fr 1.05fr;gap:14px;">
+      <div>
+        <p style="font-size:9.5pt;">Browsers sometimes stop new tabs from opening, to protect you from ads. You only need to allow it once.</p>
+        <ol class="steps">
+          <li>Look at the <strong>right end of the address bar</strong> (the long bar at the top). A small icon with a red ✕ appears.</li>
+          <li>Click that icon.</li>
+          <li>Click <strong>"Always allow pop-ups and redirects from emorywoods.vercel.app"</strong>, then <strong>Done</strong>.</li>
+          <li>Go back to the dashboard and click the document button again.</li>
+        </ol>
+      </div>
+      <div>
+        <div style="background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,0.08);">
+          <div style="background:#f1efe9;padding:6px 8px;display:flex;align-items:center;gap:6px;">
+            <span style="color:#aaa;font-size:9pt;">← →</span>
+            <div style="flex:1;background:#fff;border-radius:12px;padding:3px 10px;font-size:7.5pt;color:#222;display:flex;justify-content:space-between;align-items:center;">emorywoods.vercel.app/jr-dashboard
+              <span style="position:relative;display:inline-flex;"><svg width="14" height="12" viewBox="0 0 14 12"><rect x="0.5" y="0.5" width="11" height="9" rx="1" fill="none" stroke="#555"/><path d="M0.5 3h11" stroke="#555"/><circle cx="11" cy="9" r="3" fill="#c94a4a"/><path d="M9.6 7.6l2.8 2.8M12.4 7.6l-2.8 2.8" stroke="#fff" stroke-width="1"/></svg></span>
+            </div><span class="pin">1</span>
+          </div>
+          <div style="margin:6px 8px 10px auto;width:78%;border:1px solid #ddd;border-radius:8px;padding:8px 10px;font-size:7.5pt;color:#222;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+            <div style="font-weight:700;margin-bottom:5px;">Pop-ups blocked:</div>
+            <div style="margin-bottom:3px;"><span style="display:inline-block;width:9px;height:9px;border:1.5px solid #1a73e8;border-radius:50%;background:radial-gradient(#1a73e8 40%,transparent 45%);vertical-align:-1px;"></span> Always allow pop-ups and redirects from emorywoods.vercel.app <span class="pin" style="width:13px;height:13px;font-size:6.5pt;">3</span></div>
+            <div style="margin-bottom:6px;color:#666;"><span style="display:inline-block;width:9px;height:9px;border:1.5px solid #888;border-radius:50%;vertical-align:-1px;"></span> Continue blocking</div>
+            <div style="text-align:right;"><span style="background:#1a73e8;color:#fff;border-radius:12px;padding:2px 10px;">Done</span></div>
+          </div>
+        </div>
+        <div class="ui-cap">What it looks like in Chrome (Edge looks almost the same)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:12px;">
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-head">
+        <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><rect x="2" y="9" width="20" height="9" rx="2"/><path d="M6 14h12v8H6z"/></svg></div>
+        <div><div class="recipe-title">Print it</div></div>
+      </div>
+      <ol class="steps" style="font-size:9.5pt;">
+        <li>In the document's tab, click the <strong>printer icon</strong> at the top right — or hold <strong>Ctrl</strong> and press <strong>P</strong>.</li>
+        <li>Next to <strong>Destination</strong> (or <em>Printer</em>), pick the office printer.</li>
+        <li>Click <strong>Print</strong>.</li>
+      </ol>
+    </div>
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-head">
+        <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div><div class="recipe-title">Save it (to email later)</div></div>
+      </div>
+      <ol class="steps" style="font-size:9.5pt;">
+        <li>Click the <strong>download arrow ⤓</strong> at the top right of the document.</li>
+        <li>Give it a clear name, e.g. <em>2194ND07 Deposit Receipt</em>, and click <strong>Save</strong>.</li>
+        <li>It goes to your <strong>Downloads</strong> folder. In your email, click the paper-clip (attach) and pick it from there.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>The print window, explained</h2>
+  <p style="font-size:9.5pt;">Reports and lists (Chapter 09) go straight to this window. To make a PDF file instead of paper, choose <strong>Save as PDF</strong> as the destination.</p>
+  <div class="split" style="grid-template-columns:1.05fr 0.95fr;gap:14px;">
+    <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:8pt;color:#222;box-shadow:0 6px 16px rgba(0,0,0,0.08);">
+      <div style="font-size:10pt;font-weight:700;margin-bottom:8px;">Print <span style="float:right;color:#666;font-weight:400;font-size:8pt;">1 sheet of paper</span></div>
+      <div style="display:grid;grid-template-columns:80px 1fr 18px;gap:7px 6px;align-items:center;">
+        <span>Destination</span><span style="border:1px solid #ccc;border-radius:4px;padding:3px 6px;">Save as PDF ▾</span><span class="pin" style="width:14px;height:14px;font-size:6.5pt;">A</span>
+        <span>Pages</span><span style="border:1px solid #ccc;border-radius:4px;padding:3px 6px;">All ▾</span><span></span>
+        <span>Layout</span><span style="border:1px solid #ccc;border-radius:4px;padding:3px 6px;">Landscape ▾</span><span class="pin" style="width:14px;height:14px;font-size:6.5pt;">B</span>
+        <span style="color:#1a73e8;">More settings ▾</span><span style="color:#666;">Paper size: Legal</span><span class="pin" style="width:14px;height:14px;font-size:6.5pt;">C</span>
+      </div>
+      <div style="text-align:right;margin-top:10px;"><span style="background:#1a73e8;color:#fff;border-radius:12px;padding:3px 12px;">Save</span> <span style="border:1px solid #ccc;border-radius:12px;padding:3px 10px;margin-left:4px;">Cancel</span></div>
+    </div>
+    <ul class="legend">
+      <li><span class="pin">A</span><span><strong>Destination</strong> — click it and pick the printer for paper, or <strong>Save as PDF</strong> for a file.</span></li>
+      <li><span class="pin">B</span><span><strong>Layout</strong> — <em>Landscape</em> = sideways (wide). <em>Portrait</em> = upright (tall).</span></li>
+      <li><span class="pin">C</span><span><strong>Paper size</strong> — under <em>More settings</em>. The weekly report uses <strong>Legal</strong> (the long paper).</span></li>
+    </ul>
+  </div>
+  <div class="foot"><span>06 Documents · Print, save, email</span><b></b></div>
+</section>
+
+<!-- ============================================================ 07 BROCHURE -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">07</div>
+    <div class="kicker">Chapter 07</div>
+    <h1>The brochure</h1>
+    <p>Prices changed? Print a fresh, fully designed brochure in under a minute — no design software.</p>
+  </div>
+
+  <div class="split" style="grid-template-columns:1.05fr 0.95fr;gap:16px;">
+    <div>
+      <div class="recipe">
+        <div class="recipe-head">
+          <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4h7l3 2 3-2h7v16h-7l-3 2-3-2H2z"/><path d="M12 6v16"/></svg></div>
+          <div><div class="recipe-title">Create a brochure</div><div class="recipe-meta"><span>⏱ 1 min</span><span>No apartment needed</span></div></div>
+        </div>
+        <ol class="steps">
+          <li>Click <span class="btnref gold">Create Document</span>.</li>
+          <li>Choose <strong>Brochure</strong>. The <em>Brochure Pricing</em> form opens straight away.</li>
+          <li>For each of the 5 floor plans, set the <strong>Base rent</strong> (left box) and <strong>Water/sewer</strong> (right box).</li>
+          <li>Set <strong>Security Deposit</strong> — a number (<em>500</em>) or words (<em>Half month's rent</em>). Leave empty for "~1 month rent".</li>
+          <li>Set <strong>Application Fee ($)</strong> (default 75).</li>
+          <li>Click <span class="btnref gold">Generate Brochure</span>.</li>
+        </ol>
+        <div class="result">the brochure opens in a new tab with your prices printed on the floor-plan page and fees on the cover.</div>
+      </div>
+      <h3>Starting prices in the form</h3>
+      <table class="t">
+        <thead><tr><th>Floor plan</th><th>Base</th><th>Water/sewer</th></tr></thead>
+        <tbody>
+          <tr><td>Studio</td><td>$890</td><td>$25</td></tr>
+          <tr><td>2-Bedroom Classic</td><td>$1,225</td><td>$45</td></tr>
+          <tr><td>2-Bedroom Renovated</td><td>$1,750</td><td>$60</td></tr>
+          <tr><td>3-Bedroom Classic</td><td>$1,400</td><td>$60</td></tr>
+          <tr><td>3-Bedroom Renovated</td><td>$2,250</td><td>$80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="ui">
+        <div class="ui-title" style="margin-bottom:9px;">Brochure Pricing</div>
+        <span class="ui-label">Studio <span class="pin" style="width:12px;height:12px;font-size:6pt;">3</span></span><div class="ui-row" style="gap:6px;margin-bottom:5px;"><div class="ui-input" style="flex:1;">890</div><div class="ui-input" style="flex:1;">25</div></div>
+        <span class="ui-label">2-Bedroom Classic</span><div class="ui-row" style="gap:6px;margin-bottom:5px;"><div class="ui-input" style="flex:1;">1225</div><div class="ui-input" style="flex:1;">45</div></div>
+        <span class="ui-label">2-Bedroom Renovated</span><div class="ui-row" style="gap:6px;margin-bottom:5px;"><div class="ui-input" style="flex:1;">1750</div><div class="ui-input" style="flex:1;">60</div></div>
+        <span class="ui-label">3-Bedroom Classic</span><div class="ui-row" style="gap:6px;margin-bottom:5px;"><div class="ui-input" style="flex:1;">1400</div><div class="ui-input" style="flex:1;">60</div></div>
+        <span class="ui-label">3-Bedroom Renovated</span><div class="ui-row" style="gap:6px;margin-bottom:7px;"><div class="ui-input" style="flex:1;">2250</div><div class="ui-input" style="flex:1;">80</div></div>
+        <div class="ui-row" style="gap:6px;margin-bottom:8px;"><div style="flex:1;"><span class="ui-label">Security Deposit <span class="pin" style="width:12px;height:12px;font-size:6pt;">4</span></span><div class="ui-input ph">~1 month rent</div></div><div style="flex:1;"><span class="ui-label">Application Fee ($) <span class="pin" style="width:12px;height:12px;font-size:6pt;">5</span></span><div class="ui-input">75</div></div></div>
+        <div class="ui-row"><div class="ui-btn gold" style="flex:1;padding:6px;">Generate Brochure</div><span class="pin">6</span></div>
+        <div class="ui-btn" style="width:100%;margin-top:6px;">Cancel</div>
+      </div>
+      <div class="ui-cap">Left box = base rent · right box = water/sewer</div>
+
+      <h3 style="margin-top:12px;">What prints where</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:8.5pt;">
+          <div style="height:46px;border-radius:5px;background:linear-gradient(135deg,#2A4A35,#0D1A12);margin-bottom:5px;position:relative;"><span style="position:absolute;bottom:4px;left:6px;right:6px;background:#fff;border-radius:3px;font-size:6pt;padding:1px 4px;color:#6b675f;">Application fee $75 · Deposit ~1 month rent</span></div>
+          <strong>Page 1 · Cover</strong><br>fee &amp; deposit line
+        </div>
+        <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:8.5pt;">
+          <div style="height:46px;border-radius:5px;background:#F3EDE0;margin-bottom:5px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;padding:4px;">
+            <span style="background:#fff;border-radius:2px;font-size:5pt;padding:1px;">From $890 /mo</span><span style="background:#fff;border-radius:2px;font-size:5pt;padding:1px;">$1,225 + $45</span><span style="background:#fff;border-radius:2px;font-size:5pt;padding:1px;">$1,400 + $60</span>
+          </div>
+          <strong>Page 2 · Floor plans</strong><br>price line under each plan
+        </div>
+      </div>
+      <div class="note">Prices reset to the starting values each time you open the form — and your changes here never change any unit's rent.</div>
+    </div>
+  </div>
+  <div class="foot"><span>07 The brochure</span><b></b></div>
+</section>
+
+<!-- ============================================================ 08 CARPORTS -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">08</div>
+    <div class="kicker">Chapter 08</div>
+    <h1>Carports</h1>
+    <p>Who parks where, at what rate — and which spaces are free.</p>
+  </div>
+
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <h2 style="margin-top:0;">Finding carports</h2>
+      <ul class="dots">
+        <li><strong>Map view:</strong> click <span class="btnref">Carports</span> at the top of the right panel, or click a carport marker on the map to jump to that area.</li>
+        <li><strong>Table view:</strong> pick the <span class="btnref">Carports</span> tab. A summary reads <em>X available · Y tenant · Z office · W shop · N total</em>.</li>
+      </ul>
+      <p>Click any carport row to open its <strong>Carport Area</strong> window, listing every space in that area.</p>
+      <h2>Space types</h2>
+      <table class="t">
+        <thead><tr><th>Badge</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><span class="lb gray">Available</span></td><td>Free to rent.</td></tr>
+          <tr><td><span class="lb purple">Tenant</span></td><td>Rented to an Emory Woods resident (linked to their unit).</td></tr>
+          <tr><td><span class="lb blue">Office</span></td><td>Reserved for the leasing office.</td></tr>
+          <tr><td><span class="lb shop">Shop</span></td><td>Reserved for the maintenance shop.</td></tr>
+          <tr><td><span class="lb teal">External</span></td><td>Rented to someone who doesn't live here.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="ui">
+        <div style="color:#a078ff;font-weight:700;letter-spacing:0.06em;">Carport Area — 524CC</div>
+        <div style="color:var(--a-muted);font-size:7pt;margin-bottom:8px;">3 available · 5 leased · 8 total spaces</div>
+        <div style="border:1px solid var(--a-border);border-radius:6px;padding:6px 8px;background:var(--a-bg);margin-bottom:5px;" class="ui-row"><span style="color:#7a52d6;font-weight:700;">1</span><span class="ui-badge bd-cp-t">Tenant</span><span style="color:var(--a-muted);flex:1;white-space:nowrap;">P. Johnson · $50/mo</span><span class="ui-btn">Edit</span><span class="ui-btn red">Unassign</span><span class="pin">4</span></div>
+        <div style="border:1px solid var(--a-border);border-radius:6px;padding:6px 8px;background:var(--a-bg);" >
+          <div class="ui-row" style="margin-bottom:6px;"><span style="color:#7a52d6;font-weight:700;">2</span><span class="ui-badge bd-occ">Available</span><span style="flex:1;"></span><span class="pin">1</span></div>
+          <span class="ui-label">Assign To <span class="pin" style="width:12px;height:12px;font-size:6pt;">2</span></span>
+          <div class="ui-row" style="margin-bottom:6px;"><span class="ui-btn purple" style="flex:1;">Tenant</span><span class="ui-btn" style="flex:1;">Office</span><span class="ui-btn" style="flex:1;">Shop</span><span class="ui-btn" style="flex:1;">External</span></div>
+          <span class="ui-label">Tenant Unit <span class="pin" style="width:12px;height:12px;font-size:6pt;">3</span></span><div class="ui-input" style="margin-bottom:5px;">2194 ND 07 — Sam Rivera ▾</div>
+          <div class="ui-row" style="gap:6px;margin-bottom:5px;"><div style="flex:1;"><span class="ui-label">Rental Date</span><div class="ui-input">11/01/2026</div></div><div style="flex:1;"><span class="ui-label">Rate</span><div class="ui-input">$50/mo</div></div></div>
+          <div class="ui-row" style="justify-content:flex-end;"><span class="ui-btn">Cancel</span><span class="ui-btn purple">Save</span></div>
+        </div>
+      </div>
+      <div class="ui-cap">Carport Area window (sample data)</div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:4px;">
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:12pt;margin-bottom:6px;">Assign a space</div>
+      <ol class="steps">
+        <li>Open the carport area, find the space, click <span class="btnref">Assign</span> (or <span class="btnref">Edit</span>).</li>
+        <li>Choose <strong>Tenant</strong>, <strong>Office</strong>, <strong>Shop</strong> or <strong>External</strong>.</li>
+        <li><em>Tenant:</em> pick the <strong>Tenant Unit</strong> (name and address fill in), add <strong>Rental Date</strong> + <strong>Rate</strong>.<br><em>External:</em> type <strong>Name</strong>, <strong>Phone</strong>, date and rate.<br><em>Office / Shop:</em> notes only.</li>
+        <li>Click <span class="btnref">Save</span>.</li>
+      </ol>
+    </div>
+    <div class="recipe" style="margin:0;">
+      <div class="recipe-title" style="font-size:12pt;margin-bottom:6px;">Free up a space</div>
+      <ol class="steps">
+        <li>Open the carport area.</li>
+        <li>Click <span class="btnref" style="color:var(--red);border-color:var(--red);">Unassign</span> next to the space.</li>
+      </ol>
+      <div class="warn" style="margin-top:6px;">Unassign happens <strong>instantly</strong> — there's no "are you sure?". Rate, date and person details are wiped.</div>
+      <div class="tip">Only apartments with a tenant appear in the Tenant Unit list. Save a move-in first.</div>
+    </div>
+  </div>
+  <div class="foot"><span>08 Carports</span><b></b></div>
+</section>
+
+<!-- ============================================================ 09 REPORT -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">09</div>
+    <div class="kicker">Chapter 09</div>
+    <h1>Reports &amp; lists</h1>
+    <p>The weekly leasing sheet in one click, plus a do-it-yourself table for anything else.</p>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-head">
+      <div class="recipe-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+      <div><div class="recipe-title">Print the Vacant / Notices report</div><div class="recipe-meta"><span>⏱ 30 sec</span><span>Legal paper · landscape</span></div></div>
+    </div>
+    <ol class="steps">
+      <li>Click <span class="btnref">⤓ Vacant/ Notices Report</span> in the top bar. A <em>Leasing Report</em> preview opens.</li>
+      <li>Click <span class="btnref gold">Print</span>. In the print window choose a printer — or <strong>Save as PDF</strong>.</li>
+      <li>Check the paper is <strong>Legal, Landscape</strong>. Press <span class="btnref">Close</span> (or the Esc key) when done.</li>
+    </ol>
+  </div>
+
+  <h2>Reading the report</h2>
+  <div style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);">
+    <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:6px;"><span style="font-weight:800;letter-spacing:0.08em;color:#1a3a25;">EMORY WOODS</span><span style="color:#777;font-size:8pt;">Leasing Report — Thursday, October 1, 2026</span></div>
+    <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:10px;font-size:7.5pt;">
+      <div>
+        <div style="font-size:6.5pt;letter-spacing:0.12em;color:#888;border-bottom:1px solid #ddd;margin-bottom:3px;">VACANT UNITS (3)</div>
+        <table style="width:100%;border-collapse:collapse;">
+          <tr style="background:#f5f0e8;font-size:6pt;color:#555;"><td>UNIT</td><td>TYPE</td><td>RENT</td><td>FUTURE</td><td>MOVE-IN</td><td>P</td><td>M</td><td>C</td><td>F</td><td>DONE</td><td>LOCK</td><td>TOUR</td></tr>
+          <tr style="border-left:3px solid #c9a84c;"><td><b>2194ND07</b></td><td>Eff</td><td>$890</td><td>Rivera</td><td>11/01/2026</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr style="border-left:3px solid #e05c5c;background:#f7f3ec;"><td><b>2194ND12</b></td><td>2BR</td><td>$1,225</td><td></td><td></td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td><td></td><td></td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:6.5pt;letter-spacing:0.12em;color:#888;border-bottom:1px solid #ddd;margin-bottom:3px;">MOVE-OUT NOTICES (1)</div>
+        <table style="width:100%;border-collapse:collapse;">
+          <tr style="background:#f5f0e8;font-size:6pt;color:#555;"><td>UNIT</td><td>TYPE</td><td>RENT</td><td>MOVE-OUT</td><td>TENANT</td><td>FUTURE</td><td>MOVE-IN</td></tr>
+          <tr style="border-left:3px solid #9bbfa8;"><td><b>2194ND04</b></td><td>2BR</td><td>$1,225</td><td>11/30/2026</td><td>Johnson</td><td></td><td></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:10px;">
+    <table class="t" style="margin:0;">
+      <thead><tr><th>Column</th><th>Means</th></tr></thead>
+      <tbody>
+        <tr><td>P · M · C · F</td><td>Paint · Maintenance · Cleaning · Flooring needed</td></tr>
+        <tr><td>Done · Lock · Tour</td><td>Maint. done · locks changed · ready for tour</td></tr>
+        <tr><td>Eff</td><td>Efficiency (Studio)</td></tr>
+        <tr><td>Names</td><td>Last names only, for privacy</td></tr>
+      </tbody>
+    </table>
+    <table class="t" style="margin:0;">
+      <thead><tr><th>Left stripe</th><th>Means</th></tr></thead>
+      <tbody>
+        <tr><td><span style="display:inline-block;width:14px;height:10px;background:#c9a84c;border-radius:2px;"></span> Gold</td><td>Vacant, future tenant lined up</td></tr>
+        <tr><td><span style="display:inline-block;width:14px;height:10px;background:#e05c5c;border-radius:2px;"></span> Red</td><td>Vacant, nobody lined up — focus here</td></tr>
+        <tr><td><span style="display:inline-block;width:14px;height:10px;background:#9bbfa8;border-radius:2px;"></span> Green</td><td>Move-out notice</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tip">The report always covers <strong>every building</strong>, sorted by street then number. Update units first — the report reflects what's saved right now.</div>
+
+  <div class="tip">Two buttons say "Table": the <em>Map / Table</em> switch changes the view; the <strong>▦ Table</strong> button with the grid icon lets you make your own list (next page).</div>
+  <div class="foot"><span>09 Reports</span><b></b></div>
+</section>
+
+<!-- ============================================================ 09 TABLE BUILDER -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">09 · Reports</span></div>
+  <h2 style="margin-top:0;">Make your own list or checklist</h2>
+  <p>Need a sign-up sheet, an inspection checklist, or a page for meter readings? The <span class="btnref">▦ Table</span> button makes a printable grid: the apartments you pick go down the left side, and the headings you type go across the top.</p>
+
+  <svg viewBox="0 0 700 64" width="100%" style="display:block;margin:4px 0 8px;">
+    <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8B6914"/></marker></defs>
+    <g font-family="Segoe UI, Arial" text-anchor="middle">
+      <rect x="10" y="8" width="190" height="48" rx="24" fill="#0D1A12"/><text x="105" y="30" fill="#C9A84C" font-size="11" font-weight="800">STEP 1</text><text x="105" y="46" fill="#F5EFE0" font-size="10">Select Units</text>
+      <rect x="255" y="8" width="190" height="48" rx="24" fill="#0D1A12"/><text x="350" y="30" fill="#C9A84C" font-size="11" font-weight="800">STEP 2</text><text x="350" y="46" fill="#F5EFE0" font-size="10">Build Columns</text>
+      <rect x="500" y="8" width="190" height="48" rx="24" fill="#0D1A12"/><text x="595" y="30" fill="#C9A84C" font-size="11" font-weight="800">STEP 3</text><text x="595" y="46" fill="#F5EFE0" font-size="10">Preview &amp; Print</text>
+      <path d="M200 32H251" stroke="#8B6914" stroke-width="2" marker-end="url(#ah3)"/><path d="M445 32H496" stroke="#8B6914" stroke-width="2" marker-end="url(#ah3)"/>
+    </g>
+  </svg>
+
+  <div class="grid3" style="gap:10px;">
+    <div class="recipe" style="margin:0;padding:11px;">
+      <div class="recipe-title" style="font-size:11pt;">1 · Select Units</div>
+      <ol class="steps" style="font-size:9pt;margin-top:5px;">
+        <li>Click <span class="btnref">▦ Table</span>.</li>
+        <li>Tick units, or search then <span class="btnref">Select All</span>.</li>
+        <li><span class="btnref">Clear</span> unticks all.</li>
+        <li>Click <span class="btnref gold">Next (n selected)</span>.</li>
+      </ol>
+      <div class="ui" style="padding:7px;margin-top:6px;">
+        <div class="ui-row" style="flex-wrap:wrap;gap:4px;"><span class="ui-btn on-gold" style="font-weight:400;">☑ 2194ND01</span><span class="ui-btn on-gold" style="font-weight:400;">☑ 2194ND02</span><span class="ui-btn">☐ 2194ND03</span></div>
+      </div>
+    </div>
+    <div class="recipe" style="margin:0;padding:11px;">
+      <div class="recipe-title" style="font-size:11pt;">2 · Build Columns</div>
+      <ol class="steps" style="font-size:9pt;margin-top:5px;">
+        <li>Rename <em>Column 1</em> by typing over it.</li>
+        <li><span class="btnref">+ Add Column</span> for more.</li>
+        <li><span class="btnref">+ Sub-column</span> splits a column (e.g. <em>Smoke detector → Bedroom / Hall</em>).</li>
+        <li>Optional: type into the cells below.</li>
+        <li><span class="btnref" style="color:var(--red);border-color:var(--red);">Remove</span> / <span class="btnref">✕</span> deletes. Then <span class="btnref gold">Preview</span>.</li>
+      </ol>
+    </div>
+    <div class="recipe" style="margin:0;padding:11px;">
+      <div class="recipe-title" style="font-size:11pt;">3 · Preview &amp; Print</div>
+      <ol class="steps" style="font-size:9pt;margin-top:5px;">
+        <li>Pick <span class="btnref">Portrait</span> or <span class="btnref">Landscape</span>.</li>
+        <li>Click <span class="btnref gold">Print / Export</span>.</li>
+        <li>Choose a printer or <strong>Save as PDF</strong>.</li>
+        <li><span class="btnref">Back</span> to change anything.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2 style="margin-top:12px;">What is a "sub-column"? A picture explains it</h2>
+  <p style="font-size:9.5pt;">A sub-column splits one heading into smaller boxes underneath it. Example: an annual smoke-detector check where each apartment has two detectors.</p>
+  <div class="split" style="grid-template-columns:1fr 0.12fr 1.25fr;gap:8px;align-items:center;">
+    <div>
+      <div class="ui" style="padding:8px;">
+        <div class="ui-row" style="margin-bottom:5px;"><div class="ui-input" style="flex:1;font-weight:700;">Smoke detector</div><span class="ui-btn">+ Sub-column</span><span class="pin">1</span></div>
+        <div class="ui-row" style="padding-left:10px;"><div class="ui-input" style="width:62px;">Bedroom</div><span class="ui-btn red" style="padding:3px 5px;">✕</span><div class="ui-input" style="width:46px;">Hall</div><span class="ui-btn red" style="padding:3px 5px;">✕</span><span class="pin">2</span></div>
+        <div class="ui-row" style="margin-top:7px;"><div class="ui-input" style="flex:1;font-weight:700;">Tenant initials</div></div>
+      </div>
+      <div class="ui-cap">What you type in the dashboard</div>
+    </div>
+    <div style="text-align:center;font-size:20pt;color:var(--gold-deep);">→</div>
+    <div>
+      <table class="t" style="font-size:8.5pt;margin:0;">
+        <thead>
+          <tr><th rowspan="2" style="vertical-align:bottom;">Unit</th><th colspan="2" style="text-align:center;">Smoke detector</th><th rowspan="2" style="vertical-align:bottom;">Tenant initials</th></tr>
+          <tr><th style="border-top:1px solid var(--line);">Bedroom</th><th style="border-top:1px solid var(--line);">Hall</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>2194ND01</strong></td><td>&nbsp;</td><td></td><td></td></tr>
+          <tr><td><strong>2194ND02</strong></td><td>&nbsp;</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="ui-cap">What gets printed</div>
+    </div>
+  </div>
+  <ul class="legend" style="margin-top:6px;">
+    <li><span class="pin">1</span><span>Type the main heading, then click <span class="btnref">+ Sub-column</span> once for each smaller box you want.</span></li>
+    <li><span class="pin">2</span><span>Type a name in each smaller box. Click the red ✕ to remove one.</span></li>
+  </ul>
+  <div class="warn">These lists are <strong>not saved</strong>. If you close the window (Close, the Esc key, or clicking outside it) everything is gone — print it or save it as a PDF first.</div>
+  <div class="foot"><span>09 Make your own list</span><b></b></div>
+</section>
+
+<!-- ============================================================ 09 TABLE VIEW -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">09 · Reports</span></div>
+  <h1 class="ch" style="font-size:20pt;">The big list view</h1>
+  <p class="lede">Prefer a list like Excel instead of the map? Every apartment, one per line, with every detail side by side.</p>
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <ol class="steps">
+        <li>At the top, click <span class="btnref">Table</span> in the <em>Map | Table</em> switch. (Not the <strong>▦ Table</strong> button — that one makes your own list.)</li>
+        <li>Choose <strong>Units</strong> (apartments) or <strong>Carports</strong> (parking) just above the list.</li>
+        <li>Click any line to open that apartment's details.</li>
+        <li>Click <span class="btnref">Map</span> to go back to the map.</li>
+      </ol>
+      <h3>Putting the list in order (sorting)</h3>
+      <p style="font-size:9.5pt;">Click a heading — e.g. <strong>Rent</strong> — and the list is put in order by rent, lowest first. Click the same heading again for highest first. A small ▲ or ▼ shows which way.</p>
+      <h3>Showing only some lines (filtering)</h3>
+      <p style="font-size:9.5pt;">Under each heading is a small box:</p>
+      <ul class="dots" style="font-size:9.5pt;">
+        <li>Boxes with ▾ are drop-down lists — click and pick, e.g. <em>3BR</em>. Columns like Paint or Tour offer <em>Yes</em> or <em>No</em>.</li>
+        <li>Boxes that say <em>Filter…</em> are for typing — e.g. part of a tenant's name.</li>
+        <li><span class="btnref">Clear all</span> turns every filter off again.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="ui" style="padding:8px;">
+        <div class="ui-row" style="gap:0;font-size:6.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--a-muted);border-bottom:1px solid var(--a-border);padding-bottom:4px;">
+          <span style="flex:1;">Unit ▲</span><span style="flex:1;">Status</span><span style="flex:1;">Type</span><span style="flex:1;">Lease</span>
+        </div>
+        <div class="ui-row" style="gap:4px;padding:4px 0;border-bottom:1px solid var(--a-border);">
+          <div class="ui-input ph" style="flex:1;font-size:6.5pt;min-height:16px;padding:2px 5px;">All ▾</div><div class="ui-input ph" style="flex:1;font-size:6.5pt;min-height:16px;padding:2px 5px;">All ▾</div><div class="ui-input" style="flex:1;font-size:6.5pt;min-height:16px;padding:2px 5px;color:var(--gold);">3BR ▾</div><div class="ui-input" style="flex:1;font-size:6.5pt;min-height:16px;padding:2px 5px;color:var(--gold);">month-to-month ▾</div>
+        </div>
+        <div class="ui-row" style="gap:0;padding:4px 0;font-size:7.5pt;"><span style="flex:1;color:var(--gold);">2194ND09</span><span style="flex:1;">occupied</span><span style="flex:1;">3BR</span><span style="flex:1;">month-to-month</span></div>
+        <div class="ui-row" style="gap:0;padding:4px 0;font-size:7.5pt;"><span style="flex:1;color:var(--gold);">2198ND03</span><span style="flex:1;">notice</span><span style="flex:1;">3BR</span><span style="flex:1;">month-to-month</span></div>
+      </div>
+      <div class="ui-cap">Showing only 3-bedrooms on month-to-month leases (sample)</div>
+      <div class="tip">Example question: <em>"Which 3-bedrooms are on month-to-month leases?"</em> Pick <strong>3BR</strong> under <em>Type</em> and <strong>month-to-month</strong> under <em>Lease</em>. Done.</div>
+      <div class="note">The list is very wide. Scroll sideways (hold <strong>Shift</strong> and roll the mouse wheel) to see the columns on the right.</div>
+    </div>
+  </div>
+  <div class="foot"><span>09 The big list view</span><b></b></div>
+</section>
+
+<!-- ============================================================ 10 BADGES + FAQ -->
+<section class="page">
+  <div class="chapter-band">
+    <div class="num">10</div>
+    <div class="kicker">Chapter 10</div>
+    <h1>Colors &amp; quick fixes</h1>
+    <p>Every color on the screen, and answers to the questions people actually ask.</p>
+  </div>
+  <div class="split" style="grid-template-columns:1fr 1fr;gap:18px;">
+    <div>
+      <h2 style="margin-top:0;">What the colored labels mean</h2>
+      <table class="t" style="table-layout:fixed;">
+        <colgroup><col style="width:52%"><col></colgroup>
+        <tbody>
+          <tr><td><span class="lb occ">Occupied</span></td><td>Someone lives there.</td></tr>
+          <tr><td><span class="lb vac">Vacant</span></td><td>Empty.</td></tr>
+          <tr><td><span class="lb rent">Vacant (Rented)</span></td><td>Empty, with a Move-In date entered.</td></tr>
+          <tr><td><span class="lb not">Notice</span></td><td>Tenant is leaving.</td></tr>
+          <tr><td><span style="color:var(--blue);font-weight:700;font-size:8pt;letter-spacing:0.06em;">FUTURE:</span> strip</td><td>Next tenant + move-in date.</td></tr>
+          <tr><td><span class="lb not">Ready for Tour</span></td><td>Show-ready.</td></tr>
+          <tr><td><span class="lb promo">13-Month Promo</span></td><td>Eligible for the 13-month deal.</td></tr>
+          <tr><td><span class="lb wrn">Lease ends in Xd</span></td><td>12-month lease ends in X days.</td></tr>
+          <tr><td><span class="lb exp">Lease expired</span></td><td>End date has passed.</td></tr>
+          <tr><td><span style="color:var(--red);font-weight:700;font-size:8.5pt;">🔒 Locks Changed</span></td><td>Locks changed.</td></tr>
+          <tr><td><span style="text-decoration:line-through;color:var(--muted);">Paint</span> <span class="lb occ">Done</span></td><td>Maintenance finished.</td></tr>
+          <tr><td><span class="lb purple">12 avail</span></td><td>Free carport spaces.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2 style="margin-top:0;">FAQ &amp; troubleshooting</h2>
+      <dl class="faq">
+        <dt>I changed something but it didn't stick.</dt>
+        <dd>You closed the window without <strong>Save Unit</strong>. Reopen, redo, save.</dd>
+        <dt>A document didn't open.</dt>
+        <dd>Your browser blocked it. Follow the pictures on page 16 — it's a one-time fix.</dd>
+        <dt>The document shows the wrong name or date.</dt>
+        <dd>Fix the boxes in the document form before generating — or fix the unit's Future Tenant, then start again.</dd>
+        <dt>"Moved In?" or "Move Out" is greyed out.</dt>
+        <dd>Moved In? needs a Future Tenant name. Move Out needs status <em>Notice</em> and a Tenant Name.</dd>
+        <dt>A unit is missing from my list.</dt>
+        <dd>Click ✕ Clear on the gold strip and on the filter buttons, and set All Types back. Or just search for it.</dd>
+        <dt>Can I add or delete an apartment?</dt>
+        <dd>No — the unit list is fixed. Ask the site administrator.</dd>
+        <dt>Can I undo?</dt>
+        <dd>There's no undo button. Open the unit and set the values back, then save.</dd>
+        <dt>Asked for the access code again.</dt>
+        <dd>New browser, cleared data, or the code was changed. Ask your manager.</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="foot"><span>10 Colors &amp; quick fixes</span><b></b></div>
+</section>
+
+<!-- ============================================================ CHEAT SHEET -->
+<section class="page">
+  <div class="runhead"><span>Emory Woods · Dashboard Guide</span><span class="chip">Cheat sheet</span></div>
+  <div class="kicker">Tear-off page</div>
+  <h1 class="ch" style="font-size:24pt;">Cheat sheet</h1>
+  <p class="lede" style="margin-bottom:10px;">Every job in one line. <span class="arrow">→</span> means "then click". Always finish unit edits with <span class="btnref gold">Save Unit</span>.</p>
+  <div class="cheat">
+    <div class="c"><h4>New tenant signed</h4><p>Open unit <span class="arrow">→</span> + Add Future Tenant <span class="arrow">→</span> name + Scheduled Move-In <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Tenant moved in</h4><p>Open unit <span class="arrow">→</span> Moved In? <span class="arrow">→</span> check dates/lease type <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Tenant gave notice</h4><p>Open unit <span class="arrow">→</span> Notice <span class="arrow">→</span> Notice Date + Move-Out <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Tenant moved out</h4><p>Open unit (Notices tab) <span class="arrow">→</span> Move Out <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Cancel future tenant</h4><p>Open unit <span class="arrow">→</span> ✕ Remove <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Record existing tenant</h4><p>Open unit <span class="arrow">→</span> Occupied <span class="arrow">→</span> name, contact, lease type, Lease From <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Renew a lease</h4><p>Renewals tab <span class="arrow">→</span> unit <span class="arrow">→</span> new Lease From (check Lease To, rent) <span class="arrow">→</span> Save Unit</p></div>
+    <div class="c"><h4>Get a unit ready</h4><p>Tick Paint/Maintenance/Cleaning/Flooring <span class="arrow">→</span> Locks Changed <span class="arrow">→</span> Mark Done <span class="arrow">→</span> Mark Ready for Tour</p></div>
+    <div class="c"><h4>Deposit receipt</h4><p>Create Document <span class="arrow">→</span> Deposit Receipt <span class="arrow">→</span> apartment <span class="arrow">→</span> check numbers <span class="arrow">→</span> Deposit Receipt</p></div>
+    <div class="c"><h4>Welcome / Policy / Insurance</h4><p>Create Document <span class="arrow">→</span> type <span class="arrow">→</span> apartment <span class="arrow">→</span> check name &amp; date <span class="arrow">→</span> generate button</p></div>
+    <div class="c"><h4>Brochure</h4><p>Create Document <span class="arrow">→</span> Brochure <span class="arrow">→</span> prices, deposit, fee <span class="arrow">→</span> Generate Brochure</p></div>
+    <div class="c"><h4>Assign carport</h4><p>Carports <span class="arrow">→</span> row <span class="arrow">→</span> Assign <span class="arrow">→</span> type + details <span class="arrow">→</span> Save</p></div>
+    <div class="c"><h4>Free a carport</h4><p>Carports <span class="arrow">→</span> row <span class="arrow">→</span> Unassign <em>(instant)</em></p></div>
+    <div class="c"><h4>Leasing report</h4><p>Vacant/ Notices Report <span class="arrow">→</span> Print <span class="arrow">→</span> Legal, Landscape</p></div>
+    <div class="c"><h4>Your own list</h4><p>▦ Table <span class="arrow">→</span> tick units <span class="arrow">→</span> Next <span class="arrow">→</span> name columns <span class="arrow">→</span> Preview <span class="arrow">→</span> Print / Export</p></div>
+    <div class="c"><h4>Find anything</h4><p>Search: unit, name, address, notes, or <code>2194nd04</code> <span class="arrow">→</span> click result. Esc key closes.</p></div>
+  </div>
+  <div style="margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+    <div style="background:#fff;border:1.5px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 11px;font-size:8.5pt;"><b style="color:var(--gold-deep);font-family:Gelasio,serif;font-size:11pt;">Save</b><br>Nothing sticks until <em>Save Unit</em>.</div>
+    <div style="background:#fff;border:1.5px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 11px;font-size:8.5pt;"><b style="color:var(--gold-deep);font-family:Gelasio,serif;font-size:11pt;">Nothing opens?</b><br>See page 16.</div>
+    <div style="background:#fff;border:1.5px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 11px;font-size:8.5pt;"><b style="color:var(--gold-deep);font-family:Gelasio,serif;font-size:11pt;">30 days</b><br>Renewal alerts start.</div>
+    <div style="background:#fff;border:1.5px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 11px;font-size:8.5pt;"><b style="color:var(--gold-deep);font-family:Gelasio,serif;font-size:11pt;">Last 3 days</b><br>Move-in adds next month's rent.</div>
+  </div>
+  <div class="foot"><span>Cheat sheet · Emory Woods Leasing Dashboard</span><b></b></div>
+</section>
 
 </body>
 </html>
